@@ -6,7 +6,7 @@ import "./style.css";
 export function RatesBody() {
   return (
     <Container>
-      <Grid container spacing={6} style={{ margin: "0 50px" }}>
+      <Grid container spacing={6} style={{ padding: "0 50px" }}>
         <p
           className='main_title'
           style={{ marginBottom: 0, marginTop: 100, width: "100%" }}
