@@ -2,7 +2,7 @@ import { createMuiTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Main, Documentation, AboutUs } from "./pages";
+import { Main, Documentation, AboutUs, Rates } from "./pages";
 
 export default function App() {
   return (
@@ -13,6 +13,7 @@ export default function App() {
           <Route exact path='/' component={Main} />
           <Route exac path='/documentation' component={Documentation} />
           <Route exact path='/about-us' component={AboutUs} />
+          <Route exact path='/rates' component={Rates} />
         </Router>
       </ThemeProvider>
     </div>

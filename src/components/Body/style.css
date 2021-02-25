@@ -45,3 +45,11 @@
 .list_item {
   color: #ff9900;
 }
+/* Rates page */
+.rates_list_item {
+  color: #fff;
+  margin-top: 10px;
+}
+.rates_list_item::marker {
+  color: #505050;
+}
