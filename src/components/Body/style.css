@@ -1,27 +1,47 @@
-/* Main page */
-.main_bitcoin,
-.notebook,
-.bitcoin {
-  position: absolute;
+/* Documentations page */
+.main_title {
+  font-weight: normal;
+  font-size: 40px;
+  color: #ffffff;
+  text-align: center;
 }
-.main_bitcoin {
-  top: 20px;
-  left: -25%;
-  z-index: -1;
+.title {
+  font-weight: normal;
+  font-size: 30px;
+  line-height: 157.69%;
+  /* or 47px */
+  margin-bottom: 0;
+  color: #ffffff;
 }
-.notebook {
-  bottom: -40px;
-  left: -20%;
+.subtitle,
+.doc_link {
+  font-weight: normal;
+  font-size: 18px;
+  color: #ffffff;
 }
-.bitcoin1 {
-  bottom: 60px;
-  left: -11%;
+.subtitle {
+  line-height: 150%;
 }
-.bitcoin2 {
-  bottom: 160px;
-  left: 20%;
+.doc_link {
+  color: #ff9900;
+  border-bottom: 1px dashed #ff9900;
+  cursor: pointer;
 }
-.bitcoin3 {
-  right: 10%;
-  top: 42%;
+.blue_text {
+  color: #83cdec;
+  line-height: 200%;
+}
+.red_text {
+  color: #ff6f6f;
+  line-height: 200%;
+}
+.green_text {
+  color: #4eaa68;
+  line-height: 200%;
+}
+.step {
+  margin-bottom: 80px;
+}
+.list_item {
+  color: #ff9900;
 }

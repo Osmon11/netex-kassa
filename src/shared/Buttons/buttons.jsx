@@ -1,4 +1,5 @@
-import { Button } from "@material-ui/core";
+import { Button, withStyles } from "@material-ui/core";
+import { ToggleButton } from "@material-ui/lab";
 import React from "react";
 
 export const GoldButton = ({ outlined, children, style }) => {
@@ -16,3 +17,16 @@ export const GoldButton = ({ outlined, children, style }) => {
     </Button>
   );
 };
+
+export const GoldToggleButton = withStyles({
+  selected: {
+    "&$selected": {
+      color: "#fff",
+      background: "#FF9900",
+      "&:hover": {
+        color: "#FF9900",
+        backgroundColor: "#fff",
+      },
+    },
+  },
+})(ToggleButton);
