@@ -2,7 +2,7 @@ import { Button, withStyles } from "@material-ui/core";
 import { ToggleButton } from "@material-ui/lab";
 import React from "react";
 
-export const GoldButton = ({ outlined, children, style }) => {
+export const GoldButton = ({ outlined, children, style, ...args }) => {
   return (
     <Button
       style={{
@@ -12,6 +12,7 @@ export const GoldButton = ({ outlined, children, style }) => {
         backgroundColor: outlined ? "transparent" : "#FF9900",
         minHeight: 55,
       }}
+      {...args}
     >
       {children}
     </Button>

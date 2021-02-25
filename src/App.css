@@ -1,3 +1,6 @@
+* {
+  font-family: Roboto;
+}
 body {
   background-color: #18191d !important;
 }
@@ -31,15 +34,84 @@ body {
   font-size: 14px;
   color: #fff;
 }
-.bg_image {
+.bg_image,
+.bg2_image {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   z-index: -1;
+}
+.bg_image {
+  background-image: url("./assets/main-bg1.png");
+}
+.bg2_image {
+  background-image: url("./assets/app-bg1.png");
 }
 .position_center {
   margin-left: 50%;
   transform: translateX(-50%);
+}
+.menu_text {
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+  text-transform: uppercase;
+}
+.circle_button {
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+}
+.circle_button:hover {
+  transform: scale(1.1);
+}
+.notebook {
+  width: 100%;
+}
+.main_bitcoin,
+.bitcoin {
+  position: absolute;
+}
+.main_bitcoin {
+  top: -210px;
+  left: -50px;
+  z-index: -1;
+}
+.bitcoin1 {
+  left: 0;
+  bottom: 60px;
+}
+.bitcoin2 {
+  left: 35%;
+  bottom: 160px;
+}
+.bitcoin3 {
+  top: 42%;
+  right: 1%;
+}
+
+@media (max-width: 960px) {
+  .p_1 {
+    font-size: 10px;
+  }
+  .bg2_image {
+    background-position: right;
+  }
+}
+@media (max-width: 600px) {
+  .main_bitcoin {
+    width: 300px;
+    top: -100px;
+  }
+  .bitcoin {
+    width: 60px;
+  }
 }
