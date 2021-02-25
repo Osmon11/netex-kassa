@@ -12,7 +12,7 @@ export default function App() {
         <Router>
           <Route exact path='/' component={Main} />
           <Route exac path='/documentation' component={Documentation} />
-          <Route exact path='/' component={AboutUs} />
+          <Route exact path='/about-us' component={AboutUs} />
         </Router>
       </ThemeProvider>
     </div>

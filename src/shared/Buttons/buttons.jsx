@@ -24,8 +24,8 @@ export const GoldToggleButton = withStyles({
       color: "#fff",
       background: "#FF9900",
       "&:hover": {
-        color: "#FF9900",
-        backgroundColor: "#fff",
+        color: "#fff",
+        backgroundColor: "#FF9900",
       },
     },
   },
