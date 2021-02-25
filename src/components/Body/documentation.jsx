@@ -1,10 +1,11 @@
 import {
   Container,
-  Divider,
   Grid,
   makeStyles,
   Paper,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@material-ui/core";
 import { ToggleButtonGroup } from "@material-ui/lab";
 import React, { useState } from "react";
@@ -13,6 +14,9 @@ import "./style.css";
 
 export function DocumentationBody() {
   const classes = useStyles();
+  const theme = useTheme();
+  const sm = useMediaQuery(theme.breakpoints.down("sm"));
+  const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const tabs = [
     "Знакомство",
     "Начало работы",
@@ -23,7 +27,7 @@ export function DocumentationBody() {
   return (
     <Container>
       <Grid container spacing={3} style={{ marginTop: 65 }}>
-        <Grid item md={3}>
+        <Grid item md={3} xs={12}>
           <Paper className={classes.sideBar}>
             <Typography
               variant='body1'
@@ -31,14 +35,22 @@ export function DocumentationBody() {
             >
               API справочник
             </Typography>
-            <div className='flex_vertical' style={{ alignItems: "flex-start" }}>
+            <div
+              className='flex_vertical'
+              style={{
+                alignItems: "flex-start",
+                flexWrap: "wrap",
+                flexDirection: sm || xs ? "row" : "column",
+              }}
+            >
               {tabs.map((value, index) => (
                 <span
                   className='nav_link'
                   style={{
-                    fontSize: 20,
+                    fontSize: xs ? 16 : 20,
                     fontWeight: 400,
                     marginBottom: 20,
+                    width: sm || xs ? "50%" : "",
                     color: tab.value === value ? "#FF9900" : "#fff",
                   }}
                   onClick={() => setTab({ value, index })}
@@ -50,7 +62,7 @@ export function DocumentationBody() {
             </div>
           </Paper>
         </Grid>
-        <Grid item md={9}>
+        <Grid item md={9} xs={12}>
           <Paper style={{ background: "#2A2B31", padding: 32 }} elevation={0}>
             <p className='main_title'>{docSteps[tab.index].title}</p>
             <p className='subtitle'>{docSteps[tab.index].descrip}</p>
@@ -68,6 +80,9 @@ export function DocumentationBody() {
 const tabsContent = [<Acquaintance />, <BeginningOfWork />, <APIClients />];
 
 function Acquaintance() {
+  const theme = useTheme();
+  const xs = useMediaQuery(theme.breakpoints.down("xs"));
+
   return (
     <div className='step'>
       <p style={{ marginTop: 30 }}>
@@ -80,11 +95,11 @@ function Acquaintance() {
       <p className='subtitle' style={{ marginTop: 0 }}>
         Попробуйте примеры ниже что бы увидеть как работает Biwse API.
       </p>
-      <p className='subtitle' style={{ fontSize: 25 }}>
+      <p className='subtitle' style={{ fontSize: xs ? 20 : 25 }}>
         Создание страницы оплаты
       </p>
       <CodeExample />
-      <p className='subtitle' style={{ fontSize: 25 }}>
+      <p className='subtitle' style={{ fontSize: xs ? 20 : 25 }}>
         Получение баланса кошелька
       </p>
       <CodeExample />
@@ -99,6 +114,9 @@ function Acquaintance() {
 }
 
 function BeginningOfWork() {
+  const theme = useTheme();
+  const xs = useMediaQuery(theme.breakpoints.down("xs"));
+
   return (
     <div className='step'>
       <p className='title'>Шаг 1: Панель управления</p>
@@ -120,8 +138,8 @@ function BeginningOfWork() {
         Создайте новый API токен в настройках приложения.
       </p>
       <div className='flex_box' style={{ borderLeft: "10px solid #FF9900 " }}>
-        <div style={{ padding: "16px 0" }}>
-          <p className='title' style={{ fontSize: 25 }}>
+        <div style={{ padding: "16px 0", marginLeft: 20 }}>
+          <p className='title' style={{ fontSize: xs ? 20 : 25 }}>
             Примечание
           </p>
           <p className='subtitle'>
@@ -156,6 +174,8 @@ function BeginningOfWork() {
 
 function APIClients() {
   const classes = useStyles();
+  const theme = useTheme();
+  const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const [tab, setTab] = useState("Node.js");
 
   return (
@@ -174,7 +194,7 @@ function APIClients() {
       <ToggleButtonGroup
         exclusive
         value={tab}
-        style={{ minWidth: 525, margin: "33px 0" }}
+        style={{ minWidth: xs ? "100%" : 525, margin: "33px 0" }}
         onChange={(_, tab) => setTab(tab)}
       >
         <GoldToggleButton className={classes.toggleBtn} value='Node.js'>
@@ -196,25 +216,25 @@ function APIClients() {
 
 const CodeExample = () => (
   <Paper
-    style={{ backgroundColor: "#18191D", borderRadius: 4, padding: 32 }}
+    style={{
+      backgroundColor: "#18191D",
+      borderRadius: 4,
+      padding: 32,
+      overflowX: "auto",
+    }}
     elevation={0}
   >
     <p className='blue_text'>
       curl -X POST \<br />
       -H <span className='red_text'>"Content-Type: application/json" </span>
       <span style={{ color: "#fff" }}>\</span>
-      <br />
       -H <span className='red_text'>"Accept: application/json" </span>
       <span style={{ color: "#fff" }}>\</span>
-      <br />
       -H <span className='red_text'>"Authorization: Bearer YOUR_TOKEN" </span>
       <span style={{ color: "#fff" }}>\</span>
-      <br />
-      https://api.biwse.com/v1/app/YOUR_APP_ID/invoice
-      <br />
-      -d <span className='red_text'>'{'{ "amount": 0.0001 }'}' </span>
+      https://api.biwse.com/v1/app/YOUR_APP_ID/invoice -d{" "}
+      <span className='red_text'>'{'{ "amount": 0.0001 }'}' </span>
       <span style={{ color: "#fff" }}>\</span>
-      <br />
     </p>
     <p className='green_text' style={{ marginTop: 20 }}>
       # Response:
@@ -231,12 +251,18 @@ const useStyles = makeStyles((theme) => ({
     padding: "30px 50px",
     background: " linear-gradient(270deg, #2A2B31 0%, #18191D 82.47%)",
     minHeight: 624,
+    [theme.breakpoints.down("sm")]: {
+      minHeight: 165,
+    },
   },
   toggleBtn: {
     width: "33.33%",
     textTransform: "none",
     color: "#000",
     backgroundColor: "#f5f5f5",
+    [theme.breakpoints.down("xs")]: {
+      fontSize: 14,
+    },
     "&:hover": {
       color: "#FF9900",
       backgroundColor: "#fff",
