@@ -70,6 +70,24 @@
   bottom: 120px;
   z-index: -1;
 }
+/* Dashboard page */
+.projects {
+  list-style: none;
+  padding-left: 20px;
+}
+.projects span {
+  line-height: 200%;
+}
+.project_link {
+  text-decoration: none;
+  color: #ff9900;
+  font-size: 18px;
+  cursor: pointer;
+}
+.project_link:hover {
+  color: #fff;
+}
+
 @media (max-width: 750px) {
   .cripto_brend {
     width: 90px;

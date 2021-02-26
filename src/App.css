@@ -1,8 +1,12 @@
-* {
-  font-family: Roboto;
-}
 body {
   background-color: #18191d !important;
+}
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #454545;
+  border-radius: 6px;
 }
 .flex_box {
   display: flex;
@@ -35,7 +39,8 @@ body {
   color: #fff;
 }
 .bg_image,
-.bg2_image {
+.bg2_image,
+.bg3_image {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -51,6 +56,9 @@ body {
 }
 .bg2_image {
   background-image: url("./assets/app-bg1.png");
+}
+.bg3_image {
+  background-image: url("./assets/app-bg2.png");
 }
 .position_center {
   margin-left: 50%;

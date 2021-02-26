@@ -2,18 +2,19 @@ import { createMuiTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Main, Documentation, AboutUs, Rates } from "./pages";
+import { Main, Documentation, AboutUs, Rates, Dashboard } from "./pages";
 
 export default function App() {
   return (
-    <div className='App'>
-      <CssBaseline />
+    <div className="App">
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Router>
-          <Route exact path='/' component={Main} />
-          <Route exac path='/documentation' component={Documentation} />
-          <Route exact path='/about-us' component={AboutUs} />
-          <Route exact path='/rates' component={Rates} />
+          <Route exact path="/" component={Main} />
+          <Route exac path="/documentation" component={Documentation} />
+          <Route exact path="/about-us" component={AboutUs} />
+          <Route exact path="/rates" component={Rates} />
+          <Route exact path="/dashboard" component={Dashboard} />
         </Router>
       </ThemeProvider>
     </div>
