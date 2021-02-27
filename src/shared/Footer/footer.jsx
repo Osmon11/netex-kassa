@@ -42,12 +42,10 @@ export function Footer() {
           ) : null}
           <img src={logo} style={{ height: 66 }} alt='' />
           <Typography variant='body2' style={{ margin: "24px 0" }}>
-            Advanced - команда разработчиков работает с криптовалютами в области
-            финансовых технологий
+            Advanced - команда разработчиков
+            <br /> работает с криптовалютами в<br /> области финансовых
+            технологий
           </Typography>
-          <span className='body_3' style={{ textDecoration: "underline" }}>
-            Политика конфиденциальности
-          </span>
         </Grid>
 
         {!sm ? (
@@ -84,6 +82,12 @@ export function Footer() {
                   Вход в личный кабинет
                 </span>
               </Typography>
+              <span
+                className='body_3 nav_link'
+                style={{ textDecoration: "underline" }}
+              >
+                Политика конфиденциальности
+              </span>
             </Grid>
 
             <Grid item md={4}>

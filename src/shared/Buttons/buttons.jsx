@@ -10,7 +10,6 @@ export const GoldButton = ({ outlined, children, style, ...args }) => {
         border: outlined ? "1px solid #FF9900" : "none",
         color: outlined ? "#FF9900" : "#fff",
         backgroundColor: outlined ? "transparent" : "#FF9900",
-        minHeight: 55,
       }}
       {...args}
     >
@@ -24,6 +23,7 @@ export const GoldToggleButton = withStyles({
     "&$selected": {
       color: "#fff",
       background: "#FF9900",
+
       "&:hover": {
         color: "#fff",
         backgroundColor: "#FF9900",

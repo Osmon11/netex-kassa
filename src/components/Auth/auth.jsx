@@ -16,23 +16,23 @@ export function Auth({ open, handleClose, login, setLogin }) {
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby="auth-dialog">
+    <Dialog open={open} onClose={handleClose} aria-labelledby='auth-dialog'>
       <DialogContent
         style={{
           backgroundColor: "#2A2B31",
-          padding: "25px 100px",
+          padding: "55px 80px 20px",
         }}
       >
         {login ? <SingIn sm={sm} /> : <SingUp sm={sm} />}
 
-        <div className="flex_box" style={{ margin: "20px 0" }}>
+        <div className='flex_box' style={{ margin: "20px 0" }}>
           <Typography
-            variant="body2"
+            variant='body2'
             style={{ width: "100%", textAlign: "center" }}
           >
             {login ? "У вас нет учетной записи?" : "У вас уже есть аккаунт?"}{" "}
             <span
-              style={{ color: "#FF9900", cursor: "pointer" }}
+              style={{ color: "#FF9900", cursor: "pointer", marginLeft: 10 }}
               onClick={() => setLogin(!login)}
             >
               {login ? "Зарегистрироваться" : "Войти"}
@@ -54,44 +54,53 @@ function SingIn({ sm }) {
     <>
       {sm ? (
         <p
-          className="title"
-          style={{ fontSize: 25, textAlign: "center", marginBottom: 40 }}
+          className='title'
+          style={{
+            fontSize: 25,
+            textAlign: "center",
+            marginBottom: 40,
+            marginTop: 0,
+          }}
         >
           {fogetPassword ? "Восстановление пароля" : "Вход"}
         </p>
       ) : null}
       <form onSubmit={submitHandler}>
-        <Typography variant="body2">Ваша почта</Typography>
+        <Typography variant='body2' style={{ marginTop: 15 }}>
+          Ваша почта
+        </Typography>
         <ThemeInput
-          margin="dense"
-          placeholder="Введите почту"
-          name="email"
-          type="email"
-          variant="outlined"
+          margin='dense'
+          placeholder='Введите почту'
+          name='email'
+          type='email'
+          variant='outlined'
           fullWidth
         />
         {!fogetPassword ? (
           <>
-            <Typography variant="body2">Пароль</Typography>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
+              Пароль
+            </Typography>
             <ThemeInput
-              margin="dense"
-              placeholder="Введите пароль"
-              name="password"
-              type="password"
-              variant="outlined"
+              margin='dense'
+              placeholder='Введите пароль'
+              name='password'
+              type='password'
+              variant='outlined'
               fullWidth
             />
             <div
-              className="flex_box"
+              className='flex_box'
               style={{ justifyContent: "space-between" }}
             >
-              <span className="flex_box">
-                <Checkbox name="rememberMe" color="primary" />
-                <Typography variant="body2">Запомнить пароль</Typography>
+              <span className='flex_box'>
+                <Checkbox name='rememberMe' style={{ color: "#fff" }} />
+                <Typography variant='body2'>Запомнить пароль</Typography>
               </span>
 
               <span
-                className="nav_link"
+                className='nav_link'
                 style={{ fontSize: 16 }}
                 onClick={() => setPassword(true)}
               >
@@ -117,46 +126,57 @@ function SingUp({ sm }) {
     <>
       {sm ? (
         <p
-          className="title"
-          style={{ fontSize: 25, textAlign: "center", marginBottom: 40 }}
+          className='title'
+          style={{
+            fontSize: 25,
+            textAlign: "center",
+            marginBottom: 40,
+            marginTop: 0,
+          }}
         >
           Регистрация
         </p>
       ) : null}
       <form onSubmit={submitHandler}>
-        <Typography variant="body2">Имя</Typography>
+        <Typography variant='body2' style={{ marginTop: 15 }}>
+          Имя
+        </Typography>
         <ThemeInput
-          margin="dense"
-          placeholder="Введите Ваше имя"
-          name="username"
-          type="text"
-          variant="outlined"
+          margin='dense'
+          placeholder='Введите Ваше имя'
+          name='username'
+          type='text'
+          variant='outlined'
           fullWidth
         />
-        <Typography variant="body2">Почта</Typography>
+        <Typography variant='body2' style={{ marginTop: 15 }}>
+          Почта
+        </Typography>
         <ThemeInput
-          margin="dense"
-          placeholder="Введите почту"
-          name="email"
-          type="email"
-          variant="outlined"
+          margin='dense'
+          placeholder='Введите почту'
+          name='email'
+          type='email'
+          variant='outlined'
           fullWidth
         />
-        <Typography variant="body2">Пароль</Typography>
+        <Typography variant='body2' style={{ marginTop: 15 }}>
+          Пароль
+        </Typography>
         <ThemeInput
-          margin="dense"
-          placeholder="Введите пароль"
-          name="password"
-          type="password"
-          variant="outlined"
+          margin='dense'
+          placeholder='Введите пароль'
+          name='password'
+          type='password'
+          variant='outlined'
           fullWidth
         />
         <ThemeInput
-          margin="dense"
-          placeholder="Повторите пароль"
-          name="password2"
-          type="password"
-          variant="outlined"
+          margin='dense'
+          placeholder='Повторите пароль'
+          name='password2'
+          type='password'
+          variant='outlined'
           fullWidth
         />
         <GoldButton style={{ ...btnStyle }} type={"submit"}>
@@ -181,8 +201,7 @@ export const ThemeInput = withStyles({
 })(TextField);
 
 let btnStyle = {
-  minHeight: 40,
-  maxHeight: 40,
+  minHeight: 50,
   marginTop: 40,
   minWidth: 195,
   marginLeft: "50%",

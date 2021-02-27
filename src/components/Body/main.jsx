@@ -35,19 +35,19 @@ export function MainBody() {
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
 
   return (
-    <div className="main_page">
+    <div className='main_page'>
       <section style={{ position: "relative", minHeight: "90vh" }}>
         <Container>
           <div
-            className="flex_vertical"
+            className='flex_vertical'
             style={{ width: "100%", color: "#fff", padding: "180px 5%" }}
           >
-            <Typography variant="h3" className={classes.sectionTitle}>
+            <Typography variant='h3' className={classes.sectionTitle}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor
             </Typography>
             <Typography
-              variant="body1"
+              variant='body1'
               style={{
                 textAlign: "center",
                 margin: "30px 0",
@@ -57,17 +57,17 @@ export function MainBody() {
               Принимайте и отправляйте криптовалюту с нашим API без каких любо
               усилий.
             </Typography>
-            <div className="flex_box">
-              <GoldButton style={{ minWidth: sm ? 164 : 270 }}>
+            <div className='flex_box'>
+              <GoldButton style={{ minWidth: sm ? 164 : 270, minHeight: 60 }}>
                 Начать работу
               </GoldButton>
-              <Button className={classes.customButton} variant="outlined">
+              <Button className={classes.customButton} variant='outlined'>
                 API
               </Button>
             </div>
           </div>
         </Container>
-        <div className="bg_image" />
+        <div className='bg_image' />
       </section>
 
       <section>
@@ -75,20 +75,20 @@ export function MainBody() {
           <Grid container spacing={2}>
             <Grid item md={6}>
               <Typography
-                variant="h3"
+                variant='h3'
                 style={{ marginTop: 64, fontSize: xs ? 35 : 50 }}
               >
                 <Typography
-                  variant="h3"
+                  variant='h3'
                   style={{ color: "#FF9900", fontSize: xs ? 35 : 50 }}
-                  component="span"
+                  component='span'
                 >
                   Правильное
                 </Typography>{" "}
                 решение для бизнеса
               </Typography>
               <Typography
-                variant="body1"
+                variant='body1'
                 style={{
                   margin: "44px 0 30px",
                   marginLeft: sm ? 0 : 50,
@@ -102,7 +102,7 @@ export function MainBody() {
                 профессиональной команде.
               </Typography>
               <Typography
-                variant="body1"
+                variant='body1'
                 style={{
                   margin: "0 0 44px",
                   marginLeft: sm ? 0 : 50,
@@ -114,7 +114,9 @@ export function MainBody() {
                 quae ab illo inventore veritatis et quasi architecto beatae
                 vitae dicta sunt explicabo.
               </Typography>
-              <GoldButton style={{ minWidth: 270 }}>Начать работу</GoldButton>
+              <GoldButton style={{ minWidth: 270, minHeight: 60 }}>
+                Начать работу
+              </GoldButton>
             </Grid>
 
             <Grid
@@ -128,7 +130,7 @@ export function MainBody() {
             >
               <Grid item xs={7}>
                 <div
-                  className="flex_vertical"
+                  className='flex_vertical'
                   style={{
                     alignItems: "flex-end",
                     justifyContent: "flex-end",
@@ -145,7 +147,7 @@ export function MainBody() {
                   >
                     <img
                       src={part1}
-                      alt=""
+                      alt=''
                       style={{ width: "100%", height: "100%" }}
                     />
                   </Paper>
@@ -158,7 +160,7 @@ export function MainBody() {
                   >
                     <img
                       src={part2}
-                      alt=""
+                      alt=''
                       style={{ width: "100%", height: "100%" }}
                     />
                   </Paper>
@@ -166,7 +168,7 @@ export function MainBody() {
               </Grid>
               <Grid item xs={5}>
                 <div
-                  className="flex_vertical"
+                  className='flex_vertical'
                   style={{
                     alignItems: "start",
                     justifyContent: "flex-end",
@@ -183,7 +185,7 @@ export function MainBody() {
                   >
                     <img
                       src={part3}
-                      alt=""
+                      alt=''
                       style={{ width: "100%", height: "100%" }}
                     />
                   </Paper>
@@ -196,7 +198,7 @@ export function MainBody() {
                   >
                     <img
                       src={part4}
-                      alt=""
+                      alt=''
                       style={{ width: "100%", height: "100%" }}
                     />
                   </Paper>
@@ -210,15 +212,15 @@ export function MainBody() {
       <section style={{ position: "relative" }}>
         <Container>
           <Typography
-            variant="h3"
+            variant='h3'
             className={classes.sectionTitle}
             style={{ paddingTop: 200, fontSize: xs ? 35 : 50 }}
           >
             Наши{" "}
             <Typography
-              variant="h3"
+              variant='h3'
               style={{ color: "#FF9900", fontSize: xs ? 35 : 50 }}
-              component="span"
+              component='span'
             >
               преимущества
             </Typography>
@@ -227,13 +229,13 @@ export function MainBody() {
             {advantages.map((obj) => (
               <Grid item md={4} key={obj.subtitle}>
                 <div
-                  className="flex_box"
+                  className='flex_box'
                   style={{
                     alignItems: "flex-start",
                     flexDirection: sm || xs ? "row" : "column",
                   }}
                 >
-                  <img src={obj.img} alt="" />
+                  <img src={obj.img} alt='' />
                   <div style={{ marginLeft: sm || xs ? 20 : 0 }}>
                     <Typography
                       variant={sm || xs ? "body2" : "subtitle2"}
@@ -246,7 +248,7 @@ export function MainBody() {
                       {obj.subtitle}
                     </Typography>
                     <Typography
-                      variant="body2"
+                      variant='body2'
                       style={{ fontSize: xs ? 12 : 16 }}
                     >
                       {obj.text}
@@ -257,7 +259,7 @@ export function MainBody() {
             ))}
           </Grid>
         </Container>
-        <div className="bg2_image" />
+        <div className='bg2_image' />
       </section>
 
       <section style={{ overflow: "hidden", paddingBottom: 100 }}>
@@ -265,13 +267,13 @@ export function MainBody() {
           <Grid container spacing={2}>
             <Grid item md={6}>
               <Typography
-                variant="h3"
+                variant='h3'
                 style={{ margin: "96px 0 64px 0", fontSize: xs ? 35 : 50 }}
               >
                 <Typography
-                  variant="h3"
+                  variant='h3'
                   style={{ color: "#FF9900", fontSize: xs ? 35 : 50 }}
-                  component="span"
+                  component='span'
                 >
                   Недостающий фрагмент
                 </Typography>
@@ -281,14 +283,14 @@ export function MainBody() {
                 className={classes.bitcoinPaper}
                 style={{ marginBottom: 40 }}
               >
-                <Typography variant="body1" style={{ fontSize: xs ? 14 : 20 }}>
+                <Typography variant='body1' style={{ fontSize: xs ? 14 : 20 }}>
                   Готовы начать? Присоединяйтесь к тысячам разработчиков которые
                   используют biwse.com. Нет ничего проще. Прочите API
                   документацию и убедитесь сами.
                 </Typography>
               </Paper>
               <Paper className={classes.bitcoinPaper}>
-                <Typography variant="body1" style={{ fontSize: xs ? 14 : 20 }}>
+                <Typography variant='body1' style={{ fontSize: xs ? 14 : 20 }}>
                   Используйте топовые криптовалюты Начни сегодня использовать
                   топовые криптовалюты на своем сайте и получи первую неделю
                   Бесплатно!
@@ -298,11 +300,11 @@ export function MainBody() {
             <Grid item md={6} style={{ position: "relative" }}>
               {sm ? (
                 <>
-                  <img className="notebook" src={notebook} alt="" />
-                  <img className="main_bitcoin" src={mainBitcoin} alt="" />
-                  <img className="bitcoin bitcoin1" src={bitcoin1} alt="" />
-                  <img className="bitcoin bitcoin2" src={bitcoin2} alt="" />
-                  <img className="bitcoin bitcoin3" src={bitcoin3} alt="" />
+                  <img className='notebook' src={notebook} alt='' />
+                  <img className='main_bitcoin' src={mainBitcoin} alt='' />
+                  <img className='bitcoin bitcoin1' src={bitcoin1} alt='' />
+                  <img className='bitcoin bitcoin2' src={bitcoin2} alt='' />
+                  <img className='bitcoin bitcoin3' src={bitcoin3} alt='' />
                 </>
               ) : (
                 <ParallaxMousemove
@@ -328,7 +330,7 @@ export function MainBody() {
                       },
                     }}
                   >
-                    <img src={notebook} alt="" />
+                    <img src={notebook} alt='' />
                   </ParallaxMousemove.Layer>
                   {/* Bitcoin large */}
                   <ParallaxMousemove.Layer
@@ -347,7 +349,7 @@ export function MainBody() {
                       },
                     }}
                   >
-                    <img src={mainBitcoin} alt="" />
+                    <img src={mainBitcoin} alt='' />
                   </ParallaxMousemove.Layer>
                   {/* Bitcoin1 image */}
                   <ParallaxMousemove.Layer
@@ -365,7 +367,7 @@ export function MainBody() {
                       },
                     }}
                   >
-                    <img src={bitcoin1} alt="" />
+                    <img src={bitcoin1} alt='' />
                   </ParallaxMousemove.Layer>
                   {/* Bitcoin2 image */}
                   <ParallaxMousemove.Layer
@@ -383,7 +385,7 @@ export function MainBody() {
                       },
                     }}
                   >
-                    <img src={bitcoin2} alt="" />
+                    <img src={bitcoin2} alt='' />
                   </ParallaxMousemove.Layer>
                   {/* Bitcoin3 image */}
                   <ParallaxMousemove.Layer
@@ -401,7 +403,7 @@ export function MainBody() {
                       },
                     }}
                   >
-                    <img src={bitcoin3} alt="" />
+                    <img src={bitcoin3} alt='' />
                   </ParallaxMousemove.Layer>
                 </ParallaxMousemove>
               )}
@@ -418,7 +420,7 @@ const useStyles = makeStyles((theme) => ({
     border: "3px solid #FFFFFF",
     fontSize: 20,
     fontWeight: "normal",
-    minHeight: 55,
+    minHeight: 60,
     minWidth: 170,
     marginLeft: 20,
     color: "#fff",

@@ -172,9 +172,7 @@ export function Header() {
                   margin: sm ? 0 : "0 0 0 10px",
                 }}
               >
-                Excepteur sint
-                <br /> occaecat cupidatat
-                <br /> non proident
+                Excepteur sint occaecat cupidatat non proident
               </p>
             </span>
 
@@ -196,7 +194,7 @@ export function Header() {
 
                 <span className='flex_box'>
                   <GoldButton
-                    style={{ minWidth: 90 }}
+                    style={{ minWidth: 90, minHeight: 40 }}
                     onClick={() => setDialog({ open: true, login: true })}
                     outlined
                   >
@@ -204,7 +202,7 @@ export function Header() {
                   </GoldButton>
                   <p
                     className='nav_link'
-                    style={{ marginLeft: 10 }}
+                    style={{ marginLeft: 20 }}
                     onClick={() => setDialog({ open: true, login: false })}
                   >
                     Регистрация

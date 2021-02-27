@@ -3,10 +3,13 @@ body {
 }
 ::-webkit-scrollbar {
   width: 6px;
+  height: 18px;
+  background: #c4c4c4;
+  border-radius: 35px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #454545;
-  border-radius: 6px;
+  background: #ff9900;
+  border-radius: 35px;
 }
 .flex_box {
   display: flex;
@@ -23,6 +26,8 @@ body {
   font-weight: 300;
   font-size: 14px;
   color: #ffffff;
+  line-height: normal;
+  max-width: 105px;
 }
 .nav_link {
   text-decoration: none;

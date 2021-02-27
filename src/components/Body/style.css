@@ -1,12 +1,12 @@
 /* Documentations page */
 .main_title {
-  font-weight: normal;
+  font-weight: 300;
   font-size: 40px;
   color: #ffffff;
   text-align: center;
 }
 .title {
-  font-weight: normal;
+  font-weight: 300;
   font-size: 30px;
   line-height: 157.69%;
   /* or 47px */
@@ -15,7 +15,7 @@
 }
 .subtitle,
 .doc_link {
-  font-weight: normal;
+  font-weight: 300;
   font-size: 18px;
   color: #ffffff;
 }
@@ -45,6 +45,7 @@
 .list_item {
   color: #ff9900;
 }
+
 /* Rates page */
 .rates_list_item {
   color: #fff;
@@ -52,6 +53,10 @@
 }
 .rates_list_item::marker {
   color: #505050;
+}
+.rates_mobile {
+  width: 210px;
+  margin: 0 30px;
 }
 /* About us */
 .planet {
