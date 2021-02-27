@@ -12,10 +12,10 @@ export function Settings() {
 
   return (
     <>
-      <p className="title" style={{ fontSize: 25 }}>
+      <p className='title' style={{ fontSize: 25 }}>
         Азим Дженалиев
       </p>
-      <p className="subtitle">azimdzhenaliev@gmail.com</p>
+      <p className='subtitle'>azimdzhenaliev@gmail.com</p>
       <Grid container>
         <Grid item xs={6}>
           <ToggleButtonGroup
@@ -24,80 +24,88 @@ export function Settings() {
             style={{ width: "100%", margin: "33px 0" }}
             onChange={(_, tab) => setTab(tab)}
           >
-            <GoldToggleButton className={classes.toggleBtn} value="Профиль">
+            <GoldToggleButton className={classes.toggleBtn} value='Профиль'>
               Профиль
             </GoldToggleButton>
             <GoldToggleButton
               className={classes.toggleBtn}
-              value="Журнал входа"
+              value='Журнал входа'
             >
               Журнал входа
             </GoldToggleButton>
-            <GoldToggleButton className={classes.toggleBtn} value="Кошельки">
+            <GoldToggleButton className={classes.toggleBtn} value='Кошельки'>
               Кошельки
             </GoldToggleButton>
           </ToggleButtonGroup>
           {tab === "Профиль" ? (
             <form style={{ paddingRight: "15%" }}>
-              <Typography variant="body2">Имя</Typography>
+              <Typography variant='body2' style={{ marginTop: 15 }}>
+                Имя
+              </Typography>
               <ThemeInput
-                margin="dense"
-                placeholder="Введите Ваше имя"
-                name="username"
-                type="text"
-                variant="outlined"
+                margin='dense'
+                placeholder='Введите Ваше имя'
+                name='username'
+                type='text'
+                variant='outlined'
                 style={{ marginBottom: 20 }}
                 fullWidth
               />
-              <Typography variant="body2">Почта</Typography>
+              <Typography variant='body2' style={{ marginTop: 15 }}>
+                Почта
+              </Typography>
               <ThemeInput
-                margin="dense"
-                placeholder="Введите почту"
-                name="email"
-                type="email"
-                variant="outlined"
+                margin='dense'
+                placeholder='Введите почту'
+                name='email'
+                type='email'
+                variant='outlined'
                 style={{ marginBottom: 20 }}
                 fullWidth
               />
-              <Typography variant="body2">Аватар</Typography>
+              <Typography variant='body2' style={{ marginTop: 15 }}>
+                Аватар
+              </Typography>
               <ThemeInput
-                margin="dense"
-                placeholder="Загрузить изображение"
-                name="avatar"
-                type="text"
-                variant="outlined"
+                margin='dense'
+                placeholder='Загрузить изображение'
+                name='avatar'
+                type='text'
+                variant='outlined'
                 onClick={() => avatar.current.click()}
                 style={{ marginBottom: 20 }}
                 disabled
                 fullWidth
               />
-              <Typography variant="body2">Смена пароля</Typography>
+              <Typography variant='body2' style={{ marginTop: 15 }}>
+                Смена пароля
+              </Typography>
               <ThemeInput
-                margin="dense"
-                placeholder="Введите текущий пароль"
-                name="currentpw"
-                type="password"
-                variant="outlined"
+                margin='dense'
+                placeholder='Введите текущий пароль'
+                name='currentpw'
+                type='password'
+                variant='outlined'
                 fullWidth
               />
               <ThemeInput
-                margin="dense"
-                placeholder="Введите новый пароль"
-                name="newpw"
-                type="password"
-                variant="outlined"
+                margin='dense'
+                placeholder='Введите новый пароль'
+                name='newpw'
+                type='password'
+                variant='outlined'
                 fullWidth
               />
               <ThemeInput
-                margin="dense"
-                placeholder="Повторите новый пароль"
-                name="repeatnewpw"
-                type="password"
-                variant="outlined"
+                margin='dense'
+                placeholder='Повторите новый пароль'
+                name='repeatnewpw'
+                type='password'
+                variant='outlined'
                 fullWidth
               />
               <GoldButton
-                type="submit"
+                type='submit'
                 style={{
                   marginTop: 20,
                   fontSize: 16,
@@ -121,13 +129,13 @@ export function Settings() {
                 }}
               >
                 <Grid item xs={3}>
-                  <Typography variant="body2">IP</Typography>
+                  <Typography variant='body2'>IP</Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography variant="body2">Браузер</Typography>
+                  <Typography variant='body2'>Браузер</Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography variant="body2">Дата</Typography>
+                  <Typography variant='body2'>Дата</Typography>
                 </Grid>
               </Grid>
               {data.map((obj) => (
@@ -142,13 +150,13 @@ export function Settings() {
                   key={obj.ip + obj.date}
                 >
                   <Grid item xs={3}>
-                    <Typography variant="body2">{obj.ip}</Typography>
+                    <Typography variant='body2'>{obj.ip}</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography variant="body2">{obj.browser}</Typography>
+                    <Typography variant='body2'>{obj.browser}</Typography>
                   </Grid>
                   <Grid item xs={3}>
-                    <Typography variant="body2">{obj.date}</Typography>
+                    <Typography variant='body2'>{obj.date}</Typography>
                   </Grid>
                 </Grid>
               ))}
@@ -156,7 +164,7 @@ export function Settings() {
           ) : null}
         </Grid>
       </Grid>
-      <input type="file" ref={avatar} style={{ display: "none" }} />
+      <input type='file' ref={avatar} style={{ display: "none" }} />
     </>
   );
 }

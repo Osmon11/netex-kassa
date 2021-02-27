@@ -435,7 +435,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   customPaper: {
-    borderRadius: 15,
+    borderRadius: 17,
     filter: "drop-shadow(0px 0px 32px rgba(255, 255, 255, 0.15))",
   },
   bitcoinPaper: {

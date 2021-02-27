@@ -12,6 +12,7 @@ import React from "react";
 import "./style.css";
 import logo from "assets/logo.png";
 import ava from "assets/avatar.png";
+import { WithdrawFunds } from "components/Dashboard/WithdrawFunds";
 
 const drawerWidth = 280;
 
@@ -24,15 +25,15 @@ export function Admin() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="absolute" className={classes.appBar}>
+      <AppBar position='absolute' className={classes.appBar}>
         <Toolbar style={{ paddingLeft: "15%" }}>
-          <div className="flex_box">
-            <span className="subtitle">Азим Дженалиев</span>
-            <Avatar alt="" src={ava} style={{ marginLeft: 20 }} />
+          <div className='flex_box'>
+            <span className='subtitle'>Азим Дженалиев</span>
+            <Avatar alt='' src={ava} style={{ marginLeft: 20 }} />
             <Button
-              variant="outlined"
+              variant='outlined'
               className={classes.customButton}
-              style={{ marginLeft: 20 }}
+              style={{ marginLeft: 40 }}
             >
               Выйти
             </Button>
@@ -41,24 +42,24 @@ export function Admin() {
       </AppBar>
       <Drawer
         className={classes.drawer}
-        variant="permanent"
+        variant='permanent'
         classes={{
           paper: classes.drawerPaper,
         }}
-        anchor="left"
+        anchor='left'
       >
         <div className={classes.toolbar} />
         <span
-          className="flex_box"
+          className='flex_box'
           style={{ flexDirection: xs ? "column" : "row" }}
         >
           <img
             src={logo}
             style={{ height: sm ? 36 : "", width: 150 }}
-            alt="logo"
+            alt='logo'
           />
           <p
-            className="p_1"
+            className='p_1'
             style={{
               margin: xs ? 0 : "0 0 0 10px",
               fontSize: 10,
@@ -70,29 +71,29 @@ export function Admin() {
           </p>
         </span>
 
-        <p className="subtitle">Проекты</p>
-        <ul className="projects">
+        <p className='subtitle'>Проекты</p>
+        <ul className='projects'>
           {projects.map((value) => (
             <li key={value}>
-              <span className="project_link">{value}</span>
+              <span className='project_link'>{value}</span>
             </li>
           ))}
           <li>
-            <span className="subtitle" style={{ cursor: "pointer" }}>
+            <span className='subtitle' style={{ cursor: "pointer" }}>
               + Создать новый проект
             </span>
           </li>
         </ul>
 
-        <p className="subtitle">История операций</p>
-        <p className="subtitle">Настройки</p>
+        <p className='subtitle'>История операций</p>
+        <p className='subtitle'>Настройки</p>
       </Drawer>
 
-      <section
-        style={{ marginTop: 65, width: "100%", paddingLeft: 40 }}
-      ></section>
+      <section style={{ marginTop: 65, width: "100%", paddingLeft: 40 }}>
+        <WithdrawFunds />
+      </section>
 
-      <div className="bg3_image" />
+      <div className='bg3_image' />
     </div>
   );
 }

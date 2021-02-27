@@ -196,7 +196,7 @@ export function Header() {
                   <GoldButton
                     style={{ minWidth: 90, minHeight: 40 }}
                     onClick={() => setDialog({ open: true, login: true })}
-                    outlined
+                    variant='outlined'
                   >
                     Вход
                   </GoldButton>

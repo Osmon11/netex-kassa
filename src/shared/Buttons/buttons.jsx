@@ -1,22 +1,28 @@
 import { Button, withStyles } from "@material-ui/core";
 import { ToggleButton } from "@material-ui/lab";
-import React from "react";
 
-export const GoldButton = ({ outlined, children, style, ...args }) => {
-  return (
-    <Button
-      style={{
-        ...style,
-        border: outlined ? "1px solid #FF9900" : "none",
-        color: outlined ? "#FF9900" : "#fff",
-        backgroundColor: outlined ? "transparent" : "#FF9900",
-      }}
-      {...args}
-    >
-      {children}
-    </Button>
-  );
-};
+export const GoldButton = withStyles({
+  root: {
+    border: "none",
+    color: "#fff",
+    background: "#FF9900",
+    "&:hover": {
+      color: "#ff9900",
+      backgroundColor: "transparent",
+      border: "2px solid #ff9900",
+    },
+  },
+  outlined: {
+    color: "#ff9900",
+    backgroundColor: "transparent",
+    border: "2px solid #ff9900",
+    "&:hover": {
+      border: "none",
+      color: "#fff",
+      background: "#FF9900",
+    },
+  },
+})(Button);
 
 export const GoldToggleButton = withStyles({
   selected: {
