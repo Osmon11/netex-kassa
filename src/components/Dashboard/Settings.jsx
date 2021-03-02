@@ -37,7 +37,7 @@ export function Settings() {
               Кошельки
             </GoldToggleButton>
           </ToggleButtonGroup>
-          {tab === "Профиль" ? (
+          {tab === "Профиль" && (
             <form style={{ paddingRight: "15%" }}>
               <Typography variant='body2' style={{ marginTop: 15 }}>
                 Имя
@@ -114,9 +114,9 @@ export function Settings() {
                 Сменить пароль
               </GoldButton>
             </form>
-          ) : null}
+          )}
 
-          {tab === "Журнал входа" ? (
+          {tab === "Журнал входа" && (
             <>
               <Grid
                 item
@@ -161,7 +161,7 @@ export function Settings() {
                 </Grid>
               ))}
             </>
-          ) : null}
+          )}
         </Grid>
       </Grid>
       <input type='file' ref={avatar} style={{ display: "none" }} />

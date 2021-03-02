@@ -173,7 +173,6 @@ function BeginningOfWork() {
 }
 
 function APIClients() {
-  const classes = useStyles();
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const [tab, setTab] = useState("Node.js");
@@ -197,15 +196,9 @@ function APIClients() {
         style={{ minWidth: xs ? "100%" : 525, margin: "33px 0" }}
         onChange={(_, tab) => setTab(tab)}
       >
-        <GoldToggleButton className={classes.toggleBtn} value='Node.js'>
-          Node.js
-        </GoldToggleButton>
-        <GoldToggleButton className={classes.toggleBtn} value='PHP'>
-          PHP
-        </GoldToggleButton>
-        <GoldToggleButton className={classes.toggleBtn} value='Go'>
-          Go
-        </GoldToggleButton>
+        <GoldToggleButton value='Node.js'>Node.js</GoldToggleButton>
+        <GoldToggleButton value='PHP'>PHP</GoldToggleButton>
+        <GoldToggleButton value='Go'>Go</GoldToggleButton>
       </ToggleButtonGroup>
       <p className='title'>{tab}</p>
       <p className='subtitle'>Установите пакет через npm</p>
@@ -253,19 +246,6 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 624,
     [theme.breakpoints.down("sm")]: {
       minHeight: 165,
-    },
-  },
-  toggleBtn: {
-    width: "33.33%",
-    textTransform: "none",
-    color: "#000",
-    backgroundColor: "#f5f5f5",
-    [theme.breakpoints.down("xs")]: {
-      fontSize: 14,
-    },
-    "&:hover": {
-      color: "#FF9900",
-      backgroundColor: "#fff",
     },
   },
 }));

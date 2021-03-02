@@ -6,15 +6,15 @@ import { Main, Documentation, AboutUs, Rates, Dashboard } from "./pages";
 
 export default function App() {
   return (
-    <div className="App">
+    <div className='App'>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <Route exact path="/" component={Main} />
-          <Route exac path="/documentation" component={Documentation} />
-          <Route exact path="/about-us" component={AboutUs} />
-          <Route exact path="/rates" component={Rates} />
-          <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path='/' component={Main} />
+          <Route exac path='/documentation' component={Documentation} />
+          <Route exact path='/about-us' component={AboutUs} />
+          <Route exact path='/rates' component={Rates} />
+          <Route path='/dashboard' component={Dashboard} />
         </Router>
       </ThemeProvider>
     </div>

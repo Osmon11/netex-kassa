@@ -12,10 +12,12 @@ import React from "react";
 import "./style.css";
 import logo from "assets/logo.png";
 import ava from "assets/avatar.png";
+import { Link, Route, Switch } from "react-router-dom";
+import { ProjectSettings } from "components/Dashboard/ProjectSettings";
 
 const drawerWidth = 280;
 
-export function Admin() {
+export function Admin({ match }) {
   const classes = useStyles();
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
@@ -74,9 +76,11 @@ export function Admin() {
           Проекты
         </p>
         <ul className='projects'>
-          {projects.map((value) => (
+          {projects.map((value, index) => (
             <li key={value}>
-              <span className='project_link'>{value}</span>
+              <Link to={`/dashboard/:${index}`} className='project_link'>
+                {value}
+              </Link>
             </li>
           ))}
           <li>
@@ -91,8 +95,17 @@ export function Admin() {
       </Drawer>
 
       <section
-        style={{ marginTop: 65, width: "100%", paddingLeft: 40 }}
-      ></section>
+        style={{
+          marginTop: 130,
+          width: "100%",
+          paddingRight: "10%",
+          paddingLeft: 90,
+        }}
+      >
+        <Switch>
+          <Route path='/dashboard/:id' component={ProjectSettings} />
+        </Switch>
+      </section>
 
       <div className='bg3_image' />
     </div>
@@ -106,6 +119,7 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
+    paddingRight: "10%",
     flexDirection: "row-reverse",
     borderBottom: "1px solid rgba(255, 255, 255, 0.5);",
     backgroundColor: "transparent",

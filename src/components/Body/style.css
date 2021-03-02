@@ -80,7 +80,7 @@
   list-style: none;
   padding-left: 20px;
 }
-.projects span {
+.projects li {
   line-height: 200%;
 }
 .project_link {

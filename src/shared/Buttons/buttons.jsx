@@ -24,7 +24,21 @@ export const GoldButton = withStyles({
   },
 })(Button);
 
-export const GoldToggleButton = withStyles({
+export const GoldToggleButton = withStyles((theme) => ({
+  root: {
+    width: "33.33%",
+    textTransform: "none",
+    color: "#000",
+    backgroundColor: "#f5f5f5",
+    fontSize: 18,
+    [theme.breakpoints.down("xs")]: {
+      fontSize: 14,
+    },
+    "&:hover": {
+      color: "#FF9900",
+      backgroundColor: "#fff",
+    },
+  },
   selected: {
     "&$selected": {
       color: "#fff",
@@ -36,7 +50,7 @@ export const GoldToggleButton = withStyles({
       },
     },
   },
-})(ToggleButton);
+}))(ToggleButton);
 
 export const CustomSwitch = withStyles({
   root: {
