@@ -1,103 +1,247 @@
 import {
+  Button,
   makeStyles,
-  MenuItem,
-  Switch,
   Typography,
   useMediaQuery,
   useTheme,
-  withStyles,
 } from "@material-ui/core";
 import { ToggleButtonGroup } from "@material-ui/lab";
 import React from "react";
-import { ThemeInput } from "components/Auth/auth";
 import { GoldToggleButton } from "shared/Buttons/buttons";
+import { CustomSwitch } from "shared/Buttons/buttons";
+import { GoldButton } from "shared/Buttons/buttons";
+import { Inputs } from "./Inputs";
 
 export function SecondStep({ handleNext }) {
   const classes = useStyles();
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
-  const [tab, setTab] = React.useState("Шаг 1");
-  const [country, setCountry] = React.useState("USA");
+  const [tab, setTab] = React.useState(1);
   const countries = ["Russia", "China", "USA"];
 
+  function prevStep() {
+    setTab(tab - 1);
+    window.scrollTo(0, 300);
+  }
+  function nextStep() {
+    setTab(tab + 1);
+    window.scrollTo(0, 300);
+  }
   return (
     <div className={classes.stepContainer}>
       <ToggleButtonGroup
         exclusive
         value={tab}
-        style={{ minWidth: xs ? "100%" : 454, maxHeight: 54, margin: "33px 0" }}
+        style={{ minWidth: xs ? "100%" : 454, maxHeight: 50, marginBottom: 33 }}
         onChange={(_, tab) => setTab(tab)}
       >
-        <GoldToggleButton className={classes.toggleBtn} value="Шаг 1">
+        <GoldToggleButton className={classes.toggleBtn} value={1}>
           Шаг 1
         </GoldToggleButton>
-        <GoldToggleButton className={classes.toggleBtn} value="Шаг 2">
+        <GoldToggleButton className={classes.toggleBtn} value={2}>
           Шаг 2
         </GoldToggleButton>
-        <GoldToggleButton className={classes.toggleBtn} value="Шаг 3">
+        <GoldToggleButton className={classes.toggleBtn} value={3}>
           Шаг 3
         </GoldToggleButton>
       </ToggleButtonGroup>
-      <div className="flex_box" style={{ justifyContent: "space-between" }}>
-        <Typography variant="body2" style={{ fontSize: 16, fontWeight: 300 }}>
-          Страна регистрации вашей компании
-        </Typography>
-        <ThemeInput
-          margin="dense"
-          name="country"
-          select
-          variant="outlined"
-          value={country}
-          onChange={(e) => setCountry(e.target.current)}
-          style={{ marginBottom: 20, width: 334 }}
-        >
-          {countries.map((value) => (
-            <MenuItem
-              key={"country" + value}
-              value={value}
-              className={classes.menuItem}
-            >
-              {value}
-            </MenuItem>
-          ))}
-        </ThemeInput>
-      </div>
 
-      <div className="flex_box" style={{ justifyContent: "space-between" }}>
-        <Typography variant="body2" style={{ fontSize: 16, fontWeight: 300 }}>
-          Город регистрации вашей компании
-        </Typography>
-        <ThemeInput
-          margin="dense"
-          name="cityname"
-          select
-          variant="outlined"
-          value={country}
-          onChange={(e) => setCountry(e.target.current)}
-          style={{ marginBottom: 20, width: 334 }}
-        >
-          {countries.map((value) => (
-            <MenuItem
-              key={"city" + value}
-              value={value}
-              className={classes.menuItem}
-            >
-              {value}
-            </MenuItem>
-          ))}
-        </ThemeInput>
-      </div>
+      {tab === 1 && (
+        <>
+          <Inputs
+            label="Страна регистрации вашей компании"
+            items={countries}
+            name="country"
+            select
+          />
+          <Inputs
+            label="Город регистрации вашей компании"
+            name="cityname"
+            placeholder="Введите свой город"
+          />
 
-      <Typography variant="body2">
-        <CustomSwith />
-      </Typography>
+          <div
+            className="flex_box"
+            style={{ justifyContent: "flex-start", marginTop: 20 }}
+          >
+            <CustomSwitch />
+            <Typography variant="body2" style={{ marginLeft: 20 }}>
+              Ознакомлен и согласен с{" "}
+              <span
+                style={{ color: "#ff9900", borderBottom: "1px dashed #ff9900" }}
+              >
+                тарифом
+              </span>
+            </Typography>
+          </div>
+          <div
+            className="flex_box"
+            style={{ justifyContent: "flex-start", marginTop: 20 }}
+          >
+            <CustomSwitch />
+            <Typography variant="body2" style={{ marginLeft: 20 }}>
+              Согласен на сбор персональных данных и с{" "}
+              <span
+                style={{ color: "#ff9900", borderBottom: "1px dashed #ff9900" }}
+              >
+                договором присоединения
+              </span>
+            </Typography>
+          </div>
+
+          <div
+            className="flex_box"
+            style={{
+              justifyContent: "space-between",
+              width: "50%",
+              marginTop: 40,
+            }}
+          >
+            <Button
+              className={classes.customBtn}
+              onClick={() => setTab(tab - 1)}
+              variant="outlined"
+            >
+              Отмена
+            </Button>
+            <GoldButton
+              style={{ width: "40%" }}
+              onClick={() => setTab(tab + 1)}
+            >
+              Далее
+            </GoldButton>
+          </div>
+        </>
+      )}
+
+      {tab === 2 && (
+        <>
+          <p
+            className="subtitle"
+            style={{ textTransform: "uppercase", color: "#ff9900" }}
+          >
+            Общие сведения о вашей компании
+          </p>
+          <Inputs
+            label="Тип организации"
+            items={countries}
+            name="organizationType"
+            select
+          />
+          <Inputs
+            label="Юридиеское название организации"
+            name="organization"
+            placeholder="Введите название организации"
+          />
+          <Inputs
+            label="Вид деятельности"
+            items={countries}
+            name="kindOfActivity"
+            select
+          />
+          <Inputs
+            label="Скан копия свидетельства о государственной регистрации"
+            name="certificate"
+            upload
+          />
+          <Inputs label="Скан копия устава" name="charter" upload />
+          <Inputs
+            label="Скан решения о создании компании"
+            name="decisions"
+            upload
+          />
+          <Inputs
+            label="Дата регистрации компании"
+            name="dateOfRegistration"
+            placeholder="Введите дату регистрации"
+            date
+          />
+          <p
+            className="subtitle"
+            style={{
+              textTransform: "uppercase",
+              color: "#ff9900",
+              marginTop: 30,
+            }}
+          >
+            Реквизиты
+          </p>
+          <Inputs label="ИНН" name="INN" placeholder="Введите ИНН" />
+          <Inputs label="ОКПО" name="OKPO" placeholder="Введите ОКПО" />
+          <Inputs
+            label="Наименование банка"
+            name="nameOfTheBank"
+            placeholder="Введите наименование банка"
+          />
+          <Inputs label="БИК" name="BIK" placeholder="Введите БИК" />
+          <Inputs
+            label="Расчетный счет"
+            name="checkingAccount"
+            placeholder="Введите счет"
+          />
+          <Inputs label="IBAN" name="IBAN" placeholder="Введите IBAN" />
+          <div
+            className="flex_box"
+            style={{ justifyContent: "flex-start", marginTop: 20 }}
+          >
+            <CustomSwitch />
+            <Typography variant="body2" style={{ marginLeft: 20 }}>
+              Организация является плательщиком НДС
+            </Typography>
+          </div>
+          <p
+            className="subtitle"
+            style={{
+              textTransform: "uppercase",
+              color: "#ff9900",
+              marginTop: 50,
+            }}
+          >
+            Юридический адрес
+          </p>
+          <Inputs label="Индекс" name="index" placeholder="Введите индекс" />
+          <Inputs label="Адрес" name="adress" placeholder="Введите aдрес" />
+          <div
+            className="flex_box"
+            style={{ justifyContent: "flex-start", marginTop: 20 }}
+          >
+            <CustomSwitch />
+            <Typography variant="body2" style={{ marginLeft: 20 }}>
+              Фактический адрес не совпадает с юридическим
+            </Typography>
+          </div>
+          <div
+            className="flex_box"
+            style={{
+              justifyContent: "space-between",
+              width: "50%",
+              marginTop: 40,
+            }}
+          >
+            <Button
+              className={classes.customBtn}
+              onClick={prevStep}
+              variant="outlined"
+            >
+              Отмена
+            </Button>
+            <GoldButton style={{ width: "40%" }} onClick={nextStep}>
+              Далее
+            </GoldButton>
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
-const CustomSwith = withStyles({})(Switch);
-
 const useStyles = makeStyles((theme) => ({
+  stepContainer: {
+    borderLeft: "2px solid #ff9900",
+    padding: "0 50px",
+    marginTop: 33,
+    marginLeft: 60,
+  },
   toggleBtn: {
     width: "33.33%",
     textTransform: "none",
@@ -111,11 +255,15 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#fff",
     },
   },
-  menuItem: {
-    color: "#ff9900",
+  customBtn: {
+    width: "40%",
+    minHeight: 50,
+    fontSize: 16,
+    color: "rgba(255, 255, 255, 0.3)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
     "&:hover": {
-      backgroundColor: "#ff9900",
       color: "#fff",
+      borderColor: "#fff",
     },
   },
 }));

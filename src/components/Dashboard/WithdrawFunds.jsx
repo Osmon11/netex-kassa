@@ -54,7 +54,7 @@ export function WithdrawFunds() {
 
       <form>
         <Typography variant="body2" style={{ marginTop: 15 }}>
-          Проекты
+          Проект
         </Typography>
         <ThemeInput
           margin="dense"
@@ -62,11 +62,16 @@ export function WithdrawFunds() {
           select
           variant="outlined"
           value={project}
-          onChange={(e) => setProject(e.target.current)}
+          onChange={(e) => setProject(e.target.value)}
           style={{ marginBottom: 20, width: 334 }}
         >
           {projects.map((value) => (
-            <MenuItem key={value} value={value} className={classes.menuItem}>
+            <MenuItem
+              key={value}
+              value={value}
+              className={classes.menuItem}
+              classes={{ selected: classes.selected }}
+            >
               {value}
             </MenuItem>
           ))}
@@ -80,11 +85,16 @@ export function WithdrawFunds() {
           select
           variant="outlined"
           value={wallet}
-          onChange={(e) => setWallet(e.target.current)}
+          onChange={(e) => setWallet(e.target.value)}
           style={{ marginBottom: 20, width: 334 }}
         >
           {wallets.map((value) => (
-            <MenuItem key={value} value={value} className={classes.menuItem}>
+            <MenuItem
+              key={value}
+              value={value}
+              className={classes.menuItem}
+              classes={{ selected: classes.selected }}
+            >
               {value}
             </MenuItem>
           ))}
@@ -168,6 +178,11 @@ const useStyles = makeStyles({
     "&:hover": {
       backgroundColor: "#ff9900",
       color: "#fff",
+    },
+  },
+  selected: {
+    "&:hover": {
+      color: "#ff9900",
     },
   },
 });

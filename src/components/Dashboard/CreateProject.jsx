@@ -67,7 +67,7 @@ export function CreateProject() {
                 </Button>
               </NavLink>
               <GoldButton
-                style={{ minHeight: 50, width: "40%" }}
+                style={{ minHeight: 50, width: "40%", fontSize: 16 }}
                 onClick={() => setSuccess((isSuccess) => !isSuccess)}
               >
                 Далее

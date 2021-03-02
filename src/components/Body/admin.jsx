@@ -5,6 +5,8 @@ import {
   Drawer,
   IconButton,
   makeStyles,
+  Menu,
+  MenuItem,
   Toolbar,
   useMediaQuery,
   useTheme,
@@ -13,36 +15,56 @@ import React from "react";
 import "./style.css";
 import logo from "assets/logo.png";
 import ava from "assets/avatar.png";
-import { CreateProject } from "components/Dashboard";
-import { NavLink, Route, Switch } from "react-router-dom";
-import { VerticalStepper } from "components/Dashboard/VerticalStepper";
-import { Settings } from "components/Dashboard/Settings";
+import {
+  CreateProject,
+  ProjectSettings,
+  VerticalStepper,
+  WithdrawFunds,
+  Settings,
+  GetNewAdress,
+} from "components/Dashboard";
+import { Link, NavLink, Route, Switch } from "react-router-dom";
 
 const drawerWidth = 280;
 
-export function Admin() {
+export function Admin({ match }) {
   const classes = useStyles();
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const projects = ["Netex.kg", "Bironex", "Интернет магазин Kivano"];
 
+  function handleOpen(event) {
+    setAnchorEl(event.currentTarget);
+  }
+  function handleClose() {
+    setAnchorEl(null);
+  }
   return (
     <div className={classes.root}>
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar style={{ paddingLeft: "15%" }}>
           <div className="flex_box">
-            <span className="subtitle">Азим Дженалиев</span>
-            <IconButton style={{ marginLeft: 20 }}>
+            <span
+              className="subtitle"
+              style={{ cursor: "pointer" }}
+              onClick={handleOpen}
+            >
+              Азим Дженалиев
+            </span>
+            <IconButton style={{ marginLeft: 20 }} onClick={handleOpen}>
               <Avatar alt="" src={ava} />
             </IconButton>
-            <Button
-              variant="outlined"
-              className={classes.customButton}
-              style={{ marginLeft: 40 }}
-            >
-              Выйти
-            </Button>
+            <NavLink to="/" style={{ textDecoration: "none" }}>
+              <Button
+                variant="outlined"
+                className={classes.customButton}
+                style={{ marginLeft: 40 }}
+              >
+                Выйти
+              </Button>
+            </NavLink>
           </div>
         </Toolbar>
       </AppBar>
@@ -59,11 +81,13 @@ export function Admin() {
           className="flex_box"
           style={{ flexDirection: xs ? "column" : "row" }}
         >
-          <img
-            src={logo}
-            style={{ height: sm ? 36 : "", width: 150 }}
-            alt="logo"
-          />
+          <NavLink to="/dashboard">
+            <img
+              src={logo}
+              style={{ height: sm ? 36 : "", width: 150 }}
+              alt="logo"
+            />
+          </NavLink>
           <p
             className="p_1"
             style={{
@@ -77,11 +101,18 @@ export function Admin() {
           </p>
         </span>
 
-        <p className="subtitle">Проекты</p>
+        <p className="subtitle" style={{ marginTop: 50 }}>
+          Проекты
+        </p>
         <ul className="projects">
-          {projects.map((value) => (
+          {projects.map((value, index) => (
             <li key={value}>
-              <span className="project_link">{value}</span>
+              <Link
+                to={`/dashboard/project/:${index}`}
+                className="project_link"
+              >
+                {value}
+              </Link>
             </li>
           ))}
           <li>
@@ -108,8 +139,20 @@ export function Admin() {
         </p>
       </Drawer>
 
-      <section style={{ marginTop: 65, width: "100%", paddingLeft: 40 }}>
+      <section
+        style={{
+          marginTop: 130,
+          width: "100%",
+          paddingRight: "10%",
+          paddingLeft: 90,
+        }}
+      >
         <Switch>
+          <Route
+            exact
+            path="/dashboard/project/:id"
+            component={ProjectSettings}
+          />
           <Route exact path="/dashboard/settings" component={Settings} />
           <Route
             exact
@@ -117,9 +160,45 @@ export function Admin() {
             component={CreateProject}
           />
           <Route exact path="/dashboard/steps" component={VerticalStepper} />
+          <Route
+            exact
+            path="/dashboard/withdrawal-of-funds"
+            component={WithdrawFunds}
+          />
+          <Route
+            exact
+            path="/dashboard/get-new-adress"
+            component={GetNewAdress}
+          />
         </Switch>
       </section>
 
+      <Menu
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        classes={{
+          paper: classes.paper,
+        }}
+      >
+        <NavLink
+          to="/dashboard/get-new-adress"
+          style={{ textDecoration: "none" }}
+        >
+          <MenuItem className={classes.menuItem} onClick={handleClose}>
+            Получить новый адрес
+          </MenuItem>
+        </NavLink>
+        <NavLink
+          to="/dashboard/withdrawal-of-funds"
+          style={{ textDecoration: "none" }}
+        >
+          <MenuItem className={classes.menuItem} onClick={handleClose}>
+            Вывод средств
+          </MenuItem>
+        </NavLink>
+      </Menu>
       <div className="bg3_image" />
     </div>
   );
@@ -129,9 +208,13 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
+  paper: {
+    backgroundColor: "#1a1b20",
+  },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
+    paddingRight: "10%",
     flexDirection: "row-reverse",
     borderBottom: "1px solid rgba(255, 255, 255, 0.5);",
     backgroundColor: "transparent",
@@ -160,6 +243,13 @@ const useStyles = makeStyles((theme) => ({
     color: "#fff",
     "&:hover": {
       color: "#ff9900",
+    },
+  },
+  menuItem: {
+    color: "#ff9900",
+    "&:hover": {
+      backgroundColor: "#ff9900",
+      color: "#fff",
     },
   },
 }));

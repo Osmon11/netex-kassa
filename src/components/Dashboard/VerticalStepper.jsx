@@ -72,12 +72,28 @@ export function VerticalStepper() {
             <CustomLabel
               StepIconComponent={(props) => StepIcon(props, index + 1)}
             >
-              <>
-                <p style={{ fontSize: 18, color: "inherit" }}>{label.title}</p>
-                <p style={{ fontSize: 16, fontWeight: 300, color: "inherit" }}>
-                  {label.subtitle}
-                </p>
-              </>
+              <p
+                style={{
+                  fontSize: 18,
+                  color: "inherit",
+                  margin: 0,
+                  marginLeft: 40,
+                }}
+              >
+                {label.title}
+              </p>
+              <p
+                style={{
+                  fontSize: 16,
+                  fontWeight: 300,
+                  color: "inherit",
+                  margin: 0,
+                  marginTop: 8,
+                  marginLeft: 40,
+                }}
+              >
+                {label.subtitle}
+              </p>
             </CustomLabel>
             <StepContent>{getStepContent(index)}</StepContent>
           </Step>
