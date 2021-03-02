@@ -14,7 +14,7 @@ export default function App() {
           <Route exac path="/documentation" component={Documentation} />
           <Route exact path="/about-us" component={AboutUs} />
           <Route exact path="/rates" component={Rates} />
-          <Route exact path="/dashboard" component={Dashboard} />
+          <Route path="/dashboard" component={Dashboard} />
         </Router>
       </ThemeProvider>
     </div>
