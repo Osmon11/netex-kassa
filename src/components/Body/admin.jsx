@@ -12,7 +12,6 @@ import React from "react";
 import "./style.css";
 import logo from "assets/logo.png";
 import ava from "assets/avatar.png";
-import { WithdrawFunds } from "components/Dashboard/WithdrawFunds";
 
 const drawerWidth = 280;
 
@@ -71,7 +70,9 @@ export function Admin() {
           </p>
         </span>
 
-        <p className='subtitle'>Проекты</p>
+        <p className='subtitle' style={{ marginTop: 50 }}>
+          Проекты
+        </p>
         <ul className='projects'>
           {projects.map((value) => (
             <li key={value}>
@@ -89,9 +90,9 @@ export function Admin() {
         <p className='subtitle'>Настройки</p>
       </Drawer>
 
-      <section style={{ marginTop: 65, width: "100%", paddingLeft: 40 }}>
-        <WithdrawFunds />
-      </section>
+      <section
+        style={{ marginTop: 65, width: "100%", paddingLeft: 40 }}
+      ></section>
 
       <div className='bg3_image' />
     </div>

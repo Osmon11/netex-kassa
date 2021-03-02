@@ -1,4 +1,4 @@
-import { Button, withStyles } from "@material-ui/core";
+import { Button, Switch, withStyles } from "@material-ui/core";
 import { ToggleButton } from "@material-ui/lab";
 
 export const GoldButton = withStyles({
@@ -37,3 +37,36 @@ export const GoldToggleButton = withStyles({
     },
   },
 })(ToggleButton);
+
+export const CustomSwitch = withStyles({
+  root: {
+    width: 38,
+    height: 18,
+    padding: 0,
+  },
+  switchBase: {
+    padding: 0,
+    color: "#9f9f9f",
+    "&$checked": {
+      color: "#ff9900",
+      transform: "translateX(18px)",
+    },
+    "&$checked + $track": {
+      backgroundColor: "#fff",
+      opacity: 1,
+    },
+  },
+  thumb: {
+    height: 18,
+    borderRadius: 4,
+  },
+  track: {
+    borderRadius: 4,
+    backgroundColor: "#fff",
+    opacity: 1,
+  },
+  checked: {
+    transform: "translateX(18px)",
+    color: "#ff9900",
+  },
+})(Switch);
