@@ -4,7 +4,7 @@ import React from "react";
 
 export function Rates() {
   return (
-    <div className='rates_page'>
+    <div className="rates_page">
       <AppContainer>
         <RatesBody />
       </AppContainer>

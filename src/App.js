@@ -3,20 +3,23 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Main, Documentation, AboutUs, Rates, Dashboard } from "./pages";
+import { AuthProvider, PrivateRoute } from "components";
 
 export default function App() {
   return (
     <div className="App">
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Router>
-          <Route exact path="/" component={Main} />
-          <Route exac path="/documentation" component={Documentation} />
-          <Route exact path="/about-us" component={AboutUs} />
-          <Route exact path="/rates" component={Rates} />
-          <Route path="/dashboard" component={Dashboard} />
-        </Router>
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Router>
+            <Route exact path="/" component={Main} />
+            <Route exac path="/documentation" component={Documentation} />
+            <Route exact path="/about-us" component={AboutUs} />
+            <Route exact path="/rates" component={Rates} />
+            <PrivateRoute path="/dashboard" component={Dashboard} />
+          </Router>
+        </ThemeProvider>
+      </AuthProvider>
     </div>
   );
 }

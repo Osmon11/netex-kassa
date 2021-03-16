@@ -25,11 +25,12 @@ import {
 } from "components/Dashboard";
 import { Link, NavLink, Route, Switch } from "react-router-dom";
 
-const drawerWidth = 280;
+let drawerWidth = 280;
 
-export function Admin({ match }) {
+export function Admin() {
   const classes = useStyles();
   const theme = useTheme();
+  const md = useMediaQuery(theme.breakpoints.down("md"));
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -143,8 +144,8 @@ export function Admin({ match }) {
         style={{
           marginTop: 130,
           width: "100%",
-          paddingRight: "10%",
-          paddingLeft: 90,
+          paddingRight: md ? 10 : "10%",
+          paddingLeft: md ? 10 : 90,
         }}
       >
         <Switch>
