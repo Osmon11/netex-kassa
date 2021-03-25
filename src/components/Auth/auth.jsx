@@ -8,7 +8,9 @@ import {
   useTheme,
   withStyles,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import { ErrorMessage, Form, Formik, useField } from "formik";
+import * as Yup from "yup";
+import React, { useEffect, useState } from "react";
 import { GoldButton } from "shared/Buttons/buttons";
 
 export function Auth({ open, handleClose, login, setLogin }) {
@@ -16,7 +18,7 @@ export function Auth({ open, handleClose, login, setLogin }) {
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby='auth-dialog'>
+    <Dialog open={open} onClose={handleClose} aria-labelledby="auth-dialog">
       <DialogContent
         style={{
           backgroundColor: "#2A2B31",
@@ -25,9 +27,9 @@ export function Auth({ open, handleClose, login, setLogin }) {
       >
         {login ? <SingIn sm={sm} /> : <SingUp sm={sm} />}
 
-        <div className='flex_box' style={{ margin: "20px 0" }}>
+        <div className="flex_box" style={{ margin: "20px 0" }}>
           <Typography
-            variant='body2'
+            variant="body2"
             style={{ width: "100%", textAlign: "center" }}
           >
             {login ? "У вас нет учетной записи?" : "У вас уже есть аккаунт?"}{" "}
@@ -46,61 +48,76 @@ export function Auth({ open, handleClose, login, setLogin }) {
 
 function SingIn({ sm }) {
   const [fogetPassword, setPassword] = useState(false);
+  const [remember, setRemember] = useState(false);
+  const [values, setValues] = useState({ email: "", password: "" });
+  const validate = Yup.object({
+    email: Yup.string().required("Поле должно быть заполнена"),
+    password: Yup.number()
+      .min(8, "Пароль должен быть не меньше 8")
+      .required("Поле должно быть заполнена"),
+  });
+
+  useEffect(() => {
+    if (localStorage.password && localStorage.email) {
+      setValues({
+        email: localStorage.getItem("email"),
+        password: localStorage.getItem("password"),
+      });
+    }
+  }, [setValues]);
 
   function submitHandler(e) {
-    e.preventDefault();
+    console.log(e);
   }
   return (
-    <>
-      {sm ? (
-        <p
-          className='title'
-          style={{
-            fontSize: 25,
-            textAlign: "center",
-            marginBottom: 40,
-            marginTop: 0,
-          }}
-        >
-          {fogetPassword ? "Восстановление пароля" : "Вход"}
-        </p>
-      ) : null}
-      <form onSubmit={submitHandler}>
-        <Typography variant='body2' style={{ marginTop: 15 }}>
+    <Formik
+      onSubmit={submitHandler}
+      initialValues={values}
+      validationSchema={validate}
+    >
+      <Form>
+        {sm ? (
+          <p
+            className="title"
+            style={{
+              fontSize: 25,
+              textAlign: "center",
+              marginBottom: 40,
+              marginTop: 0,
+            }}
+          >
+            {fogetPassword ? "Восстановление пароля" : "Вход"}
+          </p>
+        ) : null}
+        <Typography variant="body2" style={{ marginTop: 15 }}>
           Ваша почта
         </Typography>
-        <ThemeInput
-          margin='dense'
-          placeholder='Введите почту'
-          name='email'
-          type='email'
-          variant='outlined'
-          fullWidth
-        />
+        <InputComponent placeholder="Введите почту" name="email" type="email" />
         {!fogetPassword ? (
           <>
-            <Typography variant='body2' style={{ marginTop: 15 }}>
+            <Typography variant="body2" style={{ marginTop: 15 }}>
               Пароль
             </Typography>
-            <ThemeInput
-              margin='dense'
-              placeholder='Введите пароль'
-              name='password'
-              type='password'
-              variant='outlined'
-              fullWidth
+            <InputComponent
+              placeholder="Введите пароль"
+              name="password"
+              type="password"
             />
             <div
-              className='flex_box'
+              className="flex_box"
               style={{ justifyContent: "space-between" }}
             >
-              <span className='flex_box'>
-                <Checkbox name='rememberMe' style={{ color: "#fff" }} />
-                <Typography variant='body2'>Запомнить пароль</Typography>
+              <span className="flex_box">
+                <Checkbox
+                  name="rememberMe"
+                  style={{ color: "#fff" }}
+                  onClick={() => setRemember(true)}
+                />
+                <Typography variant="body2">Запомнить пароль</Typography>
               </span>
 
               <span
-                className='nav_link'
+                className="nav_link"
                 style={{ fontSize: 16 }}
                 onClick={() => setPassword(true)}
               >
@@ -113,79 +130,99 @@ function SingIn({ sm }) {
         <GoldButton style={{ ...btnStyle }} type={"submit"}>
           {fogetPassword ? "Отправить на почту" : "Войти"}
         </GoldButton>
-      </form>
-    </>
+      </Form>
+    </Formik>
   );
 }
 
 function SingUp({ sm }) {
+  const validate = Yup.object({
+    username: Yup.string().required("Поле должно быть заполнена"),
+    email: Yup.string().required("Поле должно быть заполнена"),
+    password: Yup.number()
+      .min(8, "Пароль должен быть не меньше 8")
+      .required("Поле должно быть заполнена"),
+    confirmPassword: Yup.number()
+      .oneOf([Yup.ref("password"), null], "Пароли должны совпадать")
+      .required("Поле должно быть заполнена"),
+  });
+
   function submitHandler(e) {
-    e.preventDefault();
+    console.log(e);
   }
   return (
-    <>
-      {sm ? (
-        <p
-          className='title'
-          style={{
-            fontSize: 25,
-            textAlign: "center",
-            marginBottom: 40,
-            marginTop: 0,
-          }}
-        >
-          Регистрация
-        </p>
-      ) : null}
-      <form onSubmit={submitHandler}>
-        <Typography variant='body2' style={{ marginTop: 15 }}>
+    <Formik
+      onSubmit={submitHandler}
+      initialValues={{
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      }}
+      validationSchema={validate}
+    >
+      <Form>
+        {sm ? (
+          <p
+            className="title"
+            style={{
+              fontSize: 25,
+              textAlign: "center",
+              marginBottom: 40,
+              marginTop: 0,
+            }}
+          >
+            Регистрация
+          </p>
+        ) : null}
+        <Typography variant="body2" style={{ marginTop: 15 }}>
           Имя
         </Typography>
-        <ThemeInput
-          margin='dense'
-          placeholder='Введите Ваше имя'
-          name='username'
-          type='text'
-          variant='outlined'
-          fullWidth
+        <InputComponent
+          placeholder="Введите Ваше имя"
+          name="username"
+          type="text"
         />
-        <Typography variant='body2' style={{ marginTop: 15 }}>
+        <Typography variant="body2" style={{ marginTop: 15 }}>
           Почта
         </Typography>
-        <ThemeInput
-          margin='dense'
-          placeholder='Введите почту'
-          name='email'
-          type='email'
-          variant='outlined'
-          fullWidth
-        />
-        <Typography variant='body2' style={{ marginTop: 15 }}>
+        <InputComponent placeholder="Введите почту" name="email" type="email" />
+        <Typography variant="body2" style={{ marginTop: 15 }}>
           Пароль
         </Typography>
-        <ThemeInput
-          margin='dense'
-          placeholder='Введите пароль'
-          name='password'
-          type='password'
-          variant='outlined'
-          fullWidth
+        <InputComponent
+          placeholder="Введите пароль"
+          name="password"
+          type="password"
         />
-        <ThemeInput
-          margin='dense'
-          placeholder='Повторите пароль'
-          name='password2'
-          type='password'
-          variant='outlined'
-          fullWidth
+        <InputComponent
+          placeholder="Повторите пароль"
+          name="confirmPassword"
+          type="password"
         />
         <GoldButton style={{ ...btnStyle }} type={"submit"}>
           Зарегистрироваться
         </GoldButton>
-      </form>
-    </>
+      </Form>
+    </Formik>
   );
 }
+
+const InputComponent = ({ ...props }) => {
+  const [field, meta] = useField(props);
+
+  return (
+    <ThemeInput
+      margin="dense"
+      {...field}
+      {...props}
+      error={Boolean(meta.touched && meta.error)}
+      helperText={meta.error ? <ErrorMessage name={field.name} /> : ""}
+      variant="outlined"
+      fullWidth
+    />
+  );
+};
 
 export const ThemeInput = withStyles({
   root: {
