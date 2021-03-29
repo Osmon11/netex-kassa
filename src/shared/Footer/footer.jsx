@@ -132,15 +132,21 @@ export function Footer() {
                 className="flex_box"
                 style={{ justifyContent: "space-between", maxWidth: 200 }}
               >
-                <Paper className={classes.iconPaper} elevation={3}>
-                  <img src={whatsApp} alt="" />
-                </Paper>
-                <Paper className={classes.iconPaper} elevation={3}>
-                  <img src={telegram} alt="" />
-                </Paper>
-                <Paper className={classes.iconPaper} elevation={3}>
-                  <img src={viber} alt="" />
-                </Paper>
+                <a href="https://google.com">
+                  <Paper className={classes.iconPaper} elevation={3}>
+                    <img src={whatsApp} alt="" />
+                  </Paper>
+                </a>
+                <a href="https://google.com">
+                  <Paper className={classes.iconPaper} elevation={3}>
+                    <img src={telegram} alt="" />
+                  </Paper>
+                </a>
+                <a href="https://google.com">
+                  <Paper className={classes.iconPaper} elevation={3}>
+                    <img src={viber} alt="" />
+                  </Paper>
+                </a>
               </div>
             </Grid>
           </>
@@ -166,5 +172,9 @@ const useStyles = makeStyles((theme) => ({
     padding: 12,
     width: 44,
     height: 44,
+    "&:hover": {
+      backgroundColor: "inherit",
+      border: "1px solid #fff",
+    },
   },
 }));

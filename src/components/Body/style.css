@@ -93,6 +93,23 @@
   color: #fff;
 }
 
+/* Payment page */
+.payment_page {
+  background-color: #f9f9f9;
+  padding-bottom: 130px;
+}
+.cursor_img {
+  position: absolute;
+  bottom: -12px;
+  right: 20px;
+}
+.neomorphism_box {
+  padding: 10px 20px;
+  background: #f5f5f5;
+  box-shadow: inset 0px 4px 14px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
 @media (max-width: 750px) {
   .cripto_brend {
     width: 90px;

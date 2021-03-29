@@ -2,7 +2,14 @@ import { createMuiTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Main, Documentation, AboutUs, Rates, Dashboard } from "./pages";
+import {
+  Main,
+  Documentation,
+  AboutUs,
+  Rates,
+  Dashboard,
+  Payment,
+} from "./pages";
 import { AuthProvider, PrivateRoute } from "components";
 
 export default function App() {
@@ -16,6 +23,7 @@ export default function App() {
             <Route exac path="/documentation" component={Documentation} />
             <Route exact path="/about-us" component={AboutUs} />
             <Route exact path="/rates" component={Rates} />
+            <Route exact path="/payment" component={Payment} />
             <PrivateRoute path="/dashboard" component={Dashboard} />
           </Router>
         </ThemeProvider>
@@ -38,6 +46,11 @@ const theme = createMuiTheme({
       fontWeight: 300,
       fontSize: 50,
       color: "#fff",
+    },
+    h4: {
+      fontWeight: 300,
+      fontSize: 30,
+      color: "#000",
     },
     body1: {
       fontWeight: 300,
