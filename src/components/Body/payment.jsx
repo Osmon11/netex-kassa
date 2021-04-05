@@ -54,18 +54,18 @@ export function PaymentBody() {
   return (
     <Container style={{ padding: !sm ? "0 140px" : xs ? "0 10px" : "0 100px" }}>
       {!sm && (
-        <img src={logoDark} alt='logo' style={{ margin: "40px 0 100px" }} />
+        <img src={logoDark} alt="logo" style={{ margin: "40px 0 100px" }} />
       )}
       <Paper className={classes.paper}>
         <Grid container spacing={0}>
           <Grid item md={6} sm={12}>
             <Paper className={classes.innerPaper}>
               <div style={{ padding: "50px 40px 40px" }}>
-                <Typography variant='body1' style={{ color: "#000" }}>
+                <Typography variant="body1" style={{ color: "#000" }}>
                   Оплата на сайте site-name.domen
                 </Typography>
                 <Typography
-                  variant='body1'
+                  variant="body1"
                   style={{
                     color: "#FF9900",
                     margin: "10px 0 40px",
@@ -74,45 +74,45 @@ export function PaymentBody() {
                 >
                   100$
                 </Typography>
-                <Typography variant='body1' style={{ color: "#000" }}>
+                <Typography variant="body1" style={{ color: "#000" }}>
                   #264040
                 </Typography>
                 <Typography
-                  variant='body2'
+                  variant="body2"
                   style={{ color: "#000", margin: "10px 0 36px" }}
                 >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   Maecenas lobortis congue lorem et posuere.
                 </Typography>
                 <div
-                  className='flex_box'
+                  className="flex_box"
                   style={{ justifyContent: "space-between" }}
                 >
                   <Typography
-                    variant='body2'
+                    variant="body2"
                     style={{ color: "#000", fontWeight: 400 }}
                   >
                     Получатель
                   </Typography>
                   <Typography
-                    variant='body2'
+                    variant="body2"
                     style={{ color: "#000", fontWeight: 400 }}
                   >
                     laslobit.cc
                   </Typography>
                 </div>
                 <div
-                  className='flex_box'
+                  className="flex_box"
                   style={{ justifyContent: "space-between" }}
                 >
                   <Typography
-                    variant='body2'
+                    variant="body2"
                     style={{ color: "#000", fontWeight: 400 }}
                   >
                     Номер счета
                   </Typography>
                   <Typography
-                    variant='body2'
+                    variant="body2"
                     style={{ color: "#000", fontWeight: 400 }}
                   >
                     254857
@@ -122,7 +122,7 @@ export function PaymentBody() {
               <Divider style={{ backgroundColor: "#A9A9A9" }} />
               <div style={{ padding: "40px 40px 50px" }}>
                 <Typography
-                  variant='body1'
+                  variant="body1"
                   style={{ color: "#1A1A1A", fontSize: 25, marginBottom: 25 }}
                 >
                   Метод оплаты
@@ -138,22 +138,22 @@ export function PaymentBody() {
                         }}
                         onClick={() => setMethod(obj.name)}
                       >
-                        <div className='flex_box'>
+                        <div className="flex_box">
                           <img
                             src={obj.icon}
-                            alt=''
+                            alt=""
                             style={{ marginRight: 10 }}
                           />
 
                           <span>
                             <Typography
-                              variant='subtitle2'
+                              variant="subtitle2"
                               style={{ fontSize: 16, color: "#888" }}
                             >
                               {obj.name}
                             </Typography>
                             <Typography
-                              variant='body1'
+                              variant="body1"
                               style={{ fontSize: 18, color: "#000" }}
                             >
                               {obj.amount}
@@ -176,40 +176,40 @@ export function PaymentBody() {
                 }}
               >
                 <div
-                  className='flex_box'
+                  className="flex_box"
                   style={{ justifyContent: "flex-start" }}
                 >
                   <div
-                    className='flex_box'
+                    className="flex_box"
                     style={{ width: 120, justifyContent: "flex-start" }}
                   >
-                    <img src={timer} alt='' />
+                    <img src={timer} alt="" />
                     <Typography
-                      variant='body1'
+                      variant="body1"
                       style={{ color: "#000", margin: "0 15px 0 10px" }}
                     >
                       {`${minutes} : ${seconds}`}
                     </Typography>
                   </div>
                   <Typography
-                    variant='body2'
+                    variant="body2"
                     style={{ color: "#000", maxWidth: "60%" }}
                   >
                     Оплатите заявку до окончания этого времени
                   </Typography>
                 </div>
                 <Typography
-                  variant='body2'
+                  variant="body2"
                   style={{ color: "#000", margin: "50px 0 8px" }}
                 >
                   Переведите
                 </Typography>
                 <div
-                  className='neomorphism_box flex_box'
+                  className="neomorphism_box flex_box"
                   style={{ justifyContent: "space-between" }}
                 >
                   <Typography
-                    variant='body1'
+                    variant="body1"
                     style={{ color: "#000", fontWeight: 400 }}
                   >
                     0.005 BTC
@@ -222,13 +222,13 @@ export function PaymentBody() {
                     disableFocusListener
                     disableHoverListener
                     disableTouchListener
-                    title='Copied'
+                    title="Copied"
                     arrow
                     TransitionComponent={Zoom}
                   >
                     <img
                       src={copyDark}
-                      alt=''
+                      alt=""
                       style={{ cursor: "pointer" }}
                       onClick={() => {
                         copyToClipboard("0.005 BTC");
@@ -239,13 +239,13 @@ export function PaymentBody() {
                   </Tooltip>
                 </div>
                 <Typography
-                  variant='body2'
+                  variant="body2"
                   style={{ color: "#000", margin: "15px 0 8px" }}
                 >
                   На кошелек
                 </Typography>
                 <div
-                  className='neomorphism_box flex_box'
+                  className="neomorphism_box flex_box"
                   style={{
                     justifyContent: "space-between",
                     position: "relative",
@@ -253,7 +253,7 @@ export function PaymentBody() {
                   }}
                 >
                   <Typography
-                    variant='body1'
+                    variant="body1"
                     style={{
                       color: "#000",
                       fontWeight: 400,
@@ -270,13 +270,13 @@ export function PaymentBody() {
                     disableFocusListener
                     disableHoverListener
                     disableTouchListener
-                    title='Copied'
+                    title="Copied"
                     arrow
                     TransitionComponent={Zoom}
                   >
                     <img
                       src={copyDark}
-                      alt=''
+                      alt=""
                       style={{
                         cursor: "pointer",
                         position: "absolute",
@@ -292,7 +292,7 @@ export function PaymentBody() {
                   </Tooltip>
                 </div>
                 <Typography
-                  variant='body2'
+                  variant="body2"
                   style={{ color: "#000", marginTop: 40 }}
                 >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -300,7 +300,7 @@ export function PaymentBody() {
                   metus.
                 </Typography>
                 <Typography
-                  variant='body2'
+                  variant="body2"
                   style={{ color: "#000", margin: "20px 0 20px" }}
                 >
                   Curabitur aliquam urna diam, id feugiat orci sagittis non. Ut
@@ -308,7 +308,7 @@ export function PaymentBody() {
                   in justo id augue laoreet vulputate.
                 </Typography>
                 <Typography
-                  variant='body2'
+                  variant="body2"
                   style={{ color: "#000", marginBottom: 40 }}
                 >
                   Nulla vitae est nulla. Cras quis lacinia ipsum, ut blandit
@@ -316,10 +316,10 @@ export function PaymentBody() {
                   varius.
                 </Typography>
                 <div style={{ width: "100%", textAlign: "center" }}>
-                  <img src={qrCode} alt='' />
+                  <img src={qrCode} alt="" />
                 </div>
                 <Typography
-                  variant='body2'
+                  variant="body2"
                   style={{ color: "#000", textAlign: "center" }}
                 >
                   QR-код для оплаты через приложение
@@ -355,13 +355,13 @@ export function PaymentBody() {
               </section>
             ) : (
               <div
-                className='flex_box'
+                className="flex_box"
                 style={{ padding: "0 55px", height: "100%" }}
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Typography
-                      variant='h4'
+                      variant="h4"
                       style={{
                         textAlign: "center",
                         margin: sm ? "40px 0 20px" : "0 0 70px",
@@ -383,7 +383,7 @@ export function PaymentBody() {
                         }}
                       >
                         {i === 0 && (
-                          <img className='cursor_img' src={cursor} alt='' />
+                          <img className="cursor_img" src={cursor} alt="" />
                         )}
                       </Paper>
                     </Grid>
@@ -394,14 +394,14 @@ export function PaymentBody() {
           </Grid>
         </Grid>
       </Paper>
-      <div className='flex_box' style={{ margin: "50px 0" }}>
-        <img src={loading} alt='' style={{ marginRight: 20 }} />
-        <Typography variant='body2' style={{ color: "#000" }}>
+      <div className="flex_box" style={{ margin: "50px 0" }}>
+        <img src={loading} alt="" style={{ marginRight: 20 }} />
+        <Typography variant="body2" style={{ color: "#000" }}>
           Мы проверяем оплату автоматически, чтобы вам не приходилось обновлять
           страницу.
         </Typography>
       </div>
-      <div className='flex_box'>
+      <div className="flex_box">
         <GoldButton style={{ width: 250 }}>Отменить</GoldButton>
       </div>
     </Container>

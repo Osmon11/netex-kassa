@@ -1,12 +1,12 @@
+import { AuthAPI } from "components/Auth/auth";
 import React from "react";
 
 export const AuthContex = React.createContext();
 
 export function AuthProvider({ children }) {
-  const [currentUser, setUser] = React.useState(true);
-
+  const auth = new AuthAPI();
   return (
-    <AuthContex.Provider value={{ currentUser }}>
+    <AuthContex.Provider value={{ currentUser: auth.user }}>
       {children}
     </AuthContex.Provider>
   );
