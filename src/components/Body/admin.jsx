@@ -24,7 +24,8 @@ import {
   GetNewAdress,
 } from "components/Dashboard";
 import { Link, NavLink, Route, Switch } from "react-router-dom";
-import { AuthAPI } from "components/Auth/auth";
+import { useDispatch } from "react-redux";
+import { logout } from "store/reducer";
 
 let drawerWidth = 280;
 
@@ -34,9 +35,9 @@ export function Admin() {
   const md = useMediaQuery(theme.breakpoints.down("md"));
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const projects = ["Netex.kg", "Bironex", "Интернет магазин Kivano"];
-  const auth = new AuthAPI();
 
   function handleOpen(event) {
     setAnchorEl(event.currentTarget);
@@ -64,7 +65,7 @@ export function Admin() {
                 variant="outlined"
                 className={classes.customButton}
                 style={{ marginLeft: 40 }}
-                onClick={() => auth.logout()}
+                onClick={() => dispatch(logout())}
               >
                 Выйти
               </Button>
