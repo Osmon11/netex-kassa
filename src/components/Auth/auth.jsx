@@ -20,7 +20,7 @@ export function Auth({ open, handleClose, login, setLogin }) {
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby="auth-dialog">
+    <Dialog open={open} onClose={handleClose} aria-labelledby='auth-dialog'>
       <DialogContent
         style={{
           backgroundColor: "#2A2B31",
@@ -29,9 +29,9 @@ export function Auth({ open, handleClose, login, setLogin }) {
       >
         {login ? <SingIn sm={sm} /> : <SingUp sm={sm} />}
 
-        <div className="flex_box" style={{ margin: "20px 0" }}>
+        <div className='flex_box' style={{ margin: "20px 0" }}>
           <Typography
-            variant="body2"
+            variant='body2'
             style={{ width: "100%", textAlign: "center" }}
           >
             {login ? "У вас нет учетной записи?" : "У вас уже есть аккаунт?"}{" "}
@@ -174,7 +174,7 @@ function SingIn({ sm }) {
         <Alert
           onClose={() => setAlert({ ...alert, open: false })}
           severity={alert.severity}
-          variant="filled"
+          variant='filled'
         >
           {alert.message}
         </Alert>
@@ -187,7 +187,7 @@ function SingIn({ sm }) {
         <Form>
           {sm ? (
             <p
-              className="title"
+              className='title'
               style={{
                 fontSize: 25,
                 textAlign: "center",
@@ -198,39 +198,39 @@ function SingIn({ sm }) {
               {fogetPassword ? "Восстановление пароля" : "Вход"}
             </p>
           ) : null}
-          <Typography variant="body2" style={{ marginTop: 15 }}>
+          <Typography variant='body2' style={{ marginTop: 15 }}>
             Телефон
           </Typography>
           <InputComponent
-            placeholder="Введите номер"
-            name="phone"
-            type="number"
+            placeholder='Введите номер'
+            name='phone'
+            type='number'
           />
           {!fogetPassword ? (
             <>
-              <Typography variant="body2" style={{ marginTop: 15 }}>
+              <Typography variant='body2' style={{ marginTop: 15 }}>
                 Пароль
               </Typography>
               <InputComponent
-                placeholder="Введите пароль"
-                name="password"
-                type="password"
+                placeholder='Введите пароль'
+                name='password'
+                type='password'
               />
               <div
-                className="flex_box"
+                className='flex_box'
                 style={{ justifyContent: "space-between" }}
               >
-                <span className="flex_box">
+                <span className='flex_box'>
                   <Checkbox
-                    name="rememberMe"
+                    name='rememberMe'
                     style={{ color: "#fff" }}
                     onClick={() => setRemember(true)}
                   />
-                  <Typography variant="body2">Запомнить пароль</Typography>
+                  <Typography variant='body2'>Запомнить пароль</Typography>
                 </span>
 
                 <span
-                  className="nav_link"
+                  className='nav_link'
                   style={{ fontSize: 16 }}
                   onClick={() => setPassword(true)}
                 >
@@ -301,22 +301,22 @@ function SingUp({ sm }) {
         <Alert
           onClose={() => setAlert({ ...alert, open: false })}
           severity={alert.severity}
-          variant="filled"
+          variant='filled'
         >
           {alert.message}
         </Alert>
       </Snackbar>
       {enterCode ? (
         <>
-          <Typography variant="body2" style={{ marginTop: 15 }}>
+          <Typography variant='body2' style={{ marginTop: 15 }}>
             Введите полученный код сюда
           </Typography>
           <ThemeInput
-            margin="dense"
-            placeholder="Код активации"
-            name="code"
-            type="number"
-            variant="outlined"
+            margin='dense'
+            placeholder='Код активации'
+            name='code'
+            type='number'
+            variant='outlined'
             onChange={(e) => (activationCode = e.target.value)}
             fullWidth
           />
@@ -366,7 +366,7 @@ function SingUp({ sm }) {
           <Form>
             {sm ? (
               <p
-                className="title"
+                className='title'
                 style={{
                   fontSize: 25,
                   textAlign: "center",
@@ -377,34 +377,34 @@ function SingUp({ sm }) {
                 Регистрация
               </p>
             ) : null}
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Имя
             </Typography>
             <InputComponent
-              placeholder="Введите Ваше имя"
-              name="username"
-              type="text"
+              placeholder='Введите Ваше имя'
+              name='username'
+              type='text'
             />
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Телефон
             </Typography>
             <InputComponent
-              placeholder="Введите номер"
-              name="phone"
-              type="number"
+              placeholder='Введите номер'
+              name='phone'
+              type='number'
             />
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Пароль
             </Typography>
             <InputComponent
-              placeholder="Введите пароль"
-              name="password"
-              type="password"
+              placeholder='Введите пароль'
+              name='password'
+              type='password'
             />
             <InputComponent
-              placeholder="Повторите пароль"
-              name="confirmPassword"
-              type="password"
+              placeholder='Повторите пароль'
+              name='confirmPassword'
+              type='password'
             />
             <GoldButton style={{ ...btnStyle }} type={"submit"}>
               Зарегистрироваться
@@ -421,12 +421,12 @@ const InputComponent = ({ ...props }) => {
 
   return (
     <ThemeInput
-      margin="dense"
+      margin='dense'
       {...field}
       {...props}
       error={Boolean(meta.touched && meta.error)}
       helperText={meta.error ? <ErrorMessage name={field.name} /> : ""}
-      variant="outlined"
+      variant='outlined'
       fullWidth
     />
   );
