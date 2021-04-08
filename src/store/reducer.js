@@ -3,7 +3,6 @@ import { initialState } from "./initialState";
 
 export function reducer(state = initialState, action) {
   const { type, payload } = action;
-  console.log(payload);
   switch (type) {
     case SET_USER:
       return {
