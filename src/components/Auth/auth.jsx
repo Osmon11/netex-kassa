@@ -14,6 +14,15 @@ import * as Yup from "yup";
 import React, { useEffect, useState } from "react";
 import { GoldButton } from "shared/Buttons/buttons";
 import { Alert } from "@material-ui/lab";
+import { useHistory } from "react-router";
+import { useDispatch } from "react-redux";
+import {
+  accountActivation,
+  login,
+  resendActivationCode,
+  restorePassword,
+  singup,
+} from "store/reducer";
 
 export function Auth({ open, handleClose, login, setLogin }) {
   const theme = useTheme();
@@ -48,92 +57,14 @@ export function Auth({ open, handleClose, login, setLogin }) {
   );
 }
 
-export class AuthAPI {
-  constructor() {
-    this.user = false;
-  }
-  login(data) {
-    return fetch("http://crypto.media-center.kg/auth/login", {
-      method: "post",
-      body: JSON.stringify(data),
-      headers: [["Content-Type", "application/json"]],
-    })
-      .then((res) =>
-        res.json().then((data) => {
-          console.log(data);
-          this.user = true;
-        })
-      )
-      .catch((error) => console.log(error));
-  }
-  logout() {
-    fetch("http://crypto.media-center.kg/auth/logout")
-      .then((res) => (res.ok ? console.log("loggedout") : ""))
-      .catch((error) => console.log(error));
-  }
-  singup(data, callback) {
-    return fetch("http://crypto.media-center.kg/auth/registration", {
-      method: "post",
-      body: JSON.stringify(data),
-    })
-      .then((res) =>
-        res.json().then((data) => {
-          console.log(data);
-          callback();
-        })
-      )
-      .catch((error) => console.log(error));
-  }
-  accountActivation(fields) {
-    fetch("http://crypto.media-center.kg/auth/activation/activation", {
-      method: "post",
-      body: JSON.stringify(fields),
-    })
-      .then((res) =>
-        res.json().then((data) => {
-          console.log(data);
-        })
-      )
-      .catch((error) => console.log(error));
-  }
-  resendActivationCode(phone, callback) {
-    fetch("http://crypto.media-center.kg/auth/activation/resend", {
-      method: "post",
-      body: JSON.stringify(phone),
-    })
-      .then((res) =>
-        res.json().then((data) => {
-          console.log(data);
-          callback(data.message);
-        })
-      )
-      .catch((error) => console.log(error));
-  }
-  restorePassword(phone) {
-    fetch("http://crypto.media-center.kg/auth/activation/forgot", {
-      method: "post",
-      body: JSON.stringify(phone),
-    })
-      .then((res) =>
-        res.json().then((data) => {
-          console.log(data);
-        })
-      )
-      .catch((error) => console.log(error));
-  }
-}
-
 function SingIn({ sm }) {
+  const history = useHistory();
+  const dispatch = useDispatch();
   const [fogetPassword, setPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [values, setValues] = useState({
     phone: "0504543444",
     password: "4lEFnNy7",
-  });
-  const [alert, setAlert] = useState({
-    open: true,
-    severity: "success",
-    message: "This is a success message!",
   });
   const validate = Yup.object({
     phone: Yup.string()
@@ -144,41 +75,27 @@ function SingIn({ sm }) {
       .required("Поле должно быть заполнена"),
   });
 
-  useEffect(() => {
-    if (localStorage.password && localStorage.phone) {
-      setValues({
-        phone: localStorage.getItem("phone"),
-        password: localStorage.getItem("password"),
-      });
-    }
-  }, [setValues]);
+  // useEffect(() => {
+  //   if (localStorage.password && localStorage.phone) {
+  //     setValues({
+  //       phone: localStorage.getItem("phone"),
+  //       password: localStorage.getItem("password"),
+  //     });
+  //   }
+  // }, [setValues]);
 
   function submitHandler(fields) {
-    const auth = new AuthAPI();
     if (fogetPassword) {
-      return auth.restorePassword(fields.phone);
+      return dispatch(restorePassword(fields.phone));
     }
-    console.log(fields);
-    auth.login(fields, (message) =>
-      setAlert({ open: true, severity: "info", message })
+    dispatch(
+      login(fields, (message) => {
+        history.push("/dashboard");
+      })
     );
   }
   return (
     <>
-      <Snackbar
-        open={alert.open}
-        autoHideDuration={6000}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        onClose={() => setAlert({ ...alert, open: false })}
-      >
-        <Alert
-          onClose={() => setAlert({ ...alert, open: false })}
-          severity={alert.severity}
-          variant='filled'
-        >
-          {alert.message}
-        </Alert>
-      </Snackbar>
       <Formik
         onSubmit={submitHandler}
         initialValues={values}
@@ -255,25 +172,27 @@ function SingUp({ sm }) {
   const [userPhone, setUserPhone] = useState("");
   const [timeleft, setTimeLeft] = useState(30);
   const [alert, setAlert] = useState({
-    open: true,
+    open: false,
     severity: "success",
     message: "This is a success message!",
   });
   let seconds = Math.floor(timeleft % 60);
   let activationCode = "";
   const validate = Yup.object({
-    username: Yup.string().required("Поле должно быть заполнена"),
+    firstname: Yup.string().required("Поле должно быть заполнена"),
+    lastname: Yup.string().required("Поле должно быть заполнена"),
+    email: Yup.string().required("Поле должно быть заполнена"),
     phone: Yup.string()
       .max(12, "Убедитесь, что это значение содержит не более 12 символов.")
       .required("Поля должно быть заполнена"),
     password: Yup.number()
       .min(8, "Пароль должен быть не меньше 8")
       .required("Поле должно быть заполнена"),
-    confirmPassword: Yup.number()
+    password_two: Yup.number()
       .oneOf([Yup.ref("password"), null], "Пароли должны совпадать")
       .required("Поле должно быть заполнена"),
   });
-  const auth = new AuthAPI();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (enterCode) {
@@ -288,7 +207,7 @@ function SingUp({ sm }) {
   function submitHandler(fields) {
     setUserPhone(fields.phone);
     setCodeField(true);
-    auth.singup(fields, () => setBtnDisabled(false));
+    dispatch(singup(fields));
   }
   return (
     <>
@@ -329,8 +248,10 @@ function SingUp({ sm }) {
             }}
             disabled={btnDisabled}
             onClick={() =>
-              auth.resendActivationCode(userPhone, (message) =>
-                setAlert({ ...alert, message })
+              dispatch(
+                resendActivationCode(userPhone, (message) =>
+                  setAlert({ ...alert, message })
+                )
               )
             }
             fullWidth
@@ -345,7 +266,9 @@ function SingUp({ sm }) {
               marginTop: 20,
             }}
             onClick={() =>
-              auth.accountActivation({ phone: userPhone, code: activationCode })
+              dispatch(
+                accountActivation({ phone: userPhone, code: activationCode })
+              )
             }
             fullWidth
           >
@@ -356,10 +279,12 @@ function SingUp({ sm }) {
         <Formik
           onSubmit={submitHandler}
           initialValues={{
-            username: "test",
+            firstname: "Test",
+            lastname: "Test",
+            email: "osmonab@gmail.com",
             phone: "0501099029",
             password: "12121212",
-            confirmPassword: "12121212",
+            password_two: "12121212",
           }}
           validationSchema={validate}
         >
@@ -382,8 +307,24 @@ function SingUp({ sm }) {
             </Typography>
             <InputComponent
               placeholder='Введите Ваше имя'
-              name='username'
+              name='firstname'
               type='text'
+            />
+            <Typography variant='body2' style={{ marginTop: 15 }}>
+              Фамилия
+            </Typography>
+            <InputComponent
+              placeholder='Введите Вашу фамилию'
+              name='lastname'
+              type='text'
+            />
+            <Typography variant='body2' style={{ marginTop: 15 }}>
+              Почта
+            </Typography>
+            <InputComponent
+              placeholder='Введите email'
+              name='email'
+              type='email'
             />
             <Typography variant='body2' style={{ marginTop: 15 }}>
               Телефон
@@ -403,7 +344,7 @@ function SingUp({ sm }) {
             />
             <InputComponent
               placeholder='Повторите пароль'
-              name='confirmPassword'
+              name='password_two'
               type='password'
             />
             <GoldButton style={{ ...btnStyle }} type={"submit"}>

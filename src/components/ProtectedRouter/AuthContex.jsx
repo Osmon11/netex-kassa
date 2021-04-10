@@ -1,12 +1,12 @@
-import { AuthAPI } from "components/Auth/auth";
 import React from "react";
+import { useSelector } from "react-redux";
 
 export const AuthContex = React.createContext();
 
 export function AuthProvider({ children }) {
-  const auth = new AuthAPI();
+  const user = useSelector((store) => store.reducer.user);
   return (
-    <AuthContex.Provider value={{ currentUser: auth.user }}>
+    <AuthContex.Provider value={{ currentUser: user }}>
       {children}
     </AuthContex.Provider>
   );
