@@ -172,7 +172,7 @@ function SingUp({ sm }) {
   const [userPhone, setUserPhone] = useState("");
   const [timeleft, setTimeLeft] = useState(30);
   const [alert, setAlert] = useState({
-    open: false,
+    open: true,
     severity: "success",
     message: "This is a success message!",
   });
@@ -206,8 +206,14 @@ function SingUp({ sm }) {
 
   function submitHandler(fields) {
     setUserPhone(fields.phone);
-    setCodeField(true);
-    dispatch(singup(fields));
+    dispatch(
+      singup(fields, (data) => {
+        if (data.message) {
+          setAlert({ open: true, severity: "error", message: data.message });
+        }
+        setCodeField(true);
+      })
+    );
   }
   return (
     <>

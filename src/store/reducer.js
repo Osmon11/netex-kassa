@@ -1,4 +1,4 @@
-import { setUser, SET_USER } from "./actionCreators";
+import { setUser, SET_DOCUMENTATION_TAB, SET_USER } from "./actionCreators";
 import { initialState } from "./initialState";
 
 export function reducer(state = initialState, action) {
@@ -8,6 +8,11 @@ export function reducer(state = initialState, action) {
       return {
         ...state,
         user: payload,
+      };
+    case SET_DOCUMENTATION_TAB:
+      return {
+        ...state,
+        currentDocumentationTab: payload,
       };
     default:
       return state;
@@ -43,8 +48,7 @@ export const singup = (data, callback) => (dispatch) => {
   })
     .then((res) =>
       res.json().then((data) => {
-        console.log(data);
-        callback();
+        callback(data);
       })
     )
     .catch((error) => console.log(error));

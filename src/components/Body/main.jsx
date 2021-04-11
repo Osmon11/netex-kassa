@@ -27,12 +27,17 @@ import part3 from "assets/part3.png";
 import part4 from "assets/part4.png";
 import { GoldButton } from "shared/Buttons/buttons";
 import { ParallaxMousemove } from "components";
+import { useHistory } from "react-router";
+import { useDispatch } from "react-redux";
+import { setTab } from "store/actionCreators";
 
 export function MainBody() {
   const classes = useStyles();
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   return (
     <div className='main_page'>
@@ -58,10 +63,20 @@ export function MainBody() {
               усилий.
             </Typography>
             <div className='flex_box'>
-              <GoldButton style={{ minWidth: sm ? 164 : 270, minHeight: 60 }}>
+              <GoldButton
+                style={{ minWidth: sm ? 164 : 270, minHeight: 60 }}
+                onClick={() => history.push("/documentation")}
+              >
                 Начать работу
               </GoldButton>
-              <Button className={classes.customButton} variant='outlined'>
+              <Button
+                className={classes.customButton}
+                variant='outlined'
+                onClick={() => {
+                  dispatch(setTab({ value: "API клиенты", index: 2 }));
+                  history.push("/documentation");
+                }}
+              >
                 API
               </Button>
             </div>
@@ -114,7 +129,10 @@ export function MainBody() {
                 quae ab illo inventore veritatis et quasi architecto beatae
                 vitae dicta sunt explicabo.
               </Typography>
-              <GoldButton style={{ minWidth: 270, minHeight: 60 }}>
+              <GoldButton
+                style={{ minWidth: 270, minHeight: 60 }}
+                onClick={() => history.push("/documentation")}
+              >
                 Начать работу
               </GoldButton>
             </Grid>
