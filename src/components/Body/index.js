@@ -1,6 +1,6 @@
 export * from "./main";
 export * from "./documentation";
 export * from "./aboutUs";
-export * from "./rates";
+export * from "./tariffPlans";
 export * from "./admin";
 export * from "./payment";

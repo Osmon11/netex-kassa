@@ -1,4 +1,4 @@
-import { RatesBody } from "components/Body/rates";
+import { RatesBody } from "components/Body/tariffPlans";
 import { AppContainer } from "containers/AppContainer";
 import React from "react";
 

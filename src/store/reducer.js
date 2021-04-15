@@ -25,7 +25,7 @@ export function reducer(state = initialState, action) {
     case SET_DATA:
       return {
         ...state,
-        data: { ...state.data, ...payload },
+        ...payload,
       };
     case ADD_MERCHANT:
       return {
@@ -92,10 +92,9 @@ export const restorePassword = (phone) => (dispatch) => {
   });
 };
 
-export const getTariffPlans = (callback) => (dispatch) => {
+export const getTariffPlans = () => (dispatch) => {
   creatRequest("/tariff-plans").then((res) => {
-    dispatch(setData({ tariffPlans: res.data }));
-    callback();
+    dispatch(setData({ tariffPlans: res.data.plans }));
   });
 };
 
