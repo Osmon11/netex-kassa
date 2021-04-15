@@ -1,15 +1,55 @@
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 import { ToggleButtonGroup } from "@material-ui/lab";
 import { ThemeInput } from "components/Auth/auth";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
 import React, { useRef, useState } from "react";
 import { GoldButton } from "shared/Buttons/buttons";
 import { GoldToggleButton } from "shared/Buttons/buttons";
+import { changePassword } from "store/reducer";
+import { ValidatedInput } from "./Inputs";
+
+const passwordInitialValues = {
+  "old-password": "",
+  "new-password": "",
+  "confirm-password": "",
+};
+
+const validateChangePassword = Yup.object({
+  "old-password": Yup.string()
+    .min(
+      8,
+      "Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов."
+    )
+    .matches(
+      /(?=.*[a-z])(?=.*\d)/,
+      "Введённый пароль должен быть буквенно-цифровой"
+    )
+    .required("Введите старый пароль"),
+  "new-password": Yup.string()
+    .min(
+      8,
+      "Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов."
+    )
+    .max(128, "Слишком длинный пароль, максимум 128 символов")
+    .matches(
+      /(?=.*[a-z])(?=.*\d)/,
+      "Введённый пароль должен быть буквенно-цифровой"
+    )
+    .required("Поля должно быть заполнена"),
+  "confirm-password": Yup.string()
+    .oneOf([Yup.ref("new-password"), null], "Пароли должны совпадать")
+    .required("Поля должно быть заполнена"),
+});
 
 export function Settings() {
   const classes = useStyles();
   const [tab, setTab] = useState("Профиль");
   const avatar = useRef();
 
+  function changePasswordHandler(fields) {
+    console.log(fields);
+  }
   return (
     <>
       <p className="title" style={{ fontSize: 25 }}>
@@ -38,7 +78,7 @@ export function Settings() {
             </GoldToggleButton>
           </ToggleButtonGroup>
           {tab === "Профиль" && (
-            <form style={{ paddingRight: "15%" }}>
+            <>
               <Typography variant="body2" style={{ marginTop: 15 }}>
                 Имя
               </Typography>
@@ -77,44 +117,43 @@ export function Settings() {
                 disabled
                 fullWidth
               />
-              <Typography variant="body2" style={{ marginTop: 15 }}>
-                Смена пароля
-              </Typography>
-              <ThemeInput
-                margin="dense"
-                placeholder="Введите текущий пароль"
-                name="currentpw"
-                type="password"
-                variant="outlined"
-                fullWidth
-              />
-              <ThemeInput
-                margin="dense"
-                placeholder="Введите новый пароль"
-                name="newpw"
-                type="password"
-                variant="outlined"
-                fullWidth
-              />
-              <ThemeInput
-                margin="dense"
-                placeholder="Повторите новый пароль"
-                name="repeatnewpw"
-                type="password"
-                variant="outlined"
-                fullWidth
-              />
-              <GoldButton
-                type="submit"
-                style={{
-                  marginTop: 20,
-                  marginBottom: 64,
-                  fontSize: 16,
-                }}
+              <Formik
+                initialValues={passwordInitialValues}
+                validationSchema={validateChangePassword}
+                onSubmit={changePasswordHandler}
               >
-                Сменить пароль
-              </GoldButton>
-            </form>
+                <Form>
+                  <Typography variant="body2" style={{ marginTop: 15 }}>
+                    Смена пароля
+                  </Typography>
+                  <ValidatedInput
+                    placeholder="Введите текущий пароль"
+                    name="old-password"
+                    fullWidth
+                  />
+                  <ValidatedInput
+                    placeholder="Введите новый пароль"
+                    name="new-password"
+                    fullWidth
+                  />
+                  <ValidatedInput
+                    placeholder="Повторите новый пароль"
+                    name="confirm-password"
+                    fullWidth
+                  />
+                  <br />
+                  <GoldButton
+                    type="submit"
+                    style={{
+                      marginBottom: 64,
+                      fontSize: 16,
+                    }}
+                  >
+                    Сменить пароль
+                  </GoldButton>
+                </Form>
+              </Formik>
+            </>
           )}
 
           {tab === "Журнал входа" && (

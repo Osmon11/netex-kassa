@@ -1,6 +1,6 @@
 import { Step, StepContent, Stepper } from "@material-ui/core";
 import React from "react";
-import { SecondStep } from "./StepContents";
+import { SecondStep } from "./SecondStep";
 import { CustomLabel, StepIcon } from "./WithdrawFunds";
 
 export function VerticalStepper() {
