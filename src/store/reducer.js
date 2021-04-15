@@ -5,6 +5,7 @@ import {
   SET_DOCUMENTATION_TAB,
   SET_USER,
   SET_DATA,
+  ADD_MERCHANT,
 } from "./actionCreators";
 import { initialState } from "./initialState";
 
@@ -25,6 +26,11 @@ export function reducer(state = initialState, action) {
       return {
         ...state,
         data: { ...state.data, ...payload },
+      };
+    case ADD_MERCHANT:
+      return {
+        ...state,
+        addMerchant: { ...state.addMerchant, ...payload },
       };
     default:
       return state;
@@ -86,9 +92,16 @@ export const restorePassword = (phone) => (dispatch) => {
   });
 };
 
+export const getTariffPlans = (callback) => (dispatch) => {
+  creatRequest("/tariff-plans").then((res) => {
+    dispatch(setData({ tariffPlans: res.data }));
+    callback();
+  });
+};
+
 export const getCountries = (callback) => (dispatch) => {
   creatRequest("/countries").then((res) => {
-    dispatch(setData(...res.data));
+    dispatch(setData({ countries: res.data }));
     callback();
   });
 };
@@ -132,5 +145,23 @@ export const viewMerchant = (data, id, callback) => (dispatch) => {
   creatRequest(`/account/view/${id}`, data).then((res) => {
     callback(res.data);
     console.log(res.data);
+  });
+};
+
+export const getProfile = () => (dispatch) => {
+  creatRequest("/profile/personal").then((res) => {
+    dispatch(setData({ profileInfo: res.data }));
+  });
+};
+
+export const getActionLogs = (page) => (dispatch) => {
+  creatRequest(`/profile/action-log/${page}`).then((res) => {
+    dispatch(setData({ actionLogs: res.data }));
+  });
+};
+
+export const changePassword = (fields, callback) => (dispatch) => {
+  creatRequest("/profile/password", fields).then((res) => {
+    callback();
   });
 };
