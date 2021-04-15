@@ -1,4 +1,5 @@
 export const initialState = {
-  user: null,
+  user: true,
   currentDocumentationTab: { value: "Знакомство", index: 0 },
+  data: null,
 };

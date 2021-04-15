@@ -8,40 +8,49 @@ import { ThemeInput } from "components/Auth/auth";
 import React, { useRef, useState } from "react";
 import uploadIcon from "assets/upload-icon.png";
 import calendarIcon from "assets/calendar-icon.png";
+import { ErrorMessage, useField } from "formik";
 
-export function Inputs({
-  label,
-  select,
-  upload,
-  date,
-  name,
-  placeholder,
-  items,
-}) {
+export function ValidatedInput({ children, ...props }) {
+  const [field, meta] = useField(props);
+
+  return (
+    <ThemeInput
+      {...field}
+      {...props}
+      error={Boolean(meta.touched && meta.error)}
+      helperText={meta.error ? <ErrorMessage name={field.name} /> : ""}
+      margin='dense'
+      variant='outlined'
+      style={{ marginBottom: 20, width: 334 }}
+    >
+      {children}
+    </ThemeInput>
+  );
+}
+
+export function Inputs({ label, select, upload, date, items, ...props }) {
   const classes = useStyles();
   const [item, setItem] = useState(items ? items[0] : null);
   const avatar = useRef();
 
   return (
     <div
-      className="flex_box"
+      className='flex_box'
       style={{ justifyContent: "space-between", paddingRight: "25%" }}
     >
       <Typography
-        variant="body2"
+        variant='body2'
         style={{ fontSize: 16, fontWeight: 300, width: "40%" }}
       >
         {label}
       </Typography>
+      {/* if type select */}
       {select ? (
-        <ThemeInput
-          margin="dense"
-          name={name}
-          select
-          variant="outlined"
+        <ValidatedInput
+          {...props}
           value={item}
+          select
           onChange={(e) => setItem(e.target.value)}
-          style={{ marginBottom: 20, width: 334 }}
         >
           {items.map((value) => (
             <MenuItem
@@ -52,50 +61,40 @@ export function Inputs({
               {value}
             </MenuItem>
           ))}
-        </ThemeInput>
-      ) : upload ? (
-        <ThemeInput
-          margin="dense"
-          placeholder="Загрузить изображение"
-          type="text"
-          variant="outlined"
+        </ValidatedInput>
+      ) : // if it needs to upload file
+      upload ? (
+        <ValidatedInput
+          {...props}
+          placeholder='Загрузить изображение'
           onClick={() => avatar.current.click()}
           InputProps={{
             endAdornment: (
-              <InputAdornment position="end">
-                <img src={uploadIcon} alt="" />
+              <InputAdornment position='end'>
+                <img src={uploadIcon} alt='' />
               </InputAdornment>
             ),
           }}
-          style={{ marginBottom: 20, width: 334 }}
           disabled
         />
-      ) : date ? (
-        <ThemeInput
-          margin="dense"
-          placeholder={placeholder}
-          type="text"
-          variant="outlined"
+      ) : // if date then input with mask
+      date ? (
+        <ValidatedInput
+          {...props}
           InputProps={{
             endAdornment: (
-              <InputAdornment position="end">
-                <img src={calendarIcon} alt="" />
+              <InputAdornment position='end'>
+                <img src={calendarIcon} alt='' />
               </InputAdornment>
             ),
           }}
-          style={{ marginBottom: 20, width: 334 }}
         />
       ) : (
-        <ThemeInput
-          margin="dense"
-          name={name}
-          type="text"
-          variant="outlined"
-          placeholder={placeholder}
-          style={{ marginBottom: 20, width: 334 }}
-        />
+        // simple input
+        <ValidatedInput {...props} />
       )}
-      <input name={name} type="file" ref={avatar} style={{ display: "none" }} />
+      {/* it required to select and upload file  */}
+      <input {...props} type='file' ref={avatar} style={{ display: "none" }} />
     </div>
   );
 }

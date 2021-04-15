@@ -49,23 +49,23 @@ export function SecondStep({ handleNext }) {
       {tab === 1 && (
         <>
           <Inputs
-            label="Страна регистрации вашей компании"
+            label='Страна регистрации вашей компании'
             items={countries}
-            name="country"
+            name='country'
             select
           />
           <Inputs
-            label="Город регистрации вашей компании"
-            name="cityname"
-            placeholder="Введите свой город"
+            label='Город регистрации вашей компании'
+            name='city'
+            placeholder='Введите свой город'
           />
 
           <div
-            className="flex_box"
+            className='flex_box'
             style={{ justifyContent: "flex-start", marginTop: 20 }}
           >
             <CustomSwitch />
-            <Typography variant="body2" style={{ marginLeft: 20 }}>
+            <Typography variant='body2' style={{ marginLeft: 20 }}>
               Ознакомлен и согласен с{" "}
               <span
                 style={{ color: "#ff9900", borderBottom: "1px dashed #ff9900" }}
@@ -75,11 +75,11 @@ export function SecondStep({ handleNext }) {
             </Typography>
           </div>
           <div
-            className="flex_box"
+            className='flex_box'
             style={{ justifyContent: "flex-start", marginTop: 20 }}
           >
             <CustomSwitch />
-            <Typography variant="body2" style={{ marginLeft: 20 }}>
+            <Typography variant='body2' style={{ marginLeft: 20 }}>
               Согласен на сбор персональных данных и с{" "}
               <span
                 style={{ color: "#ff9900", borderBottom: "1px dashed #ff9900" }}
@@ -90,7 +90,7 @@ export function SecondStep({ handleNext }) {
           </div>
 
           <div
-            className="flex_box"
+            className='flex_box'
             style={{
               justifyContent: "space-between",
               width: "50%",
@@ -100,7 +100,7 @@ export function SecondStep({ handleNext }) {
             <Button
               className={classes.customBtn}
               onClick={() => setTab(tab - 1)}
-              variant="outlined"
+              variant='outlined'
             >
               Отмена
             </Button>
@@ -117,47 +117,47 @@ export function SecondStep({ handleNext }) {
       {tab === 2 && (
         <>
           <p
-            className="subtitle"
+            className='subtitle'
             style={{ textTransform: "uppercase", color: "#ff9900" }}
           >
             Общие сведения о вашей компании
           </p>
           <Inputs
-            label="Тип организации"
+            label='Тип организации'
             items={countries}
-            name="organizationType"
+            name='organization_type'
             select
           />
           <Inputs
-            label="Юридиеское название организации"
-            name="organization"
-            placeholder="Введите название организации"
+            label='Юридиеское название организации'
+            name='legal_name'
+            placeholder='Введите название организации'
           />
           <Inputs
-            label="Вид деятельности"
+            label='Вид деятельности'
             items={countries}
-            name="kindOfActivity"
+            name='activity_type'
             select
           />
           <Inputs
-            label="Скан копия свидетельства о государственной регистрации"
-            name="certificate"
+            label='Скан копия свидетельства о государственной регистрации'
+            name='certificate'
             upload
           />
-          <Inputs label="Скан копия устава" name="charter" upload />
+          <Inputs label='Скан копия устава' name='charter' upload />
           <Inputs
-            label="Скан решения о создании компании"
-            name="decisions"
+            label='Скан решения о создании компании'
+            name='decisions'
             upload
           />
           <Inputs
-            label="Дата регистрации компании"
-            name="dateOfRegistration"
-            placeholder="Введите дату регистрации"
+            label='Дата регистрации компании'
+            name='company_reg_date'
+            placeholder='Введите в формате dd-mm-yyyy'
             date
           />
           <p
-            className="subtitle"
+            className='subtitle'
             style={{
               textTransform: "uppercase",
               color: "#ff9900",
@@ -166,31 +166,31 @@ export function SecondStep({ handleNext }) {
           >
             Реквизиты
           </p>
-          <Inputs label="ИНН" name="INN" placeholder="Введите ИНН" />
-          <Inputs label="ОКПО" name="OKPO" placeholder="Введите ОКПО" />
+          <Inputs label='ИНН' name='inn' placeholder='Введите ИНН' />
+          <Inputs label='ОКПО' name='okpo' placeholder='Введите ОКПО' />
           <Inputs
-            label="Наименование банка"
-            name="nameOfTheBank"
-            placeholder="Введите наименование банка"
+            label='Наименование банка'
+            name='bank_name'
+            placeholder='Введите наименование банка'
           />
-          <Inputs label="БИК" name="BIK" placeholder="Введите БИК" />
+          <Inputs label='БИК' name='bik' placeholder='Введите БИК' />
           <Inputs
-            label="Расчетный счет"
-            name="checkingAccount"
-            placeholder="Введите счет"
+            label='Расчетный счет'
+            name='checking_account'
+            placeholder='Введите счет'
           />
-          <Inputs label="IBAN" name="IBAN" placeholder="Введите IBAN" />
+          <Inputs label='IBAN' name='iban' placeholder='Введите IBAN' />
           <div
-            className="flex_box"
+            className='flex_box'
             style={{ justifyContent: "flex-start", marginTop: 20 }}
           >
             <CustomSwitch />
-            <Typography variant="body2" style={{ marginLeft: 20 }}>
+            <Typography variant='body2' style={{ marginLeft: 20 }}>
               Организация является плательщиком НДС
             </Typography>
           </div>
           <p
-            className="subtitle"
+            className='subtitle'
             style={{
               textTransform: "uppercase",
               color: "#ff9900",
@@ -199,19 +199,19 @@ export function SecondStep({ handleNext }) {
           >
             Юридический адрес
           </p>
-          <Inputs label="Индекс" name="index" placeholder="Введите индекс" />
-          <Inputs label="Адрес" name="adress" placeholder="Введите aдрес" />
+          <Inputs label='Индекс' name='index' placeholder='Введите индекс' />
+          <Inputs label='Адрес' name='adress' placeholder='Введите aдрес' />
           <div
-            className="flex_box"
+            className='flex_box'
             style={{ justifyContent: "flex-start", marginTop: 20 }}
           >
             <CustomSwitch />
-            <Typography variant="body2" style={{ marginLeft: 20 }}>
+            <Typography variant='body2' style={{ marginLeft: 20 }}>
               Фактический адрес не совпадает с юридическим
             </Typography>
           </div>
           <div
-            className="flex_box"
+            className='flex_box'
             style={{
               justifyContent: "space-between",
               width: "50%",
@@ -221,7 +221,7 @@ export function SecondStep({ handleNext }) {
             <Button
               className={classes.customBtn}
               onClick={prevStep}
-              variant="outlined"
+              variant='outlined'
             >
               Отмена
             </Button>
