@@ -19,11 +19,14 @@ import cripto4 from "assets/cripto-coin4.png";
 import cripto5 from "assets/cripto-coin5.png";
 import { ParallaxMousemove } from "components";
 import { GoldButton } from "shared/Buttons/buttons";
+import { useDispatch } from "react-redux";
+import { setAuthDialog } from "store/actionCreators";
 
 export function AboutUsBody() {
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
+  const dispatch = useDispatch();
 
   return (
     <section
@@ -36,16 +39,16 @@ export function AboutUsBody() {
       <Container>
         <Grid container spacing={2}>
           <Grid item md={5}>
-            <p className='main_title' style={{ textAlign: "start" }}>
+            <p className="main_title" style={{ textAlign: "start" }}>
               О нас
             </p>
-            <Typography variant='body1' style={{ fontSize: xs ? 14 : 20 }}>
+            <Typography variant="body1" style={{ fontSize: xs ? 14 : 20 }}>
               Наша команда разработчиков работает с криптовалютами в области
               финансовых технологий с 2012 года и за эти годы мы прошли долгий
               путь развития с множеством довольных клиентов.
             </Typography>
             <Typography
-              variant='body1'
+              variant="body1"
               style={{ marginTop: 20, fontSize: xs ? 14 : 20 }}
             >
               Главная задача команды biwse.com — дать нашим клиентам достойный
@@ -55,31 +58,31 @@ export function AboutUsBody() {
             {!sm ? (
               <>
                 <p
-                  className='main_title'
+                  className="main_title"
                   style={{ textAlign: "start", marginTop: 150 }}
                 >
                   Технологии
                 </p>
-                <div className='flex_box' style={{ alignItems: "flex-start" }}>
+                <div className="flex_box" style={{ alignItems: "flex-start" }}>
                   <img
                     src={flag}
-                    alt=''
+                    alt=""
                     style={{ marginTop: 10, marginRight: 15 }}
                   />
-                  <Typography variant='body1'>
+                  <Typography variant="body1">
                     Наш сервис развиваться и мы всегда держимся новых трендов.
                     Мы готовим проект Biwse Card, и если Вы хотите получить
                     карту свяжитесь со службой поддержки и вашу заявку внесут в
                     список ожидания.
                   </Typography>
                 </div>
-                <div className='flex_box' style={{ alignItems: "flex-start" }}>
+                <div className="flex_box" style={{ alignItems: "flex-start" }}>
                   <img
                     src={flag}
-                    alt=''
+                    alt=""
                     style={{ marginTop: 25, marginRight: 15 }}
                   />
-                  <Typography variant='body1' style={{ marginTop: 20 }}>
+                  <Typography variant="body1" style={{ marginTop: 20 }}>
                     But I must explain to you how all this mistaken idea of
                     denouncing pleasure and praising pain was born and I will
                     give you a complete account of the system, and expound the
@@ -94,21 +97,21 @@ export function AboutUsBody() {
           <Grid item md={7} style={{ position: "relative" }}>
             {sm ? (
               <>
-                <img className='planet' src={planet} alt='' />
+                <img className="planet" src={planet} alt="" />
                 <img
-                  className='bitcoin about_us_bitcoin1'
+                  className="bitcoin about_us_bitcoin1"
                   src={bitcoin1}
-                  alt=''
+                  alt=""
                 />
                 <img
-                  className='bitcoin about_us_bitcoin2'
+                  className="bitcoin about_us_bitcoin2"
                   src={bitcoin2}
-                  alt=''
+                  alt=""
                 />
                 <img
-                  className='bitcoin about_us_bitcoin3'
+                  className="bitcoin about_us_bitcoin3"
                   src={bitcoin3}
-                  alt=''
+                  alt=""
                 />
               </>
             ) : (
@@ -135,7 +138,7 @@ export function AboutUsBody() {
                     },
                   }}
                 >
-                  <img src={planet} alt='' />
+                  <img src={planet} alt="" />
                 </ParallaxMousemove.Layer>
                 {/* Bitcoin1 image */}
                 <ParallaxMousemove.Layer
@@ -153,7 +156,7 @@ export function AboutUsBody() {
                     },
                   }}
                 >
-                  <img src={bitcoin1} alt='' />
+                  <img src={bitcoin1} alt="" />
                 </ParallaxMousemove.Layer>
                 {/* Bitcoin2 image */}
                 <ParallaxMousemove.Layer
@@ -171,7 +174,7 @@ export function AboutUsBody() {
                     },
                   }}
                 >
-                  <img src={bitcoin2} alt='' />
+                  <img src={bitcoin2} alt="" />
                 </ParallaxMousemove.Layer>
                 {/* Bitcoin3 image */}
                 <ParallaxMousemove.Layer
@@ -190,7 +193,7 @@ export function AboutUsBody() {
                     },
                   }}
                 >
-                  <img src={bitcoin3} alt='' />
+                  <img src={bitcoin3} alt="" />
                 </ParallaxMousemove.Layer>
               </ParallaxMousemove>
             )}
@@ -198,30 +201,30 @@ export function AboutUsBody() {
 
           {sm ? (
             <Grid item xs={12}>
-              <p className='main_title' style={{ textAlign: "start" }}>
+              <p className="main_title" style={{ textAlign: "start" }}>
                 Технологии
               </p>
-              <div className='flex_box' style={{ alignItems: "flex-start" }}>
+              <div className="flex_box" style={{ alignItems: "flex-start" }}>
                 <img
                   src={flag}
-                  alt=''
+                  alt=""
                   style={{
                     marginTop: 10,
                     marginRight: 15,
                     width: xs ? 25 : 46,
                   }}
                 />
-                <Typography variant='body1' style={{ fontSize: xs ? 14 : 20 }}>
+                <Typography variant="body1" style={{ fontSize: xs ? 14 : 20 }}>
                   Наш сервис развиваться и мы всегда держимся новых трендов. Мы
                   готовим проект Biwse Card, и если Вы хотите получить карту
                   свяжитесь со службой поддержки и вашу заявку внесут в список
                   ожидания.
                 </Typography>
               </div>
-              <div className='flex_box' style={{ alignItems: "flex-start" }}>
+              <div className="flex_box" style={{ alignItems: "flex-start" }}>
                 <img
                   src={flag}
-                  alt=''
+                  alt=""
                   style={{
                     marginTop: 25,
                     marginRight: 15,
@@ -229,7 +232,7 @@ export function AboutUsBody() {
                   }}
                 />
                 <Typography
-                  variant='body1'
+                  variant="body1"
                   style={{ marginTop: 20, fontSize: xs ? 14 : 20 }}
                 >
                   But I must explain to you how all this mistaken idea of
@@ -244,7 +247,7 @@ export function AboutUsBody() {
 
           <Grid item md={12}>
             <Typography
-              variant='h3'
+              variant="h3"
               style={{
                 padding: "0 20%",
                 marginTop: 100,
@@ -255,42 +258,45 @@ export function AboutUsBody() {
               Больше чем 200 компаний уже работают с нами
             </Typography>
             <p
-              className='title'
+              className="title"
               style={{ fontSize: xs ? 20 : 25, textAlign: "center" }}
             >
               Мы поддерживаем самые популярные криптовалюты
             </p>
             <div
-              className='flex_box'
+              className="flex_box"
               style={{ width: "100%", margin: "60px 0" }}
             >
               <img
-                className='cripto_brend'
+                className="cripto_brend"
                 src={cripto1}
                 style={{ marginRight: xs ? 15 : 30 }}
-                alt=''
+                alt=""
               />
               <img
-                className='cripto_brend'
+                className="cripto_brend"
                 src={cripto2}
                 style={{ marginRight: xs ? 15 : 30 }}
-                alt=''
+                alt=""
               />
               <img
-                className='cripto_brend'
+                className="cripto_brend"
                 src={cripto3}
                 style={{ marginRight: xs ? 15 : 30 }}
-                alt=''
+                alt=""
               />
               <img
-                className='cripto_brend'
+                className="cripto_brend"
                 src={cripto4}
                 style={{ marginRight: xs ? 15 : 30 }}
-                alt=''
+                alt=""
               />
-              <img className='cripto_brend' src={cripto5} alt='' />
+              <img className="cripto_brend" src={cripto5} alt="" />
             </div>
             <GoldButton
+              onClick={() =>
+                dispatch(setAuthDialog({ open: true, login: false }))
+              }
               style={{
                 minWidth: 300,
                 marginLeft: "50%",

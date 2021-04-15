@@ -89,9 +89,6 @@ export function SecondStep({ handleNext }) {
         <GoldToggleButton className={classes.toggleBtn} value={2}>
           Шаг 2
         </GoldToggleButton>
-        <GoldToggleButton className={classes.toggleBtn} value={3}>
-          Шаг 3
-        </GoldToggleButton>
       </ToggleButtonGroup>
 
       {tab === 1 && (

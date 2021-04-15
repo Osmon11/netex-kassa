@@ -1,6 +1,7 @@
 export const SET_USER = "SET_USER";
 export const SET_DOCUMENTATION_TAB = "SET_DOCUMENTATION_TAB";
 export const SET_DATA = "SET_DATA";
+export const SET_AUTH_DIALOG = "SET_AUTH_DIALOG";
 export const ADD_MERCHANT = "ADD_MERCHANT";
 
 export function setUser(payload) {
@@ -28,5 +29,12 @@ export function addMerchant(payload) {
   return {
     payload,
     type: ADD_MERCHANT,
+  };
+}
+
+export function setAuthDialog(payload) {
+  return {
+    payload,
+    type: SET_AUTH_DIALOG,
   };
 }

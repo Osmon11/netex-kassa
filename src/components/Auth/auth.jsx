@@ -64,14 +64,14 @@ function SingIn({ sm }) {
   const [remember, setRemember] = useState(false);
   const [values, setValues] = useState({
     phone: "0504543444",
-    password: "4lEFnNy7",
+    password: "123",
   });
   const validate = Yup.object({
     phone: Yup.string()
       .max(12, "Убедитесь, что это значение содержит не более 12 символов.")
       .required("Поля должно быть заполнена"),
     password: Yup.string()
-      .min(8, "Пароль должен быть не меньше 8")
+      // .min(8, "Пароль должен быть не меньше 8")
       .required("Поле должно быть заполнена"),
   });
 
@@ -172,7 +172,7 @@ function SingUp({ sm }) {
   const [userPhone, setUserPhone] = useState("");
   const [timeleft, setTimeLeft] = useState(30);
   const [alert, setAlert] = useState({
-    open: true,
+    open: false,
     severity: "success",
     message: "This is a success message!",
   });
@@ -208,8 +208,9 @@ function SingUp({ sm }) {
     setUserPhone(fields.phone);
     dispatch(
       singup(fields, (data) => {
-        if (data.message) {
-          setAlert({ open: true, severity: "error", message: data.message });
+        if (Boolean(data.messages)) {
+          setAlert({ open: true, severity: "error", message: data.messages });
+          return;
         }
         setCodeField(true);
       })
@@ -219,7 +220,7 @@ function SingUp({ sm }) {
     <>
       <Snackbar
         open={alert.open}
-        autoHideDuration={6000}
+        autoHideDuration={5000}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         onClose={() => setAlert({ ...alert, open: false })}
       >

@@ -6,6 +6,7 @@ import {
   SET_USER,
   SET_DATA,
   ADD_MERCHANT,
+  SET_AUTH_DIALOG,
 } from "./actionCreators";
 import { initialState } from "./initialState";
 
@@ -21,6 +22,11 @@ export function reducer(state = initialState, action) {
       return {
         ...state,
         currentDocumentationTab: payload,
+      };
+    case SET_AUTH_DIALOG:
+      return {
+        ...state,
+        authdialog: payload,
       };
     case SET_DATA:
       return {
@@ -55,6 +61,7 @@ function creatRequest(endpoint, data) {
 
 export const login = (data, callback) => (dispatch) => {
   creatRequest("/auth/login", data).then((res) => {
+    console.log(res);
     dispatch(setUser(Boolean(res.data.response)));
     callback("Logged in");
   });
