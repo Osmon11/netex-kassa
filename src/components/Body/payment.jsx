@@ -29,6 +29,7 @@ import xrp from "../../assets/xrp.png";
 import bth from "../../assets/bth.png";
 import "./style.css";
 import { GoldButton } from "shared/Buttons/buttons";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 export function PaymentBody() {
   const classes = useStyles();
@@ -226,16 +227,19 @@ export function PaymentBody() {
                     arrow
                     TransitionComponent={Zoom}
                   >
-                    <img
-                      src={copyDark}
-                      alt=""
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        copyToClipboard("0.005 BTC");
+                    <CopyToClipboard
+                      text="0.005 BTC"
+                      onCopy={() => {
                         setTooltip({ ...tooltip, a: true });
                         closeTooltip();
                       }}
-                    />
+                    >
+                      <img
+                        src={copyDark}
+                        alt=""
+                        style={{ cursor: "pointer" }}
+                      />
+                    </CopyToClipboard>
                   </Tooltip>
                 </div>
                 <Typography
@@ -274,21 +278,24 @@ export function PaymentBody() {
                     arrow
                     TransitionComponent={Zoom}
                   >
-                    <img
-                      src={copyDark}
-                      alt=""
-                      style={{
-                        cursor: "pointer",
-                        position: "absolute",
-                        top: 15,
-                        right: 20,
-                      }}
-                      onClick={() => {
-                        copyToClipboard("39uvqC8CFYnSHZthgPv27sMWmqFbGsdDyZ");
+                    <CopyToClipboard
+                      text="39uvqC8CFYnSHZthgPv27sMWmqFbGsdDyZ"
+                      onCopy={() => {
                         setTooltip({ ...tooltip, b: true });
                         closeTooltip();
                       }}
-                    />
+                    >
+                      <img
+                        src={copyDark}
+                        alt=""
+                        style={{
+                          cursor: "pointer",
+                          position: "absolute",
+                          top: 15,
+                          right: 20,
+                        }}
+                      />
+                    </CopyToClipboard>
                   </Tooltip>
                 </div>
                 <Typography
@@ -407,17 +414,6 @@ export function PaymentBody() {
     </Container>
   );
 }
-
-const copyToClipboard = (str) => {
-  const el = document.createElement("textarea");
-  el.value = str;
-  el.setAttribute("readonly", "");
-  el.style.display = "none";
-  document.body.appendChild(el);
-  el.select();
-  document.execCommand("copy");
-  document.body.removeChild(el);
-};
 
 const useStyles = makeStyles((theme) => ({
   paper: {
