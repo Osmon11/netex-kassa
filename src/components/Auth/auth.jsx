@@ -27,20 +27,32 @@ import {
 export function Auth({ open, handleClose, login, setLogin }) {
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
+  const [alert, setAlert] = useState({
+    open: false,
+    severity: "success",
+    message: "This is a success message!",
+  });
 
+  function alertHandler(options) {
+    setAlert(options);
+  }
   return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby="auth-dialog">
+    <Dialog open={open} onClose={handleClose} aria-labelledby='auth-dialog'>
       <DialogContent
         style={{
           backgroundColor: "#2A2B31",
           padding: "55px 80px 20px",
         }}
       >
-        {login ? <SingIn sm={sm} /> : <SingUp sm={sm} />}
+        {login ? (
+          <SingIn sm={sm} setAlert={alertHandler} />
+        ) : (
+          <SingUp sm={sm} setAlert={alertHandler} />
+        )}
 
-        <div className="flex_box" style={{ margin: "20px 0" }}>
+        <div className='flex_box' style={{ margin: "20px 0" }}>
           <Typography
-            variant="body2"
+            variant='body2'
             style={{ width: "100%", textAlign: "center" }}
           >
             {login ? "У вас нет учетной записи?" : "У вас уже есть аккаунт?"}{" "}
@@ -52,12 +64,27 @@ export function Auth({ open, handleClose, login, setLogin }) {
             </span>
           </Typography>
         </div>
+
+        <Snackbar
+          open={alert.open}
+          autoHideDuration={3000}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          onClose={() => setAlert({ ...alert, open: false })}
+        >
+          <Alert
+            onClose={() => setAlert({ ...alert, open: false })}
+            severity={alert.severity}
+            variant='filled'
+          >
+            {alert.message}
+          </Alert>
+        </Snackbar>
       </DialogContent>
     </Dialog>
   );
 }
 
-function SingIn({ sm }) {
+function SingIn({ sm, setAlert }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const [fogetPassword, setPassword] = useState(false);
@@ -89,8 +116,11 @@ function SingIn({ sm }) {
       return dispatch(restorePassword(fields.phone));
     }
     dispatch(
-      login(fields, (message) => {
-        history.push("/dashboard");
+      login(fields, (alert) => {
+        setAlert(alert);
+        if (alert.severity === "success") {
+          history.push("/dashboard");
+        }
       })
     );
   }
@@ -104,7 +134,7 @@ function SingIn({ sm }) {
         <Form>
           {sm ? (
             <p
-              className="title"
+              className='title'
               style={{
                 fontSize: 25,
                 textAlign: "center",
@@ -115,39 +145,39 @@ function SingIn({ sm }) {
               {fogetPassword ? "Восстановление пароля" : "Вход"}
             </p>
           ) : null}
-          <Typography variant="body2" style={{ marginTop: 15 }}>
+          <Typography variant='body2' style={{ marginTop: 15 }}>
             Телефон
           </Typography>
           <InputComponent
-            placeholder="Введите номер"
-            name="phone"
-            type="number"
+            placeholder='Введите номер'
+            name='phone'
+            type='number'
           />
           {!fogetPassword ? (
             <>
-              <Typography variant="body2" style={{ marginTop: 15 }}>
+              <Typography variant='body2' style={{ marginTop: 15 }}>
                 Пароль
               </Typography>
               <InputComponent
-                placeholder="Введите пароль"
-                name="password"
-                type="password"
+                placeholder='Введите пароль'
+                name='password'
+                type='password'
               />
               <div
-                className="flex_box"
+                className='flex_box'
                 style={{ justifyContent: "space-between" }}
               >
-                <span className="flex_box">
+                <span className='flex_box'>
                   <Checkbox
-                    name="rememberMe"
+                    name='rememberMe'
                     style={{ color: "#fff" }}
                     onClick={() => setRemember(true)}
                   />
-                  <Typography variant="body2">Запомнить пароль</Typography>
+                  <Typography variant='body2'>Запомнить пароль</Typography>
                 </span>
 
                 <span
-                  className="nav_link"
+                  className='nav_link'
                   style={{ fontSize: 16 }}
                   onClick={() => setPassword(true)}
                 >
@@ -166,16 +196,11 @@ function SingIn({ sm }) {
   );
 }
 
-function SingUp({ sm }) {
+function SingUp({ sm, setAlert }) {
   const [enterCode, setCodeField] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(true);
   const [userPhone, setUserPhone] = useState("");
   const [timeleft, setTimeLeft] = useState(30);
-  const [alert, setAlert] = useState({
-    open: false,
-    severity: "success",
-    message: "This is a success message!",
-  });
   let seconds = Math.floor(timeleft % 60);
   let activationCode = "";
   const validate = Yup.object({
@@ -218,31 +243,17 @@ function SingUp({ sm }) {
   }
   return (
     <>
-      <Snackbar
-        open={alert.open}
-        autoHideDuration={5000}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        onClose={() => setAlert({ ...alert, open: false })}
-      >
-        <Alert
-          onClose={() => setAlert({ ...alert, open: false })}
-          severity={alert.severity}
-          variant="filled"
-        >
-          {alert.message}
-        </Alert>
-      </Snackbar>
       {enterCode ? (
         <>
-          <Typography variant="body2" style={{ marginTop: 15 }}>
+          <Typography variant='body2' style={{ marginTop: 15 }}>
             Введите полученный код сюда
           </Typography>
           <ThemeInput
-            margin="dense"
-            placeholder="Код активации"
-            name="code"
-            type="number"
-            variant="outlined"
+            margin='dense'
+            placeholder='Код активации'
+            name='code'
+            type='number'
+            variant='outlined'
             onChange={(e) => (activationCode = e.target.value)}
             fullWidth
           />
@@ -298,7 +309,7 @@ function SingUp({ sm }) {
           <Form>
             {sm ? (
               <p
-                className="title"
+                className='title'
                 style={{
                   fontSize: 25,
                   textAlign: "center",
@@ -309,50 +320,50 @@ function SingUp({ sm }) {
                 Регистрация
               </p>
             ) : null}
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Имя
             </Typography>
             <InputComponent
-              placeholder="Введите Ваше имя"
-              name="firstname"
-              type="text"
+              placeholder='Введите Ваше имя'
+              name='firstname'
+              type='text'
             />
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Фамилия
             </Typography>
             <InputComponent
-              placeholder="Введите Вашу фамилию"
-              name="lastname"
-              type="text"
+              placeholder='Введите Вашу фамилию'
+              name='lastname'
+              type='text'
             />
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Почта
             </Typography>
             <InputComponent
-              placeholder="Введите email"
-              name="email"
-              type="email"
+              placeholder='Введите email'
+              name='email'
+              type='email'
             />
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Телефон
             </Typography>
             <InputComponent
-              placeholder="Введите номер"
-              name="phone"
-              type="number"
+              placeholder='Введите номер'
+              name='phone'
+              type='number'
             />
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Пароль
             </Typography>
             <InputComponent
-              placeholder="Введите пароль"
-              name="password"
-              type="password"
+              placeholder='Введите пароль'
+              name='password'
+              type='password'
             />
             <InputComponent
-              placeholder="Повторите пароль"
-              name="password_two"
-              type="password"
+              placeholder='Повторите пароль'
+              name='password_two'
+              type='password'
             />
             <GoldButton style={{ ...btnStyle }} type={"submit"}>
               Зарегистрироваться
@@ -369,12 +380,12 @@ const InputComponent = ({ ...props }) => {
 
   return (
     <ThemeInput
-      margin="dense"
+      margin='dense'
       {...field}
       {...props}
       error={Boolean(meta.touched && meta.error)}
       helperText={meta.error ? <ErrorMessage name={field.name} /> : ""}
-      variant="outlined"
+      variant='outlined'
       fullWidth
     />
   );

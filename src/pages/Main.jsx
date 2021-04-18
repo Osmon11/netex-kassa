@@ -2,7 +2,7 @@ import React from "react";
 import { AppContainer } from "../containers";
 import { MainBody } from "components";
 
-export function Main() {
+export default function Main() {
   return (
     <AppContainer>
       <MainBody />

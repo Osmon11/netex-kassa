@@ -1,31 +1,46 @@
-import { createMuiTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
-import React from "react";
+import {
+  CircularProgress,
+  createMuiTheme,
+  CssBaseline,
+  ThemeProvider,
+} from "@material-ui/core";
+import React, { Suspense } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import {
-  Main,
-  Documentation,
-  AboutUs,
-  Rates,
-  Dashboard,
-  Payment,
-} from "./pages";
 import { AuthProvider, PrivateRoute } from "components";
+
+const Main = React.lazy(() => import("./pages/Main"));
+const Documentation = React.lazy(() => import("./pages/Documentation"));
+const AboutUs = React.lazy(() => import("./pages/AboutUs"));
+const Rates = React.lazy(() => import("./pages/Rates"));
+const Dashboard = React.lazy(() => import("./pages/Dashboard"));
+const Payment = React.lazy(() => import("./pages/Payment"));
 
 export default function App() {
   return (
-    <div className="App">
+    <div className='App'>
       <AuthProvider>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Router>
-            <Route exact path="/" component={Main} />
-            <Route exac path="/documentation" component={Documentation} />
-            <Route exact path="/about-us" component={AboutUs} />
-            <Route exact path="/rates" component={Rates} />
-            <Route exact path="/payment" component={Payment} />
-            <PrivateRoute path="/dashboard" component={Dashboard} />
-          </Router>
+          <Suspense
+            fallback={
+              <div
+                className='flex_box'
+                style={{ width: "100vw", height: "100vh" }}
+              >
+                <CircularProgress />
+              </div>
+            }
+          >
+            <Router>
+              <Route exact path='/' component={Main} />
+              <Route exac path='/documentation' component={Documentation} />
+              <Route exact path='/about-us' component={AboutUs} />
+              <Route exact path='/rates' component={Rates} />
+              <Route exact path='/payment' component={Payment} />
+              <PrivateRoute path='/dashboard' component={Dashboard} />
+            </Router>
+          </Suspense>
         </ThemeProvider>
       </AuthProvider>
     </div>

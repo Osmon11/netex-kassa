@@ -43,12 +43,11 @@ export function reducer(state = initialState, action) {
   }
 }
 
-const baseURL = "http://crypto.media-center.kg";
+const baseURL = "https://api.netex-kassa.com/";
 const headers = { "Content-Type": "application/x-www-form-urlencoded" };
 const AppAxios = axios.create({
   baseURL,
   headers,
-  withCredentials: true,
 });
 
 function creatRequest(endpoint, data) {
@@ -61,14 +60,22 @@ function creatRequest(endpoint, data) {
 
 export const login = (data, callback) => (dispatch) => {
   creatRequest("/auth/login", data).then((res) => {
-    console.log(res);
-    dispatch(setUser(Boolean(res.data.response)));
-    callback("Logged in");
+    if (Boolean(res)) {
+      AppAxios.defaults.withCredentials = true;
+      dispatch(setUser(Boolean(res.data?.response)));
+      callback({ message: "Logged in", severity: "success", open: true });
+    } else
+      callback({
+        message: "Вы уже авторизованы :(",
+        severity: "error",
+        open: true,
+      });
   });
 };
 
 export const logout = (callback) => (dispatch) => {
   creatRequest("/auth/logout").then((res) => {
+    AppAxios.defaults.withCredentials = false;
     callback();
     dispatch(setUser(Boolean(res.data.response)));
   });
