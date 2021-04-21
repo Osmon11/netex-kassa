@@ -43,11 +43,12 @@ export function reducer(state = initialState, action) {
   }
 }
 
-const baseURL = "https://api.netex-kassa.com";
+const baseURL = "https://api.netex-kassa.com/";
 const headers = { "Content-Type": "application/x-www-form-urlencoded" };
 const AppAxios = axios.create({
   baseURL,
   headers,
+  withCredentials: true,
 });
 
 function creatRequest(endpoint, data) {
@@ -119,36 +120,32 @@ export const getTariffPlans = () => (dispatch) => {
   });
 };
 
-export const getCountries = (callback) => (dispatch) => {
+export const getCountries = () => (dispatch) => {
   creatRequest("/countries").then((res) => {
-    dispatch(setData({ countries: res.data }));
-    callback();
+    dispatch(setData({ countries: res.data.countries }));
   });
 };
 
-export const getOrganizations = (callback) => (dispatch) => {
+export const getOrganizations = () => (dispatch) => {
   creatRequest("/organization-types").then((res) => {
-    dispatch(setData({ organizations: res.data }));
-    callback();
+    dispatch(setData({ organizationTypes: res.data.list }));
   });
 };
 
-export const getActivityTypes = (callback) => (dispatch) => {
+export const getActivityTypes = () => (dispatch) => {
   creatRequest("/activity-types").then((res) => {
-    dispatch(setData({ activityTypes: res.data }));
-    callback();
+    dispatch(setData({ activityTypes: res.data.list }));
   });
 };
 
 export const getMerchants = () => (dispatch) => {
   creatRequest("/account/list").then((res) => {
-    console.log(res);
-    // dispatch(setData({ merchants: res.data.list }));
+    dispatch(setData({ merchants: res.data.list }));
   });
 };
 
-export const addMerchant = (data, callback) => (dispatch) => {
-  creatRequest("/auth/activation/forgot", data).then((res) => {
+export const createMerchant = (data, callback) => (dispatch) => {
+  creatRequest("/auth/account/add", data).then((res) => {
     callback();
     console.log(res.data);
   });
@@ -161,22 +158,25 @@ export const editMerchant = (data, id, callback) => (dispatch) => {
   });
 };
 
-export const viewMerchant = (data, id, callback) => (dispatch) => {
-  creatRequest(`/account/view/${id}`, data).then((res) => {
-    callback(res.data);
-    console.log(res.data);
+export const viewMerchant = (id, callback) => (dispatch) => {
+  creatRequest(`/account/view/${id}`).then((res) => {
+    callback(res.data.view);
   });
 };
 
 export const getProfile = () => (dispatch) => {
   creatRequest("/profile/personal").then((res) => {
-    dispatch(setData({ profileInfo: res.data }));
+    dispatch(setData({ profileInfo: res.data.profile }));
   });
 };
 
 export const getActionLogs = (page) => (dispatch) => {
   creatRequest(`/profile/action-log/${page}`).then((res) => {
-    dispatch(setData({ actionLogs: res.data }));
+    const array = [];
+    for (let key in res.data.action) {
+      array.push(res.data.action[key]);
+    }
+    dispatch(setData({ actionLogs: array }));
   });
 };
 
