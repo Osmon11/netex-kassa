@@ -11,68 +11,72 @@ import {
   Toolbar,
   useMediaQuery,
   useTheme,
-} from "@material-ui/core";
-import React, { useEffect } from "react";
-import "./style.css";
-import logo from "assets/logo.png";
-import ava from "assets/avatar.png";
+} from '@material-ui/core'
+import React, { useEffect } from 'react'
+import './style.css'
+import logo from 'assets/logo.png'
+import ava from 'assets/avatar.png'
 import {
   CreateProject,
   ProjectSettings,
   WithdrawFunds,
   Settings,
   GetNewAdress,
-} from "components/Dashboard";
-import { Link, NavLink, Route, Switch, useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getMerchants, logout } from "store/reducer";
+} from 'components/Dashboard'
+import { Link, NavLink, Route, Switch, useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { getMerchants, getProfile, logout } from 'store/reducer'
 
-let drawerWidth = 280;
+let drawerWidth = 280
 
 export function Admin() {
-  const classes = useStyles();
-  const theme = useTheme();
-  const md = useMediaQuery(theme.breakpoints.down("md"));
-  const sm = useMediaQuery(theme.breakpoints.down("sm"));
-  const xs = useMediaQuery(theme.breakpoints.down("xs"));
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const state = useSelector((store) => store.reducer);
+  const classes = useStyles()
+  const theme = useTheme()
+  const md = useMediaQuery(theme.breakpoints.down('md'))
+  const sm = useMediaQuery(theme.breakpoints.down('sm'))
+  const xs = useMediaQuery(theme.breakpoints.down('xs'))
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const state = useSelector((store) => store.reducer)
+  const { firstname, lastname, avatar } = state.profileInfo
+    ? state.profileInfo
+    : { firstname: 'Not', lastname: 'Found', avatar: ava }
 
   useEffect(() => {
     if (!state.merchants) {
-      dispatch(getMerchants());
+      dispatch(getMerchants())
+      dispatch(getProfile())
     }
-  }, [state.merchants, dispatch]);
+  }, [state.merchants, dispatch])
 
   function handleOpen(event) {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget)
   }
   function handleClose() {
-    setAnchorEl(null);
+    setAnchorEl(null)
   }
   function logoutHandler() {
     dispatch(
       logout(() => {
-        history.push("/");
-      })
-    );
+        history.push('/')
+      }),
+    )
   }
   return (
     <div className={classes.root}>
       <AppBar position="absolute" className={classes.appBar}>
-        <Toolbar style={{ paddingLeft: "15%" }}>
+        <Toolbar style={{ paddingLeft: '15%' }}>
           <div className="flex_box">
             <span
               className="subtitle"
-              style={{ cursor: "pointer" }}
+              style={{ cursor: 'pointer' }}
               onClick={handleOpen}
             >
-              Азим Дженалиев
+              {`${firstname} ${lastname}`}
             </span>
             <IconButton style={{ marginLeft: 20 }} onClick={handleOpen}>
-              <Avatar alt="" src={ava} />
+              <Avatar alt="" src={avatar} />
             </IconButton>
             <Button
               variant="outlined"
@@ -96,19 +100,19 @@ export function Admin() {
         <div className={classes.toolbar} />
         <span
           className="flex_box"
-          style={{ flexDirection: xs ? "column" : "row" }}
+          style={{ flexDirection: xs ? 'column' : 'row' }}
         >
           <NavLink to="/dashboard">
             <img
               src={logo}
-              style={{ height: sm ? 36 : "", width: 150 }}
+              style={{ height: sm ? 36 : '', width: 150 }}
               alt="logo"
             />
           </NavLink>
           <p
             className="p_1"
             style={{
-              margin: xs ? 0 : "0 0 0 10px",
+              margin: xs ? 0 : '0 0 0 10px',
               fontSize: 10,
             }}
           >
@@ -126,7 +130,7 @@ export function Admin() {
             state.merchants.map((merchant) => (
               <li key={merchant.merchant_id}>
                 <Link
-                  to={`/dashboard/project/:${merchant.merchant_id}`}
+                  to={`/dashboard/project/${merchant.merchant_id}`}
                   className="project_link"
                 >
                   {merchant.name}
@@ -141,7 +145,7 @@ export function Admin() {
           <li>
             <NavLink
               to="/dashboard/create-project"
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: 'none' }}
             >
               <span className={classes.createProject}>
                 + Создать новый проект
@@ -165,8 +169,8 @@ export function Admin() {
       <section
         style={{
           marginTop: 130,
-          width: "100%",
-          paddingRight: md ? 10 : "10%",
+          width: '100%',
+          paddingRight: md ? 10 : '10%',
           paddingLeft: md ? 10 : 90,
         }}
       >
@@ -206,7 +210,7 @@ export function Admin() {
       >
         <NavLink
           to="/dashboard/get-new-adress"
-          style={{ textDecoration: "none" }}
+          style={{ textDecoration: 'none' }}
         >
           <MenuItem className={classes.menuItem} onClick={handleClose}>
             Получить новый адрес
@@ -214,7 +218,7 @@ export function Admin() {
         </NavLink>
         <NavLink
           to="/dashboard/withdrawal-of-funds"
-          style={{ textDecoration: "none" }}
+          style={{ textDecoration: 'none' }}
         >
           <MenuItem className={classes.menuItem} onClick={handleClose}>
             Вывод средств
@@ -223,23 +227,23 @@ export function Admin() {
       </Menu>
       <div className="bg3_image" />
     </div>
-  );
+  )
 }
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
+    display: 'flex',
   },
   paper: {
-    backgroundColor: "#1a1b20",
+    backgroundColor: '#1a1b20',
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    paddingRight: "10%",
-    flexDirection: "row-reverse",
-    borderBottom: "1px solid rgba(255, 255, 255, 0.5);",
-    backgroundColor: "transparent",
+    paddingRight: '10%',
+    flexDirection: 'row-reverse',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.5);',
+    backgroundColor: 'transparent',
   },
   drawer: {
     width: drawerWidth,
@@ -247,31 +251,31 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    background: "linear-gradient(270deg, #2A2B31 0%, #18191D 100%), #C4C4C4",
+    background: 'linear-gradient(270deg, #2A2B31 0%, #18191D 100%), #C4C4C4',
     padding: 20,
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   customButton: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
     fontWeight: 300,
-    border: "1px solid #fff",
+    border: '1px solid #fff',
     borderRadius: 8,
   },
   createProject: {
     fontSize: 16,
-    cursor: "pointer",
-    color: "#fff",
-    "&:hover": {
-      color: "#ff9900",
+    cursor: 'pointer',
+    color: '#fff',
+    '&:hover': {
+      color: '#ff9900',
     },
   },
   menuItem: {
-    color: "#ff9900",
-    "&:hover": {
-      backgroundColor: "#ff9900",
-      color: "#fff",
+    color: '#ff9900',
+    '&:hover': {
+      backgroundColor: '#ff9900',
+      color: '#fff',
     },
   },
-}));
+}))

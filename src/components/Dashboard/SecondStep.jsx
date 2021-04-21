@@ -1,86 +1,105 @@
 import {
   Button,
+  CircularProgress,
   makeStyles,
   Typography,
   useMediaQuery,
   useTheme,
-} from "@material-ui/core";
-import { ToggleButtonGroup } from "@material-ui/lab";
-import { Form, Formik } from "formik";
-import * as Yup from "yup";
-import React from "react";
-import { GoldToggleButton } from "shared/Buttons/buttons";
-import { CustomSwitch } from "shared/Buttons/buttons";
-import { GoldButton } from "shared/Buttons/buttons";
-import { Inputs } from "./Inputs";
-import { useDispatch } from "react-redux";
-import { addMerchant } from "store/actionCreators";
+} from '@material-ui/core'
+import { ToggleButtonGroup } from '@material-ui/lab'
+import { Form, Formik } from 'formik'
+import * as Yup from 'yup'
+import React, { useEffect } from 'react'
+import { GoldToggleButton } from 'shared/Buttons/buttons'
+import { CustomSwitch } from 'shared/Buttons/buttons'
+import { GoldButton } from 'shared/Buttons/buttons'
+import { Inputs } from './Inputs'
+import { useDispatch, useSelector } from 'react-redux'
+import { addMerchant } from 'store/actionCreators'
+import { getActivityTypes, getCountries, getOrganizations } from 'store/reducer'
 
 const firstTabValues = {
   country: 1,
-  city: "Tashkent",
-};
+  city: 'Tashkent',
+}
 
 const secondTabValues = {
+  city: 'Bishkek',
+  country: 1,
   organization_type: 1,
-  legal_name: "Netex UZ",
+  legal_name: 'Netex UZ',
   activity_type: 6,
-  company_reg_date: "12-04-2020",
-  inn: "INN",
-  okpo: "OKPO",
-  bik: "BIK",
-  bank_name: "Bank Name",
-  checking_account: "Checking Account",
-  iban: "iBan",
-  decisions: "",
-  certificate: "",
-  upload_file: "",
-};
+  company_reg_date: '12-04-2020',
+  inn: 'INN',
+  okpo: 'OKPO',
+  bik: 'BIK',
+  bank_name: 'Bank Name',
+  checking_account: 'Checking Account',
+  iban: 'iBan',
+  decisions: '',
+  certificate: '',
+  upload_file: '',
+}
 
 const validateFirstTab = Yup.object({
-  country: Yup.string().required("Поле должно быть заполнена"),
-  city: Yup.string().required("Поле должно быть заполнена"),
-});
+  country: Yup.string().required('Поле должно быть заполнена'),
+  city: Yup.string().required('Поле должно быть заполнена'),
+})
 
 const validateSecondTab = Yup.object({
-  organization_type: Yup.string().required("Поле должно быть заполнена"),
-  legal_name: Yup.string().required("Поле должно быть заполнена"),
-  activity_type: Yup.string().required("Поле должно быть заполнена"),
-  company_reg_date: Yup.string().required("Поле должно быть заполнена"),
-  inn: Yup.string().required("Поле должно быть заполнена"),
-  okpo: Yup.string().required("Поле должно быть заполнена"),
-  bik: Yup.string().required("Поле должно быть заполнена"),
-  bank_name: Yup.string().required("Поле должно быть заполнена"),
-  checking_account: Yup.string().required("Поле должно быть заполнена"),
-  iban: Yup.string().required("Поле должно быть заполнена"),
-});
+  organization_type: Yup.string().required('Поле должно быть заполнена'),
+  legal_name: Yup.string().required('Поле должно быть заполнена'),
+  activity_type: Yup.string().required('Поле должно быть заполнена'),
+  company_reg_date: Yup.string().required('Поле должно быть заполнена'),
+  inn: Yup.string().required('Поле должно быть заполнена'),
+  okpo: Yup.string().required('Поле должно быть заполнена'),
+  bik: Yup.string().required('Поле должно быть заполнена'),
+  bank_name: Yup.string().required('Поле должно быть заполнена'),
+  checking_account: Yup.string().required('Поле должно быть заполнена'),
+  iban: Yup.string().required('Поле должно быть заполнена'),
+})
 
 export function SecondStep({ handleNext }) {
-  const classes = useStyles();
-  const theme = useTheme();
-  const xs = useMediaQuery(theme.breakpoints.down("xs"));
-  const [tab, setTab] = React.useState(1);
-  const countries = ["Russia", "China", "USA"];
-  const dispatch = useDispatch();
+  const classes = useStyles()
+  const theme = useTheme()
+  const xs = useMediaQuery(theme.breakpoints.down('xs'))
+  const [tab, setTab] = React.useState(1)
+  const data = useSelector((store) => store.reducer)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (!data.countries) {
+      dispatch(getCountries())
+      dispatch(getOrganizations())
+      dispatch(getActivityTypes())
+    }
+  }, [dispatch, data])
 
   function submitHandler(fields) {
-    dispatch(addMerchant(fields));
-    nextStep();
+    dispatch(addMerchant(fields))
+    handleNext()
   }
   function prevStep() {
-    setTab(tab - 1);
-    window.scrollTo(0, 300);
+    setTab(tab - 1)
+    window.scrollTo(0, 300)
   }
   function nextStep() {
-    setTab(tab + 1);
-    window.scrollTo(0, 300);
+    setTab(tab + 1)
+    window.scrollTo(0, 300)
+  }
+  function Loader() {
+    return (
+      <div className="flex_box">
+        <CircularProgress />
+      </div>
+    )
   }
   return (
     <div className={classes.stepContainer}>
       <ToggleButtonGroup
         exclusive
         value={tab}
-        style={{ minWidth: xs ? "100%" : 454, maxHeight: 50, marginBottom: 33 }}
+        style={{ minWidth: xs ? '100%' : 454, maxHeight: 50, marginBottom: 33 }}
         onChange={(_, tab) => setTab(tab)}
       >
         <GoldToggleButton className={classes.toggleBtn} value={1}>
@@ -98,12 +117,16 @@ export function SecondStep({ handleNext }) {
           onSubmit={submitHandler}
         >
           <Form>
-            <Inputs
-              label="Страна регистрации вашей компании"
-              items={countries}
-              name="country"
-              select
-            />
+            {data.countries ? (
+              <Inputs
+                label="Страна регистрации вашей компании"
+                items={data.countries}
+                name="country"
+                select
+              />
+            ) : (
+              <Loader />
+            )}
             <Inputs
               label="Город регистрации вашей компании"
               name="city"
@@ -112,15 +135,15 @@ export function SecondStep({ handleNext }) {
 
             <div
               className="flex_box"
-              style={{ justifyContent: "flex-start", marginTop: 20 }}
+              style={{ justifyContent: 'flex-start', marginTop: 20 }}
             >
               <CustomSwitch />
               <Typography variant="body2" style={{ marginLeft: 20 }}>
-                Ознакомлен и согласен с{" "}
+                Ознакомлен и согласен с{' '}
                 <span
                   style={{
-                    color: "#ff9900",
-                    borderBottom: "1px dashed #ff9900",
+                    color: '#ff9900',
+                    borderBottom: '1px dashed #ff9900',
                   }}
                 >
                   тарифом
@@ -129,15 +152,15 @@ export function SecondStep({ handleNext }) {
             </div>
             <div
               className="flex_box"
-              style={{ justifyContent: "flex-start", marginTop: 20 }}
+              style={{ justifyContent: 'flex-start', marginTop: 20 }}
             >
               <CustomSwitch />
               <Typography variant="body2" style={{ marginLeft: 20 }}>
-                Согласен на сбор персональных данных и с{" "}
+                Согласен на сбор персональных данных и с{' '}
                 <span
                   style={{
-                    color: "#ff9900",
-                    borderBottom: "1px dashed #ff9900",
+                    color: '#ff9900',
+                    borderBottom: '1px dashed #ff9900',
                   }}
                 >
                   договором присоединения
@@ -148,8 +171,8 @@ export function SecondStep({ handleNext }) {
             <div
               className="flex_box"
               style={{
-                justifyContent: "space-between",
-                width: "50%",
+                justifyContent: 'space-between',
+                width: '50%',
                 marginTop: 40,
               }}
             >
@@ -160,7 +183,7 @@ export function SecondStep({ handleNext }) {
               >
                 Отмена
               </Button>
-              <GoldButton style={{ width: "40%" }} type="submit">
+              <GoldButton style={{ width: '40%' }} onClick={nextStep}>
                 Далее
               </GoldButton>
             </div>
@@ -177,27 +200,35 @@ export function SecondStep({ handleNext }) {
           <Form>
             <p
               className="subtitle"
-              style={{ textTransform: "uppercase", color: "#ff9900" }}
+              style={{ textTransform: 'uppercase', color: '#ff9900' }}
             >
               Общие сведения о вашей компании
             </p>
-            <Inputs
-              label="Тип организации"
-              items={countries}
-              name="organization_type"
-              select
-            />
+            {data.organizationTypes ? (
+              <Inputs
+                label="Тип организации"
+                items={data.organizationTypes}
+                name="organization_type"
+                select
+              />
+            ) : (
+              <Loader />
+            )}
             <Inputs
               label="Юридиеское название организации"
               name="legal_name"
               placeholder="Введите название организации"
             />
-            <Inputs
-              label="Вид деятельности"
-              items={countries}
-              name="activity_type"
-              select
-            />
+            {data.activityTypes ? (
+              <Inputs
+                label="Вид деятельности"
+                items={data.activityTypes}
+                name="activity_type"
+                select
+              />
+            ) : (
+              <Loader />
+            )}
             <Inputs
               label="Скан копия свидетельства о государственной регистрации"
               name="certificate"
@@ -218,8 +249,8 @@ export function SecondStep({ handleNext }) {
             <p
               className="subtitle"
               style={{
-                textTransform: "uppercase",
-                color: "#ff9900",
+                textTransform: 'uppercase',
+                color: '#ff9900',
                 marginTop: 30,
               }}
             >
@@ -241,7 +272,7 @@ export function SecondStep({ handleNext }) {
             <Inputs label="IBAN" name="iban" placeholder="Введите IBAN" />
             <div
               className="flex_box"
-              style={{ justifyContent: "flex-start", marginTop: 20 }}
+              style={{ justifyContent: 'flex-start', marginTop: 20 }}
             >
               <CustomSwitch />
               <Typography variant="body2" style={{ marginLeft: 20 }}>
@@ -251,8 +282,8 @@ export function SecondStep({ handleNext }) {
             <p
               className="subtitle"
               style={{
-                textTransform: "uppercase",
-                color: "#ff9900",
+                textTransform: 'uppercase',
+                color: '#ff9900',
                 marginTop: 50,
               }}
             >
@@ -262,7 +293,7 @@ export function SecondStep({ handleNext }) {
             <Inputs label="Адрес" name="adress" placeholder="Введите aдрес" />
             <div
               className="flex_box"
-              style={{ justifyContent: "flex-start", marginTop: 20 }}
+              style={{ justifyContent: 'flex-start', marginTop: 20 }}
             >
               <CustomSwitch />
               <Typography variant="body2" style={{ marginLeft: 20 }}>
@@ -272,8 +303,8 @@ export function SecondStep({ handleNext }) {
             <div
               className="flex_box"
               style={{
-                justifyContent: "space-between",
-                width: "50%",
+                justifyContent: 'space-between',
+                width: '50%',
                 marginTop: 40,
               }}
             >
@@ -284,7 +315,7 @@ export function SecondStep({ handleNext }) {
               >
                 Отмена
               </Button>
-              <GoldButton style={{ width: "40%" }} type="submit">
+              <GoldButton style={{ width: '40%' }} type="submit">
                 Далее
               </GoldButton>
             </div>
@@ -292,38 +323,38 @@ export function SecondStep({ handleNext }) {
         </Formik>
       )}
     </div>
-  );
+  )
 }
 
 const useStyles = makeStyles((theme) => ({
   stepContainer: {
-    borderLeft: "2px solid #ff9900",
-    padding: "0 50px",
+    borderLeft: '2px solid #ff9900',
+    padding: '0 50px',
     marginTop: 33,
     marginLeft: 60,
   },
   toggleBtn: {
-    width: "33.33%",
-    textTransform: "none",
-    color: "#000",
-    backgroundColor: "#f5f5f5",
-    [theme.breakpoints.down("xs")]: {
+    width: '33.33%',
+    textTransform: 'none',
+    color: '#000',
+    backgroundColor: '#f5f5f5',
+    [theme.breakpoints.down('xs')]: {
       fontSize: 14,
     },
-    "&:hover": {
-      color: "#FF9900",
-      backgroundColor: "#fff",
+    '&:hover': {
+      color: '#FF9900',
+      backgroundColor: '#fff',
     },
   },
   customBtn: {
-    width: "40%",
+    width: '40%',
     minHeight: 50,
     fontSize: 16,
-    color: "rgba(255, 255, 255, 0.3)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    "&:hover": {
-      color: "#fff",
-      borderColor: "#fff",
+    color: 'rgba(255, 255, 255, 0.3)',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    '&:hover': {
+      color: '#fff',
+      borderColor: '#fff',
     },
   },
-}));
+}))
