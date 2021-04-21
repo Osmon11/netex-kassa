@@ -43,12 +43,11 @@ export function reducer(state = initialState, action) {
   }
 }
 
-const baseURL = "https://api.netex-kassa.com/";
+const baseURL = "https://api.netex-kassa.com";
 const headers = { "Content-Type": "application/x-www-form-urlencoded" };
 const AppAxios = axios.create({
   baseURL,
   headers,
-  withCredentials: true,
 });
 
 function creatRequest(endpoint, data) {
@@ -62,6 +61,15 @@ function creatRequest(endpoint, data) {
 export const login = (data, callback) => (dispatch) => {
   creatRequest("/auth/login", data).then((res) => {
     if (Boolean(res)) {
+      AppAxios.interceptors.request.use(
+        (config) => {
+          config.headers.Authorization = `Bearer ${res.data.token}`;
+          return config;
+        },
+        (error) => {
+          return Promise.reject(error);
+        }
+      );
       dispatch(setUser(Boolean(res.data?.response)));
       callback({ message: "Logged in", severity: "success", open: true });
     } else
