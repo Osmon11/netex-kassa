@@ -2,7 +2,6 @@ import {
   Checkbox,
   Dialog,
   DialogContent,
-  Snackbar,
   TextField,
   Typography,
   useMediaQuery,
@@ -13,7 +12,6 @@ import { ErrorMessage, Form, Formik, useField } from "formik";
 import * as Yup from "yup";
 import React, { useEffect, useState } from "react";
 import { GoldButton } from "shared/Buttons/buttons";
-import { Alert } from "@material-ui/lab";
 import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
 import {
@@ -23,18 +21,15 @@ import {
   restorePassword,
   singup,
 } from "store/reducer";
+import { setAlert } from "store/actionCreators";
 
 export function Auth({ open, handleClose, login, setLogin }) {
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
-  const [alert, setAlert] = useState({
-    open: false,
-    severity: "success",
-    message: "This is a success message!",
-  });
+  const dispatch = useDispatch();
 
   function alertHandler(options) {
-    setAlert(options);
+    dispatch(setAlert(options));
   }
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby='auth-dialog'>
@@ -64,21 +59,6 @@ export function Auth({ open, handleClose, login, setLogin }) {
             </span>
           </Typography>
         </div>
-
-        <Snackbar
-          open={alert.open}
-          autoHideDuration={3000}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          onClose={() => setAlert({ ...alert, open: false })}
-        >
-          <Alert
-            onClose={() => setAlert({ ...alert, open: false })}
-            severity={alert.severity}
-            variant='filled'
-          >
-            {alert.message}
-          </Alert>
-        </Snackbar>
       </DialogContent>
     </Dialog>
   );
@@ -201,6 +181,7 @@ function SingUp({ sm, setAlert }) {
   const [btnDisabled, setBtnDisabled] = useState(true);
   const [userPhone, setUserPhone] = useState("");
   const [timeleft, setTimeLeft] = useState(30);
+  const dispatch = useDispatch();
   let seconds = Math.floor(timeleft % 60);
   let activationCode = "";
   const validate = Yup.object({
@@ -217,7 +198,6 @@ function SingUp({ sm, setAlert }) {
       .oneOf([Yup.ref("password"), null], "Пароли должны совпадать")
       .required("Поле должно быть заполнена"),
   });
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (enterCode) {

@@ -2,12 +2,16 @@ import {
   CircularProgress,
   createMuiTheme,
   CssBaseline,
+  Snackbar,
   ThemeProvider,
 } from "@material-ui/core";
 import React, { Suspense } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { AuthProvider, PrivateRoute } from "components";
+import { Alert } from "@material-ui/lab";
+import { setAlert } from "store/actionCreators";
+import { useDispatch, useSelector } from "react-redux";
 
 const Main = React.lazy(() => import("./pages/Main"));
 const Documentation = React.lazy(() => import("./pages/Documentation"));
@@ -17,6 +21,9 @@ const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const Payment = React.lazy(() => import("./pages/Payment"));
 
 export default function App() {
+  const dispatch = useDispatch();
+  const alert = useSelector((store) => store.reducer.alert);
+
   return (
     <div className='App'>
       <AuthProvider>
@@ -43,6 +50,20 @@ export default function App() {
           </Suspense>
         </ThemeProvider>
       </AuthProvider>
+      <Snackbar
+        open={alert.open}
+        autoHideDuration={3000}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        onClose={() => dispatch(setAlert({ ...alert, open: false }))}
+      >
+        <Alert
+          onClose={() => dispatch(setAlert({ ...alert, open: false }))}
+          severity={alert.severity}
+          variant='filled'
+        >
+          {alert.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

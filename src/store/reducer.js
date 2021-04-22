@@ -5,8 +5,8 @@ import {
   SET_DOCUMENTATION_TAB,
   SET_USER,
   SET_DATA,
-  ADD_MERCHANT,
   SET_AUTH_DIALOG,
+  SET_ALERT,
 } from "./actionCreators";
 import { initialState } from "./initialState";
 
@@ -33,11 +33,8 @@ export function reducer(state = initialState, action) {
         ...state,
         ...payload,
       };
-    case ADD_MERCHANT:
-      return {
-        ...state,
-        addMerchant: { ...state.addMerchant, ...payload },
-      };
+    case SET_ALERT:
+      return { ...state, alert: payload };
     default:
       return state;
   }
@@ -51,12 +48,14 @@ const AppAxios = axios.create({
   withCredentials: true,
 });
 
-function creatRequest(endpoint, data) {
+function creatRequest(endpoint, data, errorCallback) {
   return data
-    ? AppAxios.post(endpoint, JSON.stringify(data)).catch((error) =>
-        console.log(error)
+    ? AppAxios.post(endpoint, JSON.stringify(data)).catch(({ response }) =>
+        errorCallback(response.data.messages)
       )
-    : AppAxios.get(endpoint).catch((error) => console.log(error));
+    : AppAxios.get(endpoint).catch(({ response }) =>
+        errorCallback(response.data.messages)
+      );
 }
 
 export const login = (data, callback) => (dispatch) => {
@@ -144,10 +143,11 @@ export const getMerchants = () => (dispatch) => {
   });
 };
 
-export const createMerchant = (data, callback) => (dispatch) => {
-  creatRequest("/auth/account/add", data).then((res) => {
-    callback();
-    console.log(res.data);
+export const addMerchant = (data, callback) => (dispatch) => {
+  creatRequest("/account/add", data, callback).then((res) => {
+    if (Boolean(res)) {
+      callback();
+    }
   });
 };
 
@@ -160,7 +160,7 @@ export const editMerchant = (data, id, callback) => (dispatch) => {
 
 export const viewMerchant = (id, callback) => (dispatch) => {
   creatRequest(`/account/view/${id}`).then((res) => {
-    callback(res.data.view);
+    callback(res.data);
   });
 };
 
@@ -184,4 +184,18 @@ export const changePassword = (fields, callback) => (dispatch) => {
   creatRequest("/profile/password", fields).then((res) => {
     callback();
   });
+};
+
+export const getConfirmFile = (confirm_file_id) => (dispatch) => {
+  creatRequest(`/account/get-confirm-file/${confirm_file_id}`).then((res) => {
+    console.log(res);
+  });
+};
+
+export const confirmMerchant = (confirm_file_id, callback) => (dispatch) => {
+  creatRequest(`/account/confirm/${confirm_file_id}`, undefined, callback).then(
+    (res) => {
+      console.log(res);
+    }
+  );
 };

@@ -3,7 +3,7 @@ import React from "react";
 import { SecondStep } from "./SecondStep";
 import { CustomLabel, StepIcon } from "./WithdrawFunds";
 
-export function VerticalStepper() {
+export function VerticalStepper({ callback, handlePrev }) {
   const [activeStep, setActiveStep] = React.useState(1);
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = [
@@ -48,7 +48,13 @@ export function VerticalStepper() {
   function getStepContent(step) {
     switch (step) {
       case 1:
-        return <SecondStep handleNext={handleNext} />;
+        return (
+          <SecondStep
+            handleNext={handleNext}
+            handlePrev={handlePrev}
+            callback={callback}
+          />
+        );
       case 2:
         return "An ad group contains one or more ads which target a shared set of keywords.";
       case 3:
@@ -64,7 +70,7 @@ export function VerticalStepper() {
     <Stepper
       activeStep={activeStep}
       style={{ backgroundColor: "transparent" }}
-      orientation="vertical"
+      orientation='vertical'
     >
       {steps.map((label, index) => {
         return (
