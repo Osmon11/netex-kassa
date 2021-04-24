@@ -31,19 +31,19 @@ export function Footer() {
       <Grid container spacing={2} style={{ margin: "130px 0" }}>
         <Grid
           item
-          sm={12}
+          xs={12}
           md={4}
           style={{ textAlign: sm ? "center" : "start" }}
         >
-          {!sm ? (
-            <Typography variant='subtitle2' className={classes.tpSubtitle}>
+          {!sm && (
+            <Typography variant="subtitle2" className={classes.tpSubtitle}>
               О компании
             </Typography>
-          ) : null}
-          <NavLink to='/'>
-            <img src={logo} style={{ height: 66 }} alt='' />
+          )}
+          <NavLink to="/">
+            <img src={logo} style={{ height: 66 }} alt="" />
           </NavLink>
-          <Typography variant='body2' style={{ margin: "24px 0" }}>
+          <Typography variant="body2" style={{ margin: "24px 0" }}>
             Advanced - команда разработчиков
             <br /> работает с криптовалютами в<br /> области финансовых
             технологий
@@ -53,39 +53,39 @@ export function Footer() {
         {!sm ? (
           <>
             <Grid item md={4}>
-              <Typography variant='subtitle2' className={classes.tpSubtitle}>
+              <Typography variant="subtitle2" className={classes.tpSubtitle}>
                 Навигация по сайту
               </Typography>
-              <Typography variant='body2' style={{ marginBottom: 10 }}>
-                <NavLink to='/' className='nav_link'>
+              <Typography variant="body2" style={{ marginBottom: 10 }}>
+                <NavLink to="/" className="nav_link">
                   Главная
                 </NavLink>
               </Typography>
-              <Typography variant='body2' style={{ marginBottom: 10 }}>
-                <NavLink to='/documentation' className='nav_link'>
+              <Typography variant="body2" style={{ marginBottom: 10 }}>
+                <NavLink to="/documentation" className="nav_link">
                   Документация
                 </NavLink>
               </Typography>
-              <Typography variant='body2' style={{ marginBottom: 10 }}>
-                <NavLink to='/about-us' className='nav_link'>
+              <Typography variant="body2" style={{ marginBottom: 10 }}>
+                <NavLink to="/about-us" className="nav_link">
                   О компании
                 </NavLink>
               </Typography>
-              <Typography variant='body2' style={{ marginBottom: 10 }}>
-                <NavLink to='/rates' className='nav_link'>
+              <Typography variant="body2" style={{ marginBottom: 10 }}>
+                <NavLink to="/rates" className="nav_link">
                   Тарифы
                 </NavLink>
               </Typography>
-              <Typography variant='body2' style={{ marginBottom: 10 }}>
+              <Typography variant="body2" style={{ marginBottom: 10 }}>
                 <span
                   onClick={() => setDialog({ open: true, login: true })}
-                  className='nav_link'
+                  className="nav_link"
                 >
                   Вход в личный кабинет
                 </span>
               </Typography>
               <span
-                className='body_3 nav_link'
+                className="body_3 nav_link"
                 style={{ textDecoration: "underline" }}
               >
                 Политика конфиденциальности
@@ -93,58 +93,58 @@ export function Footer() {
             </Grid>
 
             <Grid item md={4}>
-              <Typography variant='subtitle2' className={classes.tpSubtitle}>
+              <Typography variant="subtitle2" className={classes.tpSubtitle}>
                 СВяжитесь с нами
               </Typography>
               <Typography
-                variant='body2'
+                variant="body2"
                 style={{
                   display: "flex",
                   alignItems: "center",
                   marginBottom: 10,
                 }}
               >
-                <img src={phoneIcon} alt='' style={{ marginRight: 10 }} />
+                <img src={phoneIcon} alt="" style={{ marginRight: 10 }} />
                 <a
                   style={{ textDecoration: "none", color: "#fff" }}
-                  href='tel:+7(123)123456789'
+                  href="tel:+7(123)123456789"
                 >
                   +7 (123) 123 456 789
                 </a>
               </Typography>
               <Typography
-                variant='body2'
+                variant="body2"
                 style={{
                   display: "flex",
                   alignItems: "center",
                   marginBottom: 10,
                 }}
               >
-                <img src={mailIcon} alt='' style={{ marginRight: 10 }} />
+                <img src={mailIcon} alt="" style={{ marginRight: 10 }} />
                 <a
                   style={{ textDecoration: "none", color: "#fff" }}
-                  href='mailto:Info@andancer.com'
+                  href="mailto:Info@andancer.com"
                 >
                   Info@andancer.com
                 </a>
               </Typography>
               <div
-                className='flex_box'
+                className="flex_box"
                 style={{ justifyContent: "space-between", maxWidth: 200 }}
               >
-                <a href='https://google.com'>
+                <a href="https://google.com">
                   <Paper className={classes.iconPaper} elevation={3}>
-                    <img src={whatsApp} alt='' />
+                    <img src={whatsApp} alt="" />
                   </Paper>
                 </a>
-                <a href='https://google.com'>
+                <a href="https://google.com">
                   <Paper className={classes.iconPaper} elevation={3}>
-                    <img src={telegram} alt='' />
+                    <img src={telegram} alt="" />
                   </Paper>
                 </a>
-                <a href='https://google.com'>
+                <a href="https://google.com">
                   <Paper className={classes.iconPaper} elevation={3}>
-                    <img src={viber} alt='' />
+                    <img src={viber} alt="" />
                   </Paper>
                 </a>
               </div>

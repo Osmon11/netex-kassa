@@ -146,7 +146,7 @@ export function RatesBody() {
               </Grid>
             </>
           ) : (
-            <MobileVertion />
+            <MobileVertion tariffPlans={state.tariffPlans} />
           )
         ) : null}
       </Grid>
@@ -154,7 +154,7 @@ export function RatesBody() {
   );
 }
 
-function MobileVertion() {
+function MobileVertion(props) {
   return (
     <Grid
       item
@@ -170,111 +170,58 @@ function MobileVertion() {
         style={{
           background: "#2A2B31",
           borderRadius: 4,
-          margin: "0 30px",
+          margin: "0 5px",
           padding: "30px 0 60px",
           display: "flex",
         }}
         elevation={0}
       >
-        <div className="rates_mobile">
-          <p
-            className="title"
-            style={{ textAlign: "center", marginBottom: 15 }}
-          >
-            Базовый
-          </p>
-          <Typography
-            variant="h3"
-            style={{ color: "#FF9900", textAlign: "center" }}
-          >
-            0.5%
-          </Typography>
-          <Typography variant="body1" style={{ textAlign: "center" }}>
-            за транзакцию
-          </Typography>
-          <ul>
-            <li className="rates_list_item">
-              <Typography variant="body1">Безлимитные инвойсы</Typography>
-            </li>
-            <li className="rates_list_item">
-              <Typography variant="body1">Все валюты</Typography>
-            </li>
-            <li className="rates_list_item">
-              <Typography variant="body1">Вывод без комиссии</Typography>
-            </li>
-            <li className="rates_list_item">
-              <Typography variant="body1">Бесплатная поддержка</Typography>
-            </li>
-          </ul>
-          <GoldButton
-            style={{
-              marginLeft: "50%",
-              transform: "translateX(-50%)",
-              minWidth: 125,
-              minHeight: 60,
-              marginTop: 80,
-            }}
-          >
-            Начать
-          </GoldButton>
-          <p className="subtitle">
-            At vero eos et accusamus et iusto odio dignissimos ducimus qui
-            blanditiis praesentium voluptatum deleniti atque corrupti quos
-            dolores et quas molestias excepturi sint occaecati cupiditate non
-            provident, similique sunt in culpa qui officia deserunt mollitia
-            animi, id est laborum et dolorum fuga
-          </p>
-        </div>
-
-        <div className="rates_mobile">
-          <p
-            className="title"
-            style={{ textAlign: "center", marginBottom: 15 }}
-          >
-            Безлимитный
-          </p>
-          <Typography
-            variant="h3"
-            style={{ color: "#FF9900", textAlign: "center" }}
-          >
-            2000%
-          </Typography>
-          <Typography variant="body1" style={{ textAlign: "center" }}>
-            за месяц
-          </Typography>
-          <ul>
-            <li className="rates_list_item">
-              <Typography variant="body1">Безлимитные инвойсы</Typography>
-            </li>
-            <li className="rates_list_item">
-              <Typography variant="body1">Все валюты</Typography>
-            </li>
-            <li className="rates_list_item">
-              <Typography variant="body1">Вывод без комиссии</Typography>
-            </li>
-            <li className="rates_list_item">
-              <Typography variant="body1">Бесплатная поддержка</Typography>
-            </li>
-          </ul>
-          <GoldButton
-            style={{
-              marginLeft: "50%",
-              transform: "translateX(-50%)",
-              minWidth: 125,
-              minHeight: 60,
-              marginTop: 80,
-            }}
-          >
-            Начать
-          </GoldButton>
-          <p className="subtitle">
-            At vero eos et accusamus et iusto odio dignissimos ducimus qui
-            blanditiis praesentium voluptatum deleniti atque corrupti quos
-            dolores et quas molestias excepturi sint occaecati cupiditate non
-            provident, similique sunt in culpa qui officia deserunt mollitia
-            animi, id est laborum et dolorum fuga
-          </p>
-        </div>
+        {props.tariffPlans.map((plan) => (
+          <div className="rates_mobile">
+            <p
+              className="title"
+              style={{ textAlign: "center", marginBottom: 15 }}
+            >
+              {plan.name}
+            </p>
+            <Typography
+              variant="h3"
+              style={{ color: "#FF9900", textAlign: "center" }}
+            >
+              {plan.percent}
+            </Typography>
+            <Typography variant="body1" style={{ textAlign: "center" }}>
+              {plan.name === "Unlimited pack" ? "за месяц" : "за транзакцию"}
+            </Typography>
+            <ul>
+              {plan.description.split("-").map((text) => {
+                return (
+                  <li className="rates_list_item">
+                    <Typography variant="body1">{text}</Typography>
+                  </li>
+                );
+              })}
+            </ul>
+            <GoldButton
+              style={{
+                marginLeft: "50%",
+                transform: "translateX(-50%)",
+                minWidth: 125,
+                minHeight: 60,
+                marginTop: 80,
+              }}
+            >
+              Начать
+            </GoldButton>
+            <p className="subtitle">
+              At vero eos et accusamus et iusto odio dignissimos ducimus qui
+              blanditiis praesentium voluptatum deleniti atque corrupti quos
+              dolores et quas molestias excepturi sint occaecati cupiditate non
+              provident, similique sunt in culpa qui officia deserunt mollitia
+              animi, id est laborum et dolorum fuga
+            </p>
+          </div>
+        ))}
       </Paper>
     </Grid>
   );
