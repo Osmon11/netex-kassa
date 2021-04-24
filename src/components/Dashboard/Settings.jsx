@@ -3,66 +3,66 @@ import {
   Grid,
   makeStyles,
   Typography,
-} from '@material-ui/core'
-import { ToggleButtonGroup } from '@material-ui/lab'
-import { Form, Formik } from 'formik'
-import * as Yup from 'yup'
-import React, { useEffect, useRef, useState } from 'react'
-import { GoldButton } from 'shared/Buttons/buttons'
-import { GoldToggleButton } from 'shared/Buttons/buttons'
-import { changePassword, getActionLogs } from 'store/reducer'
-import { ValidatedInput } from './Inputs'
-import { useDispatch, useSelector } from 'react-redux'
+} from "@material-ui/core";
+import { ToggleButtonGroup } from "@material-ui/lab";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
+import React, { useEffect, useRef, useState } from "react";
+import { GoldButton } from "shared/Buttons/buttons";
+import { GoldToggleButton } from "shared/Buttons/buttons";
+import { changePassword, getActionLogs } from "store/reducer";
+import { ValidatedInput } from "./Inputs";
+import { useDispatch, useSelector } from "react-redux";
 
 const passwordInitialValues = {
-  'old-password': '',
-  'new-password': '',
-  'confirm-password': '',
-}
+  "old-password": "",
+  "new-password": "",
+  "confirm-password": "",
+};
 
 const validateChangePassword = Yup.object({
-  'old-password': Yup.string()
+  "old-password": Yup.string()
     .min(
       8,
-      'Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов.',
+      "Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов."
     )
     .matches(
       /(?=.*[a-z])(?=.*\d)/,
-      'Введённый пароль должен быть буквенно-цифровой',
+      "Введённый пароль должен быть буквенно-цифровой"
     )
-    .required('Введите старый пароль'),
-  'new-password': Yup.string()
+    .required("Введите старый пароль"),
+  "new-password": Yup.string()
     .min(
       8,
-      'Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов.',
+      "Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов."
     )
-    .max(128, 'Слишком длинный пароль, максимум 128 символов')
+    .max(128, "Слишком длинный пароль, максимум 128 символов")
     .matches(
       /(?=.*[a-z])(?=.*\d)/,
-      'Введённый пароль должен быть буквенно-цифровой',
+      "Введённый пароль должен быть буквенно-цифровой"
     )
-    .required('Поля должно быть заполнена'),
-  'confirm-password': Yup.string()
-    .oneOf([Yup.ref('new-password'), null], 'Пароли должны совпадать')
-    .required('Поля должно быть заполнена'),
-})
+    .required("Поля должно быть заполнена"),
+  "confirm-password": Yup.string()
+    .oneOf([Yup.ref("new-password"), null], "Пароли должны совпадать")
+    .required("Поля должно быть заполнена"),
+});
 
 export function Settings() {
-  const classes = useStyles()
-  const dispatch = useDispatch()
-  const state = useSelector((store) => store.reducer)
-  const { firstname, lastname, email } = state.profileInfo
-  const [tab, setTab] = useState('Профиль')
-  const avatar = useRef()
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const state = useSelector((store) => store.reducer);
+  const { firstname, lastname, email } = state.profileInfo;
+  const [tab, setTab] = useState("Профиль");
+  const avatar = useRef();
 
   useEffect(() => {
     if (!state.actionLogs) {
-      dispatch(getActionLogs(1))
+      dispatch(getActionLogs(1));
     }
-  }, [state, dispatch])
+  }, [state, dispatch]);
 
   function changePasswordHandler(fields) {
-    dispatch(changePassword(fields))
+    dispatch(changePassword(fields));
   }
   return (
     <>
@@ -71,11 +71,11 @@ export function Settings() {
       </p>
       <p className="subtitle">{email}</p>
       <Grid container>
-        <Grid item xs={6}>
+        <Grid item xs={6} sm={12} md={8} lg={6}>
           <ToggleButtonGroup
             exclusive
             value={tab}
-            style={{ width: '100%', margin: '33px 0' }}
+            style={{ width: "100%", margin: "33px 0" }}
             onChange={(_, tab) => setTab(tab)}
           >
             <GoldToggleButton className={classes.toggleBtn} value="Профиль">
@@ -87,11 +87,11 @@ export function Settings() {
             >
               Журнал входа
             </GoldToggleButton>
-            <GoldToggleButton className={classes.toggleBtn} value="Кошельки">
+            {/* <GoldToggleButton className={classes.toggleBtn} value="Кошельки">
               Кошельки
-            </GoldToggleButton>
+            </GoldToggleButton> */}
           </ToggleButtonGroup>
-          {tab === 'Профиль' && (
+          {tab === "Профиль" && (
             <>
               {/* <Typography variant="body2" style={{ marginTop: 15 }}>
                 Имя
@@ -170,14 +170,14 @@ export function Settings() {
             </>
           )}
 
-          {tab === 'Журнал входа' && (
+          {tab === "Журнал входа" && (
             <>
               <Grid
                 item
                 xs={12}
                 container
                 style={{
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.5)',
+                  borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
                   marginTop: 40,
                   padding: 15,
                 }}
@@ -202,8 +202,8 @@ export function Settings() {
                     xs={12}
                     container
                     style={{
-                      borderBottom: '1px solid rgba(255, 255, 255, 0.5)',
-                      padding: '25px 15px',
+                      borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+                      padding: "25px 15px",
                     }}
                     key={obj.ip + obj.date}
                   >
@@ -230,23 +230,23 @@ export function Settings() {
           )}
         </Grid>
       </Grid>
-      <input type="file" ref={avatar} style={{ display: 'none' }} />
+      <input type="file" ref={avatar} style={{ display: "none" }} />
     </>
-  )
+  );
 }
 
 const useStyles = makeStyles((theme) => ({
   toggleBtn: {
-    width: '33.33%',
-    textTransform: 'none',
-    color: '#686868',
-    backgroundColor: '#f5f5f5',
-    [theme.breakpoints.down('xs')]: {
+    width: "33.33%",
+    textTransform: "none",
+    color: "#686868",
+    backgroundColor: "#f5f5f5",
+    [theme.breakpoints.down("xs")]: {
       fontSize: 14,
     },
-    '&:hover': {
-      color: '#FF9900',
-      backgroundColor: '#fff',
+    "&:hover": {
+      color: "#FF9900",
+      backgroundColor: "#fff",
     },
   },
-}))
+}));

@@ -86,7 +86,7 @@ export function CreateProject() {
                 <ValidatedInput
                   name="name"
                   placeholder="Введите название проекта"
-                  style={{ marginBottom: 10 }}
+                  style={{ marginBottom: 10, width: "100%" }}
                   fullWidth
                 />
                 <Typography variant="body2" style={{ marginTop: 15 }}>
@@ -95,7 +95,7 @@ export function CreateProject() {
                 <ValidatedInput
                   name="domain"
                   placeholder="Введите URL"
-                  style={{ marginBottom: 10 }}
+                  style={{ marginBottom: 10, width: "100%" }}
                   fullWidth
                 />
                 <div

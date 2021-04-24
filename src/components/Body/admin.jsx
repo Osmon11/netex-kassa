@@ -65,21 +65,21 @@ export function Admin() {
   }
   return (
     <div className={classes.root}>
-      <AppBar position='absolute' className={classes.appBar}>
+      <AppBar position="absolute" className={classes.appBar}>
         <Toolbar style={{ paddingLeft: "15%" }}>
-          <div className='flex_box'>
+          <div className="flex_box">
             <span
-              className='subtitle'
+              className="subtitle"
               style={{ cursor: "pointer" }}
               onClick={handleOpen}
             >
               {`${firstname} ${lastname}`}
             </span>
             <IconButton style={{ marginLeft: 20 }} onClick={handleOpen}>
-              <Avatar alt='' src={avatar} />
+              <Avatar alt="" src={avatar} />
             </IconButton>
             <Button
-              variant='outlined'
+              variant="outlined"
               className={classes.customButton}
               style={{ marginLeft: 40 }}
               onClick={logoutHandler}
@@ -91,26 +91,26 @@ export function Admin() {
       </AppBar>
       <Drawer
         className={classes.drawer}
-        variant='permanent'
+        variant="permanent"
         classes={{
           paper: classes.drawerPaper,
         }}
-        anchor='left'
+        anchor="left"
       >
         <div className={classes.toolbar} />
         <span
-          className='flex_box'
+          className="flex_box"
           style={{ flexDirection: xs ? "column" : "row" }}
         >
-          <NavLink to='/dashboard'>
+          <NavLink to="/dashboard">
             <img
               src={logo}
               style={{ height: sm ? 36 : "", width: 150 }}
-              alt='logo'
+              alt="logo"
             />
           </NavLink>
           <p
-            className='p_1'
+            className="p_1"
             style={{
               margin: xs ? 0 : "0 0 0 10px",
               fontSize: 10,
@@ -122,29 +122,29 @@ export function Admin() {
           </p>
         </span>
 
-        <p className='subtitle' style={{ marginTop: 50 }}>
+        <p className="subtitle" style={{ marginTop: 50 }}>
           Проекты
         </p>
-        <ul className='projects'>
+        <ul className="projects">
           {Boolean(state.merchants) ? (
             state.merchants.map((merchant) => (
               <li key={merchant.merchant_id}>
                 <Link
                   to={`/dashboard/project/${merchant.merchant_id}`}
-                  className='project_link'
+                  className="project_link"
                 >
                   {merchant.name}
                 </Link>
               </li>
             ))
           ) : (
-            <div className='flex_box'>
+            <div className="flex_box">
               <CircularProgress />
             </div>
           )}
           <li>
             <NavLink
-              to='/dashboard/create-project'
+              to="/dashboard/create-project"
               style={{ textDecoration: "none" }}
             >
               <span className={classes.createProject}>
@@ -154,13 +154,13 @@ export function Admin() {
           </li>
         </ul>
 
-        <p className='subtitle'>
-          <NavLink to='/dashboard/operations' className='nav_link'>
+        <p className="subtitle">
+          <NavLink to="/dashboard/operations" className="nav_link">
             История операций
           </NavLink>
         </p>
-        <p className='subtitle'>
-          <NavLink to='/dashboard/settings' className='nav_link'>
+        <p className="subtitle">
+          <NavLink to="/dashboard/settings" className="nav_link">
             Настройки
           </NavLink>
         </p>
@@ -170,30 +170,30 @@ export function Admin() {
         style={{
           marginTop: 130,
           width: "100%",
-          paddingRight: md ? 10 : "10%",
-          paddingLeft: md ? 10 : 90,
+          paddingLeft: md ? 30 : 90,
+          paddingRight: sm ? 30 : 0,
         }}
       >
         <Switch>
           <Route
             exact
-            path='/dashboard/project/:id'
+            path="/dashboard/project/:id"
             component={ProjectSettings}
           />
-          <Route exact path='/dashboard/settings' component={Settings} />
+          <Route exact path="/dashboard/settings" component={Settings} />
           <Route
             exact
-            path='/dashboard/create-project'
+            path="/dashboard/create-project"
             component={CreateProject}
           />
           <Route
             exact
-            path='/dashboard/withdrawal-of-funds'
+            path="/dashboard/withdrawal-of-funds"
             component={WithdrawFunds}
           />
           <Route
             exact
-            path='/dashboard/get-new-adress'
+            path="/dashboard/get-new-adress"
             component={GetNewAdress}
           />
         </Switch>
@@ -209,7 +209,7 @@ export function Admin() {
         }}
       >
         <NavLink
-          to='/dashboard/get-new-adress'
+          to="/dashboard/get-new-adress"
           style={{ textDecoration: "none" }}
         >
           <MenuItem className={classes.menuItem} onClick={handleClose}>
@@ -217,7 +217,7 @@ export function Admin() {
           </MenuItem>
         </NavLink>
         <NavLink
-          to='/dashboard/withdrawal-of-funds'
+          to="/dashboard/withdrawal-of-funds"
           style={{ textDecoration: "none" }}
         >
           <MenuItem className={classes.menuItem} onClick={handleClose}>
@@ -225,7 +225,7 @@ export function Admin() {
           </MenuItem>
         </NavLink>
       </Menu>
-      <div className='bg3_image' />
+      <div className="bg3_image" />
     </div>
   );
 }
@@ -240,7 +240,6 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    paddingRight: "10%",
     flexDirection: "row-reverse",
     borderBottom: "1px solid rgba(255, 255, 255, 0.5);",
     backgroundColor: "transparent",

@@ -20,6 +20,7 @@ import {
   getCountries,
   getOrganizations,
 } from "store/reducer";
+import { setAlert } from "store/actionCreators";
 
 const firstTabValues = {
   country: 1,
@@ -73,9 +74,33 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
 
   useEffect(() => {
     if (!data.countries) {
-      dispatch(getCountries());
-      dispatch(getOrganizations());
-      dispatch(getActivityTypes());
+      dispatch(
+        getCountries((error) => {
+          if (Boolean(error)) {
+            dispatch(
+              setAlert({ open: true, severity: "error", message: error })
+            );
+          }
+        })
+      );
+      dispatch(
+        getOrganizations((error) => {
+          if (Boolean(error)) {
+            dispatch(
+              setAlert({ open: true, severity: "error", message: error })
+            );
+          }
+        })
+      );
+      dispatch(
+        getActivityTypes((error) => {
+          if (Boolean(error)) {
+            dispatch(
+              setAlert({ open: true, severity: "error", message: error })
+            );
+          }
+        })
+      );
     }
   }, [dispatch, data]);
 
@@ -96,7 +121,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
   }
   function Loader() {
     return (
-      <div className='flex_box'>
+      <div className="flex_box">
         <CircularProgress />
       </div>
     );
@@ -126,26 +151,26 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
           <Form>
             {data.countries ? (
               <Inputs
-                label='Страна регистрации вашей компании'
+                label="Страна регистрации вашей компании"
                 items={data.countries}
-                name='country'
+                name="country"
                 select
               />
             ) : (
               <Loader />
             )}
             <Inputs
-              label='Город регистрации вашей компании'
-              name='city'
-              placeholder='Введите свой город'
+              label="Город регистрации вашей компании"
+              name="city"
+              placeholder="Введите свой город"
             />
 
             <div
-              className='flex_box'
+              className="flex_box"
               style={{ justifyContent: "flex-start", marginTop: 20 }}
             >
               <CustomSwitch />
-              <Typography variant='body2' style={{ marginLeft: 20 }}>
+              <Typography variant="body2" style={{ marginLeft: 20 }}>
                 Ознакомлен и согласен с{" "}
                 <span
                   style={{
@@ -158,11 +183,11 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               </Typography>
             </div>
             <div
-              className='flex_box'
+              className="flex_box"
               style={{ justifyContent: "flex-start", marginTop: 20 }}
             >
               <CustomSwitch />
-              <Typography variant='body2' style={{ marginLeft: 20 }}>
+              <Typography variant="body2" style={{ marginLeft: 20 }}>
                 Согласен на сбор персональных данных и с{" "}
                 <span
                   style={{
@@ -176,7 +201,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
             </div>
 
             <div
-              className='flex_box'
+              className="flex_box"
               style={{
                 justifyContent: "space-between",
                 width: "50%",
@@ -186,7 +211,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               <Button
                 className={classes.customBtn}
                 onClick={handlePrev}
-                variant='outlined'
+                variant="outlined"
               >
                 Назад
               </Button>
@@ -206,55 +231,55 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
         >
           <Form>
             <p
-              className='subtitle'
+              className="subtitle"
               style={{ textTransform: "uppercase", color: "#ff9900" }}
             >
               Общие сведения о вашей компании
             </p>
             {data.organizationTypes ? (
               <Inputs
-                label='Тип организации'
+                label="Тип организации"
                 items={data.organizationTypes}
-                name='organization_type'
+                name="organization_type"
                 select
               />
             ) : (
               <Loader />
             )}
             <Inputs
-              label='Юридиеское название организации'
-              name='legal_name'
-              placeholder='Введите название организации'
+              label="Юридиеское название организации"
+              name="legal_name"
+              placeholder="Введите название организации"
             />
             {data.activityTypes ? (
               <Inputs
-                label='Вид деятельности'
+                label="Вид деятельности"
                 items={data.activityTypes}
-                name='activity_type'
+                name="activity_type"
                 select
               />
             ) : (
               <Loader />
             )}
             <Inputs
-              label='Скан копия свидетельства о государственной регистрации'
-              name='certificate'
+              label="Скан копия свидетельства о государственной регистрации"
+              name="certificate"
               upload
             />
-            <Inputs label='Скан копия устава' name='charter' upload />
+            <Inputs label="Скан копия устава" name="charter" upload />
             <Inputs
-              label='Скан решения о создании компании'
-              name='decisions'
+              label="Скан решения о создании компании"
+              name="decisions"
               upload
             />
             <Inputs
-              label='Дата регистрации компании'
-              name='company_reg_date'
-              placeholder='Введите в формате dd-mm-yyyy'
+              label="Дата регистрации компании"
+              name="company_reg_date"
+              placeholder="Введите в формате dd-mm-yyyy"
               date
             />
             <p
-              className='subtitle'
+              className="subtitle"
               style={{
                 textTransform: "uppercase",
                 color: "#ff9900",
@@ -263,31 +288,31 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
             >
               Реквизиты
             </p>
-            <Inputs label='ИНН' name='inn' placeholder='Введите ИНН' />
-            <Inputs label='ОКПО' name='okpo' placeholder='Введите ОКПО' />
+            <Inputs label="ИНН" name="inn" placeholder="Введите ИНН" />
+            <Inputs label="ОКПО" name="okpo" placeholder="Введите ОКПО" />
             <Inputs
-              label='Наименование банка'
-              name='bank_name'
-              placeholder='Введите наименование банка'
+              label="Наименование банка"
+              name="bank_name"
+              placeholder="Введите наименование банка"
             />
-            <Inputs label='БИК' name='bik' placeholder='Введите БИК' />
+            <Inputs label="БИК" name="bik" placeholder="Введите БИК" />
             <Inputs
-              label='Расчетный счет'
-              name='checking_account'
-              placeholder='Введите счет'
+              label="Расчетный счет"
+              name="checking_account"
+              placeholder="Введите счет"
             />
-            <Inputs label='IBAN' name='iban' placeholder='Введите IBAN' />
+            <Inputs label="IBAN" name="iban" placeholder="Введите IBAN" />
             <div
-              className='flex_box'
+              className="flex_box"
               style={{ justifyContent: "flex-start", marginTop: 20 }}
             >
               <CustomSwitch />
-              <Typography variant='body2' style={{ marginLeft: 20 }}>
+              <Typography variant="body2" style={{ marginLeft: 20 }}>
                 Организация является плательщиком НДС
               </Typography>
             </div>
             <p
-              className='subtitle'
+              className="subtitle"
               style={{
                 textTransform: "uppercase",
                 color: "#ff9900",
@@ -296,19 +321,19 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
             >
               Юридический адрес
             </p>
-            <Inputs label='Индекс' name='index' placeholder='Введите индекс' />
-            <Inputs label='Адрес' name='adress' placeholder='Введите aдрес' />
+            <Inputs label="Индекс" name="index" placeholder="Введите индекс" />
+            <Inputs label="Адрес" name="adress" placeholder="Введите aдрес" />
             <div
-              className='flex_box'
+              className="flex_box"
               style={{ justifyContent: "flex-start", marginTop: 20 }}
             >
               <CustomSwitch />
-              <Typography variant='body2' style={{ marginLeft: 20 }}>
+              <Typography variant="body2" style={{ marginLeft: 20 }}>
                 Фактический адрес не совпадает с юридическим
               </Typography>
             </div>
             <div
-              className='flex_box'
+              className="flex_box"
               style={{
                 justifyContent: "space-between",
                 width: "50%",
@@ -318,13 +343,13 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               <Button
                 className={classes.customBtn}
                 onClick={prevStep}
-                variant='outlined'
+                variant="outlined"
               >
                 Отмена
               </Button>
               <GoldButton
                 style={{ width: "40%" }}
-                type='submit'
+                type="submit"
                 disabled={isPending}
               >
                 Далее

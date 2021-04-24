@@ -119,21 +119,27 @@ export const getTariffPlans = () => (dispatch) => {
   });
 };
 
-export const getCountries = () => (dispatch) => {
-  creatRequest("/countries").then((res) => {
-    dispatch(setData({ countries: res.data.countries }));
+export const getCountries = (callback) => (dispatch) => {
+  creatRequest("/countries", undefined, callback).then((res) => {
+    if (res.data) {
+      dispatch(setData({ countries: res.data.countries }));
+    }
   });
 };
 
-export const getOrganizations = () => (dispatch) => {
-  creatRequest("/organization-types").then((res) => {
-    dispatch(setData({ organizationTypes: res.data.list }));
+export const getOrganizations = (callback) => (dispatch) => {
+  creatRequest("/organization-types", undefined, callback).then((res) => {
+    if (res.data) {
+      dispatch(setData({ organizationTypes: res.data.list }));
+    }
   });
 };
 
-export const getActivityTypes = () => (dispatch) => {
-  creatRequest("/activity-types").then((res) => {
-    dispatch(setData({ activityTypes: res.data.list }));
+export const getActivityTypes = (callback) => (dispatch) => {
+  creatRequest("/activity-types", undefined, callback).then((res) => {
+    if (res.data) {
+      dispatch(setData({ activityTypes: res.data.list }));
+    }
   });
 };
 
