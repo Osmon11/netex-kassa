@@ -57,6 +57,7 @@
 .rates_mobile {
   width: 210px;
   margin: 0 30px;
+  text-align: center;
 }
 /* About us */
 .planet {

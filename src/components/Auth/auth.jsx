@@ -40,7 +40,7 @@ export function Auth({ open, handleClose, login, setLogin }) {
         }}
       >
         {login ? (
-          <SingIn sm={sm} setAlert={alertHandler} />
+          <SingIn sm={sm} setAlert={alertHandler} handleClose={handleClose} />
         ) : (
           <SingUp sm={sm} setAlert={alertHandler} />
         )}
@@ -64,7 +64,7 @@ export function Auth({ open, handleClose, login, setLogin }) {
   );
 }
 
-function SingIn({ sm, setAlert }) {
+function SingIn({ sm, setAlert, handleClose }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const [fogetPassword, setPassword] = useState(false);
@@ -99,6 +99,7 @@ function SingIn({ sm, setAlert }) {
       login(fields, (alert) => {
         setAlert(alert);
         if (alert.severity === "success") {
+          handleClose();
           history.push("/dashboard");
         }
       })

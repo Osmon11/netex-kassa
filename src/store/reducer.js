@@ -7,6 +7,7 @@ import {
   SET_DATA,
   SET_AUTH_DIALOG,
   SET_ALERT,
+  setAlert,
 } from "./actionCreators";
 import { initialState } from "./initialState";
 
@@ -121,7 +122,7 @@ export const getTariffPlans = () => (dispatch) => {
 
 export const getCountries = (callback) => (dispatch) => {
   creatRequest("/countries", undefined, callback).then((res) => {
-    if (res.data) {
+    if (Boolean(res)) {
       dispatch(setData({ countries: res.data.countries }));
     }
   });
@@ -129,7 +130,7 @@ export const getCountries = (callback) => (dispatch) => {
 
 export const getOrganizations = (callback) => (dispatch) => {
   creatRequest("/organization-types", undefined, callback).then((res) => {
-    if (res.data) {
+    if (Boolean(res)) {
       dispatch(setData({ organizationTypes: res.data.list }));
     }
   });
@@ -137,7 +138,7 @@ export const getOrganizations = (callback) => (dispatch) => {
 
 export const getActivityTypes = (callback) => (dispatch) => {
   creatRequest("/activity-types", undefined, callback).then((res) => {
-    if (res.data) {
+    if (Boolean(res)) {
       dispatch(setData({ activityTypes: res.data.list }));
     }
   });
@@ -165,8 +166,14 @@ export const editMerchant = (data, id, callback) => (dispatch) => {
 };
 
 export const viewMerchant = (id, callback) => (dispatch) => {
-  creatRequest(`/account/view/${id}`).then((res) => {
-    callback(res.data);
+  creatRequest(`/account/view/${id}`, undefined, (error) => {
+    if (error) {
+      setAlert({ open: true, severity: "error", message: error });
+    }
+  }).then((res) => {
+    if (Boolean(res)) {
+      callback(res.data);
+    }
   });
 };
 

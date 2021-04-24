@@ -33,6 +33,7 @@ const settingsFormValidation = Yup.object({
 export function ProjectSettings({ match }) {
   const dispatch = useDispatch();
   const theme = useTheme();
+  const md = useMediaQuery(theme.breakpoints.down("md"));
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const [tab, setTab] = useState("Инфо");
   const [tooltip, setTooltip] = useState({ a: false, b: false });
@@ -422,12 +423,12 @@ export function ProjectSettings({ match }) {
 const data = [
   {
     date: "2021-01-13 18:37:46",
-    adress: "https://my.biwse.com/app/1665870464/btc:46",
+    adress: "https://my.biwse.com",
     sum: "0.000025172 BTC",
   },
   {
     date: "2021-01-07 10:21:51",
-    adress: "https://my.biwse.com/app/1665870464/btc:46",
+    adress: "https://my.biwse.com",
     sum: "0.008500000 BTC",
   },
 ];
