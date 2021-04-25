@@ -41,7 +41,7 @@ export function reducer(state = initialState, action) {
   }
 }
 
-const baseURL = "https://api.netex-kassa.com/";
+export const baseURL = "https://api.netex-kassa.com";
 const headers = { "Content-Type": "application/x-www-form-urlencoded" };
 const AppAxios = axios.create({
   baseURL,
@@ -65,6 +65,7 @@ export const login = (data, callback) => (dispatch) => {
       AppAxios.interceptors.request.use(
         (config) => {
           config.headers.Authorization = `Bearer ${res.data.token}`;
+          dispatch(setData({ token: `Bearer ${res.data.token}` }));
           return config;
         },
         (error) => {
@@ -196,12 +197,6 @@ export const getActionLogs = (page) => (dispatch) => {
 export const changePassword = (fields, callback) => (dispatch) => {
   creatRequest("/profile/password", fields).then((res) => {
     callback();
-  });
-};
-
-export const getConfirmFile = (confirm_file_id) => (dispatch) => {
-  creatRequest(`/account/get-confirm-file/${confirm_file_id}`).then((res) => {
-    console.log(res);
   });
 };
 
