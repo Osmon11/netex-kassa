@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import React, { useEffect } from "react";
 import "./style.css";
-import logo from "assets/logo.png";
+import Logo from "../../shared/Logo/logo";
 import ava from "assets/avatar.png";
 import {
   CreateProject,
@@ -101,9 +101,7 @@ export function Admin() {
           className="flex_box"
           style={{ flexDirection: xs ? "column" : "row" }}
         >
-          <NavLink to="/dashboard">
-            <img src={logo} style={{ width: 150 }} alt="logo" />
-          </NavLink>
+          <Logo />
           <p
             className="p_1"
             style={{
