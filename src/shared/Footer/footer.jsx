@@ -8,7 +8,7 @@ import {
   useTheme,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import logo from "assets/logo.png";
+import Logo from "../Logo/logo";
 import phoneIcon from "assets/phone-grey.png";
 import mailIcon from "assets/mail-grey.png";
 import whatsApp from "assets/whatsApp-light-icon.png";
@@ -40,9 +40,7 @@ export function Footer() {
               О компании
             </Typography>
           )}
-          <NavLink to="/">
-            <img src={logo} style={{ height: 66 }} alt="" />
-          </NavLink>
+          <Logo />
           <Typography variant="body2" style={{ margin: "24px 0" }}>
             Advanced - команда разработчиков
             <br /> работает с криптовалютами в<br /> области финансовых

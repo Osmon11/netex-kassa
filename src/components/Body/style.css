@@ -1,4 +1,10 @@
 /* Documentations page */
+.dialog .auth_circle_button {
+  position: absolute;
+  top: -5px;
+  right: 0;
+}
+
 .main_title {
   font-weight: 300;
   font-size: 40px;
@@ -111,9 +117,27 @@
   border-radius: 4px;
 }
 
+/* Autth */
+.auth-form {
+  position: relative;
+}
+
 @media (max-width: 750px) {
   .cripto_brend {
     width: 90px;
+  }
+  .app_container {
+    overflow: hidden;
+  }
+  .auth-container {
+    padding: 40px 46px 44px 40px !important;
+    overflow: hidden;
+  }
+  .auth-container input {
+    width: 100%;
+  }
+  .MuiPaper-root {
+    margin: 10px !important;
   }
 }
 @media (max-width: 600px) {
@@ -135,6 +159,9 @@
   .cripto_brend {
     width: 50px;
   }
+  .section-2__btn {
+    width: 100% !important;
+  }
 }
 @media (max-width: 400px) {
   .about_us_bitcoin1 {
@@ -143,4 +170,24 @@
   .about_us_bitcoin3 {
     bottom: 20px;
   }
+  .auth-container {
+    padding: 20px 26px 24px 20px !important;
+  }
 }
+
+@media (max-width: 359px) {
+  .section-1 {
+    display: flex;
+    flex-direction: column;
+  }
+  .section-1 button {
+    padding: 0;
+    width: 310px;
+    margin: 0 !important;
+  }
+  .section-1 button:nth-child(2) {
+    margin-top: 10px !important;
+  }
+}
+
+

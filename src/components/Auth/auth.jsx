@@ -12,6 +12,7 @@ import { ErrorMessage, Form, Formik, useField } from "formik";
 import * as Yup from "yup";
 import React, { useEffect, useState } from "react";
 import { GoldButton } from "shared/Buttons/buttons";
+import closeIcon from "../../assets/close-icon.png";
 import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
 import {
@@ -32,8 +33,9 @@ export function Auth({ open, handleClose, login, setLogin }) {
     dispatch(setAlert(options));
   }
   return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby="auth-dialog">
+    <Dialog open={open} onClose={handleClose} aria-labelledby="auth-dialog" className='dialog'>
       <DialogContent
+        className='auth-container'
         style={{
           backgroundColor: "#2A2B31",
           padding: "55px 80px 20px",
@@ -112,7 +114,7 @@ function SingIn({ sm, setAlert, handleClose }) {
         initialValues={values}
         validationSchema={validate}
       >
-        <Form>
+        <Form className='auth-form'>
           {sm ? (
             <p
               className="title"

@@ -12,7 +12,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import logo from "assets/logo.png";
+import Logo from "../Logo/logo";
 import menuIcon from "assets/menu-icon.png";
 import closeIcon from "assets/close-icon.png";
 import phoneIcon from "assets/phone-grey.png";
@@ -165,20 +165,16 @@ export function Header() {
               style={{ flexDirection: sm ? "column" : "row" }}
             >
               <NavLink to="/" className="nav_link">
-                <img
-                  src={logo}
-                  style={{ height: sm ? 36 : "100%" }}
-                  alt="logo"
-                />
+                <Logo />
               </NavLink>
-              <p
+              {/* <p
                 className="p_1"
                 style={{
                   margin: sm ? 0 : "0 0 0 10px",
                 }}
               >
                 Excepteur sint occaecat cupidatat non proident
-              </p>
+              </p> */}
             </span>
 
             {sm ? (

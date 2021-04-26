@@ -48,8 +48,7 @@ export function MainBody() {
             style={{ width: "100%", color: "#fff", padding: "180px 5%" }}
           >
             <Typography variant="h3" className={classes.sectionTitle}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor
+              Скажи «ДА» КРИПТОПЛАТЕЖАМ! 
             </Typography>
             <Typography
               variant="body1"
@@ -59,12 +58,11 @@ export function MainBody() {
                 fontSize: xs ? 14 : 20,
               }}
             >
-              Принимайте и отправляйте криптовалюту с нашим API без каких любо
-              усилий.
+              Принимать оплату криптовалютами на веб-сайтах или мобильных приложениях стало доступно.
             </Typography>
-            <div className="flex_box">
+            <div className="flex_box section-1">
               <GoldButton
-                style={{ minWidth: sm ? 164 : 270, minHeight: 60 }}
+                style={{ minWidth: sm ? 164 : 270, minHeight: 60, marginRight: '10px' }}
                 onClick={() => history.push("/documentation")}
               >
                 Начать работу
@@ -124,12 +122,10 @@ export function MainBody() {
                   fontSize: xs ? 14 : 20,
                 }}
               >
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-                quae ab illo inventore veritatis et quasi architecto beatae
-                vitae dicta sunt explicabo.
+                Увеличь продажи, расширь свое дело и будь в тренде! Выведи свою компанию на новый уровень вместе с Netex-kassa.
               </Typography>
               <GoldButton
+                className='section-2__btn'
                 style={{ minWidth: 270, minHeight: 60 }}
                 onClick={() => history.push("/documentation")}
               >
@@ -306,16 +302,12 @@ export function MainBody() {
                 style={{ marginBottom: 40 }}
               >
                 <Typography variant="body1" style={{ fontSize: xs ? 14 : 20 }}>
-                  Готовы начать? Присоединяйтесь к тысячам разработчиков которые
-                  используют biwse.com. Нет ничего проще. Прочите API
-                  документацию и убедитесь сами.
+                Netex-kassa – лучшее решение для вашего бизнеса! Это сервис предоставляющий криптовалютный кошелек, с помощью которого вы с легкостью сможете принимать платежи топовыми криптовалютами. 
                 </Typography>
               </Paper>
               <Paper className={classes.bitcoinPaper}>
                 <Typography variant="body1" style={{ fontSize: xs ? 14 : 20 }}>
-                  Используйте топовые криптовалюты Начни сегодня использовать
-                  топовые криптовалюты на своем сайте и получи первую неделю
-                  Бесплатно!
+                Принимайте платежи быстро и безопасно через стильный, удобный интерфейс и мощный API. Интегрируйте систему оплаты вместе с Netex-kassa!
                 </Typography>
               </Paper>
             </Grid>
@@ -444,7 +436,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "normal",
     minHeight: 60,
     minWidth: 170,
-    marginLeft: 20,
+    marginLeft: 10,
     color: "#fff",
     [theme.breakpoints.down("xs")]: {
       minWidth: 164,
@@ -469,38 +461,38 @@ const useStyles = makeStyles((theme) => ({
 const advantages = [
   {
     img: advantage1,
-    subtitle: "Популярные криптовалюты",
+    subtitle: "Простое подключение",
     text:
-      "Принимайте и отправляйте деньги в самых востребованных криптовалютах. Незачем путать клиента в множестве никому не нужных трешкоинах.",
+      "API документация написана довольно просто и понятно.",
   },
   {
     img: advantage2,
-    subtitle: "Тарифные планы",
+    subtitle: "Оплата ТОП-20 криптовалютами",
     text:
-      "Разнообразие тарифных планов дает возможность бизнесу выбрать именно тот план, который подходит именно Вам.",
+      "Ведите работу только с проверенными временем криптовалютами.",
   },
   {
     img: advantage3,
-    subtitle: "Оффшорная зона и Криптошифрование",
+    subtitle: "Служба поддержки 24/7 ",
     text:
-      "Наши сервера находятся в офшорных зонах и обеспечивают высокий уровень безопасности, а Криптошифорование надежно хранит ваши данные.",
+      "При возникновении вопросов мы не оставляем вас один на один с нерешаемой задачей.",
   },
   {
     img: advantage4,
-    subtitle: "Скидки и персональный подход",
+    subtitle: "Выгодная тарификация",
     text:
-      "Если Вы крупный бизнес или средний бизнес свяжитесь с нами, и мы обеспечим Вам наилучший сервис по очень привлекательной цене.",
+      "Выбор подходящего тарифного плана для вашего бизнеса.",
   },
   {
     img: advantage5,
-    subtitle: "Мастер ключи",
+    subtitle: "Выгодные условия ",
     text:
-      "Предоставляем возможность импорта мастер-ключа что существенно повышает безопасность ваших средств.",
+      "Скидки для владельцев крупного и среднего бизнеса.",
   },
   {
     img: advantage6,
-    subtitle: "Быстрая интеграция",
+    subtitle: "Безопасность",
     text:
-      "API Документация проста и понятна, а Техническая Поддержка поможет Вам где бы вы не находились в любое время суток.",
+      "Криптошифрование и высокий уровень безопасности, которые надежно хранят ваши данные.",
   },
 ];
