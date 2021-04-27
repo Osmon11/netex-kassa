@@ -42,8 +42,10 @@ export function Footer() {
           )}
           <Logo />
           <Typography variant="body2" style={{ margin: "24px 0" }}>
-          Netex-kassa – лучшее решение для вашего бизнеса!
-            <br /> Это сервис предоставляющий криптовалютный кошелек, с помощью которого вы с легкостью сможете принимать платежи топовыми криптовалютами.
+            Netex-kassa – лучшее решение для вашего бизнеса!
+            <br /> Это сервис предоставляющий криптовалютный кошелек, с помощью
+            которого вы с легкостью сможете принимать платежи топовыми
+            криптовалютами.
           </Typography>
         </Grid>
 
@@ -54,18 +56,18 @@ export function Footer() {
                 Навигация по сайту
               </Typography>
               <Typography variant="body2" style={{ marginBottom: 10 }}>
-                <NavLink to="/" className="nav_link">
+                <NavLink exact to="/" className="nav_link">
                   Главная
-                </NavLink>
-              </Typography>
-              <Typography variant="body2" style={{ marginBottom: 10 }}>
-                <NavLink to="/documentation" className="nav_link">
-                  Документация
                 </NavLink>
               </Typography>
               <Typography variant="body2" style={{ marginBottom: 10 }}>
                 <NavLink to="/about-us" className="nav_link">
                   О компании
+                </NavLink>
+              </Typography>
+              <Typography variant="body2" style={{ marginBottom: 10 }}>
+                <NavLink to="/documentation" className="nav_link">
+                  Документация
                 </NavLink>
               </Typography>
               <Typography variant="body2" style={{ marginBottom: 10 }}>
@@ -156,7 +158,7 @@ export function Footer() {
         setLogin={(login) => setDialog({ open: true, login })}
         handleClose={handleClose}
       />
-       <p style={{textAlign: 'center'}}>2021 © Netex. All rights reserved.</p>
+      <p style={{ textAlign: "center" }}>2021 © Netex. All rights reserved.</p>
     </Container>
   );
 }

@@ -10,7 +10,9 @@ import {
 } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { GoldButton } from "shared/Buttons/buttons";
+import { setAuthDialog } from "store/actionCreators";
 import { getTariffPlans } from "store/reducer";
 import "./style.css";
 
@@ -20,6 +22,7 @@ export function RatesBody() {
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const dispatch = useDispatch();
   const state = useSelector((store) => store.reducer);
+  const history = useHistory();
 
   useEffect(() => {
     if (Boolean(!state.tariffPlans)) {
@@ -27,6 +30,13 @@ export function RatesBody() {
     }
   }, [state.tariffPlans, dispatch]);
 
+  function openDialog() {
+    if (state.user) {
+      history.push("/dashboard");
+      return;
+    }
+    dispatch(setAuthDialog({ open: true, login: false }));
+  }
   return (
     <Container>
       <Grid
@@ -38,13 +48,13 @@ export function RatesBody() {
           {Boolean(state.tariffPlans) ? (
             <>
               <p
-                className='main_title'
+                className="main_title"
                 style={{ marginBottom: 0, marginTop: 150, width: "100%" }}
               >
                 Доступные тарифы
               </p>
               <p
-                className='title'
+                className="title"
                 style={{
                   fontSize: 25,
                   textAlign: "center",
@@ -56,7 +66,7 @@ export function RatesBody() {
               </p>
             </>
           ) : (
-            <div className='flex_box' style={{ height: "100vh" }}>
+            <div className="flex_box" style={{ height: "100vh" }}>
               <CircularProgress />
             </div>
           )}
@@ -76,18 +86,18 @@ export function RatesBody() {
                     elevation={0}
                   >
                     <p
-                      className='title'
+                      className="title"
                       style={{ textAlign: "center", marginBottom: 15 }}
                     >
                       {plan.name}
                     </p>
                     <Typography
-                      variant='h3'
+                      variant="h3"
                       style={{ color: "#FF9900", textAlign: "center" }}
                     >
                       {plan.percent}
                     </Typography>
-                    <Typography variant='body1' style={{ textAlign: "center" }}>
+                    <Typography variant="body1" style={{ textAlign: "center" }}>
                       {plan.name === "Unlimited pack"
                         ? "за месяц"
                         : "за транзакцию"}
@@ -103,11 +113,11 @@ export function RatesBody() {
                       {plan.description.split("-").map((text) => {
                         return (
                           <li
-                            className='rates_list_item'
+                            className="rates_list_item"
                             key={`${plan.name}=${text}`}
                           >
                             <Typography
-                              variant='body1'
+                              variant="body1"
                               style={{ textAlign: "start" }}
                             >
                               {text}
@@ -117,6 +127,7 @@ export function RatesBody() {
                       })}
                     </ul>
                     <GoldButton
+                      onClick={openDialog}
                       style={{
                         minWidth: 250,
                         minHeight: 60,
@@ -130,7 +141,7 @@ export function RatesBody() {
               ))}
 
               <Grid item md={6}>
-                <p className='subtitle'>
+                <p className="subtitle">
                   At vero eos et accusamus et iusto odio dignissimos ducimus qui
                   blanditiis praesentium voluptatum deleniti atque corrupti quos
                   dolores et quas molestias excepturi sint occaecati cupiditate
@@ -140,7 +151,7 @@ export function RatesBody() {
               </Grid>
 
               <Grid item md={6}>
-                <p className='subtitle'>
+                <p className="subtitle">
                   At vero eos et accusamus et iusto odio dignissimos ducimus qui
                   blanditiis praesentium voluptatum deleniti atque corrupti quos
                   dolores et quas molestias excepturi sint occaecati cupiditate
@@ -158,6 +169,17 @@ export function RatesBody() {
 }
 
 function MobileVertion(props) {
+  const dispatch = useDispatch();
+  const state = useSelector((store) => store.reducer);
+  const history = useHistory();
+
+  function openDialog() {
+    if (state.user) {
+      history.push("/dashboard");
+      return;
+    }
+    dispatch(setAuthDialog({ open: true, login: false }));
+  }
   return (
     <Grid
       item
@@ -180,27 +202,27 @@ function MobileVertion(props) {
         elevation={0}
       >
         {props.tariffPlans.map((plan) => (
-          <div className='rates_mobile'>
+          <div className="rates_mobile">
             <p
-              className='title'
+              className="title"
               style={{ textAlign: "center", marginBottom: 15 }}
             >
               {plan.name}
             </p>
             <Typography
-              variant='h3'
+              variant="h3"
               style={{ color: "#FF9900", textAlign: "center" }}
             >
               {plan.percent}
             </Typography>
-            <Typography variant='body1' style={{ textAlign: "center" }}>
+            <Typography variant="body1" style={{ textAlign: "center" }}>
               {plan.name === "Unlimited pack" ? "за месяц" : "за транзакцию"}
             </Typography>
             <ul>
               {plan.description.split("-").map((text) => {
                 return (
-                  <li className='rates_list_item'>
-                    <Typography variant='body1' style={{ textAlign: "start" }}>
+                  <li className="rates_list_item">
+                    <Typography variant="body1" style={{ textAlign: "start" }}>
                       {text}
                     </Typography>
                   </li>
@@ -208,6 +230,7 @@ function MobileVertion(props) {
               })}
             </ul>
             <GoldButton
+              onClick={openDialog}
               style={{
                 minWidth: 135,
                 minHeight: 60,
@@ -217,7 +240,7 @@ function MobileVertion(props) {
               Начать
             </GoldButton>
             <p
-              className='subtitle'
+              className="subtitle"
               style={{ textAlign: "start", marginTop: 30 }}
             >
               At vero eos et accusamus et iusto odio dignissimos ducimus qui

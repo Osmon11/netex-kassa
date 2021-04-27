@@ -23,6 +23,7 @@ import {
   singup,
 } from "store/actions/sign";
 import { setAlert } from "store/actionCreators";
+import { ValidatedInput } from "components/Dashboard/Inputs";
 
 export function Auth({ open, handleClose, login, setLogin }) {
   const theme = useTheme();
@@ -33,9 +34,14 @@ export function Auth({ open, handleClose, login, setLogin }) {
     dispatch(setAlert(options));
   }
   return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby="auth-dialog" className='dialog'>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="auth-dialog"
+      className="dialog"
+    >
       <DialogContent
-        className='auth-container'
+        className="auth-container"
         style={{
           backgroundColor: "#2A2B31",
           padding: "55px 80px 20px",
@@ -114,7 +120,7 @@ function SingIn({ sm, setAlert, handleClose }) {
         initialValues={values}
         validationSchema={validate}
       >
-        <Form className='auth-form'>
+        <Form className="auth-form">
           {sm ? (
             <p
               className="title"
@@ -182,11 +188,10 @@ function SingIn({ sm, setAlert, handleClose }) {
 function SingUp({ sm, setAlert }) {
   const [enterCode, setCodeField] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(true);
-  const [userPhone, setUserPhone] = useState("");
+  const [userPhone, setUserPhone] = useState("0709683738");
   const [timeleft, setTimeLeft] = useState(30);
   const dispatch = useDispatch();
   let seconds = Math.floor(timeleft % 60);
-  let activationCode = "";
   const validate = Yup.object({
     firstname: Yup.string().required("Поле должно быть заполнена"),
     lastname: Yup.string().required("Поле должно быть заполнена"),
@@ -194,10 +199,10 @@ function SingUp({ sm, setAlert }) {
     phone: Yup.string()
       .max(12, "Убедитесь, что это значение содержит не более 12 символов.")
       .required("Поля должно быть заполнена"),
-    password: Yup.number()
+    password: Yup.string()
       .min(8, "Пароль должен быть не меньше 8")
       .required("Поле должно быть заполнена"),
-    password_two: Yup.number()
+    password_two: Yup.string()
       .oneOf([Yup.ref("password"), null], "Пароли должны совпадать")
       .required("Поле должно быть заполнена"),
   });
@@ -212,11 +217,12 @@ function SingUp({ sm, setAlert }) {
     }
   }, [timeleft, enterCode]);
 
-  function submitHandler(fields) {
-    setUserPhone(fields.phone);
-    console.log(fields)
+  function submitHandler({ phone, ...fields }) {
+    let phoneIsCorrect = phone[0] === "0" ? phone : "0" + phone;
+    console.log(phoneIsCorrect);
+    setUserPhone({ phone: phoneIsCorrect });
     dispatch(
-      singup(fields, (data) => {
+      singup({ ...fields, phone: phoneIsCorrect }, (data) => {
         if (Boolean(data.messages)) {
           setAlert({ open: true, severity: "error", message: data.messages });
           return;
@@ -225,68 +231,72 @@ function SingUp({ sm, setAlert }) {
       })
     );
   }
+
   return (
     <>
       {enterCode ? (
-        <>
-          <Typography variant="body2" style={{ marginTop: 15 }}>
-            Введите полученный код сюда
-          </Typography>
-          <ThemeInput
-            margin="dense"
-            placeholder="Код активации"
-            name="code"
-            type="number"
-            variant="outlined"
-            onChange={(e) => (activationCode = e.target.value)}
-            fullWidth
-          />
-          <GoldButton
-            style={{
-              minHeight: 50,
-              minWidth: 195,
-              fontSize: 16,
-              marginTop: 20,
-            }}
-            disabled={btnDisabled}
-            onClick={() =>
-              dispatch(
-                resendActivationCode(userPhone, (message) =>
-                  setAlert({ ...alert, message })
+        <Formik
+          initialValues={{ code: "" }}
+          validationSchema={Yup.object({
+            code: Yup.number().required("Поле должно быть заполнена"),
+          })}
+          onSubmit={({ code }) =>
+            dispatch(accountActivation({ phone: userPhone, code }))
+          }
+        >
+          <Form>
+            <Typography variant="body2" style={{ marginTop: 15 }}>
+              Введите полученный код сюда
+            </Typography>
+            <ValidatedInput
+              placeholder="Код активации"
+              name="code"
+              type="number"
+              style={{ width: "100%", marginBottom: 0 }}
+            />
+            <GoldButton
+              style={{
+                minHeight: 50,
+                minWidth: 195,
+                fontSize: 16,
+                marginTop: 20,
+              }}
+              disabled={btnDisabled}
+              onClick={() =>
+                dispatch(
+                  resendActivationCode(userPhone, (message) =>
+                    setAlert({ ...alert, message })
+                  )
                 )
-              )
-            }
-            fullWidth
-          >
-            Отправить повторно через {seconds}сек
-          </GoldButton>
-          <GoldButton
-            style={{
-              minHeight: 50,
-              minWidth: 195,
-              fontSize: 16,
-              marginTop: 20,
-            }}
-            onClick={() =>
-              dispatch(
-                accountActivation({ phone: userPhone, code: activationCode })
-              )
-            }
-            fullWidth
-          >
-            Подвердить
-          </GoldButton>
-        </>
+              }
+              fullWidth
+            >
+              Отправить повторно {seconds > 0 && `через ${seconds}сек`}
+            </GoldButton>
+            <GoldButton
+              type="submit"
+              style={{
+                minHeight: 50,
+                minWidth: 195,
+                fontSize: 16,
+                marginTop: 20,
+              }}
+              fullWidth
+            >
+              Подвердить
+            </GoldButton>
+          </Form>
+        </Formik>
       ) : (
         <Formik
           onSubmit={submitHandler}
           initialValues={{
-            firstname: "Test",
-            lastname: "Test",
-            email: "osmonab@gmail.com",
-            phone: "0501099029",
-            password: "12121212",
-            password_two: "12121212",
+            firstname: "askar",
+            lastname: "begaliev",
+            email: "askarrbegaliev@gmail.com",
+            phone: "0709683738",
+            password: "Askar0102",
+            password_two: "Askar0102",
           }}
           validationSchema={validate}
         >

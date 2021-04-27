@@ -38,6 +38,9 @@ body {
 .nav_link:hover {
   color: #ff9900;
 }
+.active {
+  color: #ff9900 !important;
+}
 .body_3 {
   font-weight: 300;
   font-size: 14px;

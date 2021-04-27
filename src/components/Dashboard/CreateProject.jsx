@@ -13,8 +13,8 @@ import { handleGetMerchantsAction } from "store/actions/merchants";
 import { setAlert } from "store/actionCreators";
 
 const initialValues = {
-  name: "Netex UZ",
-  domain: "netex.uz",
+  name: "",
+  domain: "",
 };
 
 const validationSchema = Yup.object({
@@ -32,7 +32,6 @@ export function CreateProject() {
   function submitHandler(fields) {
     setSecondStep((isSecondStep) => !isSecondStep);
     setNewMerchant(fields);
-  
   }
   function callbackHandler(fields) {
     dispatch(

@@ -18,7 +18,7 @@ export function WithdrawFunds() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-  const projects = useSelector((store) => store.reducer.merchants);
+  const projects = useSelector((store) => store.merchants.merchants);
   const [project, setProject] = React.useState(projects[0].name);
   const [amount, setAmount] = React.useState(0);
   const [wallet, setWallet] = React.useState("Bitcoin");
@@ -33,7 +33,7 @@ export function WithdrawFunds() {
   };
   return (
     <section style={{ width: "50%" }}>
-      <div className='title' style={{ fontSize: 25, marginTop: 36 }}>
+      <div className="title" style={{ fontSize: 25, marginTop: 36 }}>
         Вывод средств
       </div>
       <Stepper
@@ -54,14 +54,14 @@ export function WithdrawFunds() {
       </Stepper>
 
       <form>
-        <Typography variant='body2' style={{ marginTop: 15 }}>
+        <Typography variant="body2" style={{ marginTop: 15 }}>
           Проект
         </Typography>
         <ThemeInput
-          margin='dense'
-          name='username'
+          margin="dense"
+          name="username"
           select
-          variant='outlined'
+          variant="outlined"
           value={project}
           onChange={(e) => setProject(e.target.value)}
           style={{ marginBottom: 20, width: 334 }}
@@ -77,14 +77,14 @@ export function WithdrawFunds() {
             </MenuItem>
           ))}
         </ThemeInput>
-        <Typography variant='body2' style={{ marginTop: 15 }}>
+        <Typography variant="body2" style={{ marginTop: 15 }}>
           Выберите кошелек
         </Typography>
         <ThemeInput
-          margin='dense'
-          name='username'
+          margin="dense"
+          name="username"
           select
-          variant='outlined'
+          variant="outlined"
           value={wallet}
           onChange={(e) => setWallet(e.target.value)}
           style={{ marginBottom: 20, width: 334 }}
@@ -100,45 +100,45 @@ export function WithdrawFunds() {
             </MenuItem>
           ))}
         </ThemeInput>
-        <Typography variant='body2' style={{ marginTop: 15 }}>
+        <Typography variant="body2" style={{ marginTop: 15 }}>
           Адрес
         </Typography>
         <ThemeInput
-          margin='dense'
-          placeholder='Введите адрес'
-          name='adress'
-          type='text'
-          variant='outlined'
+          margin="dense"
+          placeholder="Введите адрес"
+          name="adress"
+          type="text"
+          variant="outlined"
           style={{ width: 334 }}
         />
-        <Typography variant='body2' style={{ marginTop: 15 }}>
+        <Typography variant="body2" style={{ marginTop: 15 }}>
           Введите сумму (BTC)
         </Typography>
         <div
-          className='flex_box'
+          className="flex_box"
           style={{ justifyContent: "space-between", width: 334 }}
         >
           <ThemeInput
-            margin='dense'
-            placeholder='Введите адрес'
-            name='btcamount'
-            type='number'
-            variant='outlined'
+            margin="dense"
+            placeholder="Введите адрес"
+            name="btcamount"
+            type="number"
+            variant="outlined"
             onChange={(e) => setAmount(e.target.value * 50000)}
             style={{ width: "45%" }}
           />
           <span style={{ padding: 5 }}>-</span>
           <ThemeInput
-            id='standard-adornment-amount'
-            margin='dense'
+            id="standard-adornment-amount"
+            margin="dense"
             value={amount}
-            name='dollars'
-            type='text'
-            variant='outlined'
+            name="dollars"
+            type="text"
+            variant="outlined"
             style={{ width: "45%" }}
             InputProps={{
               startAdornment: (
-                <InputAdornment position='start'>$</InputAdornment>
+                <InputAdornment position="start">$</InputAdornment>
               ),
             }}
             disabled

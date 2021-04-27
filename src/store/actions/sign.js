@@ -1,8 +1,5 @@
-import { 
-  setUser,
-  setData,
- } from "../actionCreators";
-import { AppAxios, AppAxios2 } from '../../axios/axios';
+import { setUser, setData, setAlert } from "../actionCreators";
+import { AppAxios, AppAxios2 } from "../../axios/axios";
 
 export const login = (data, callback) => (dispatch) => {
   AppAxios.post("/auth/login", data)
@@ -12,7 +9,7 @@ export const login = (data, callback) => (dispatch) => {
           (config) => {
             config.headers.Authorization = `Bearer ${res.data.token}`;
             dispatch(setData({ token: `Bearer ${res.data.token}` }));
-            localStorage.setItem('token', `Bearer ${res.data.token}`)
+            localStorage.setItem("token", `Bearer ${res.data.token}`);
             return config;
           },
           (error) => {
@@ -29,21 +26,20 @@ export const login = (data, callback) => (dispatch) => {
         });
     })
     .catch((e) => {
-      if(e.message === 'Request failed with status code 401') {
+      if (e.message === "Request failed with status code 401") {
         callback({
           message: "Неверный пароль",
           severity: "error",
           open: true,
         });
-      }
-      else {
+      } else {
         callback({
           message: "Что то пошло не так, повторите снова",
           severity: "error",
           open: true,
         });
       }
-    })
+    });
 };
 
 export const logout = (callback) => (dispatch) => {
@@ -54,29 +50,69 @@ export const logout = (callback) => (dispatch) => {
 };
 
 export const singup = (data, callback) => (dispatch) => {
-  console.log(data)
-  AppAxios.post("/auth/registration", data).then((res) => {
-    callback(res.data);
-  });
+  console.log(data);
+  AppAxios.post("/auth/registration", data)
+    .then((res) => {
+      callback(res.data);
+    })
+    .catch(({ response }) => {
+      dispatch(
+        setAlert({
+          open: true,
+          severity: "error",
+          message: response.data.messages,
+        })
+      );
+    });
 };
 
 export const accountActivation = (fields) => (dispatch) => {
-  AppAxios.post("/auth/activation/activation", fields).then((res) => {
-    console.log(res.data);
-  });
+  AppAxios.post("/auth/activation", fields)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch(({ response }) => {
+      dispatch(
+        setAlert({
+          open: true,
+          severity: "error",
+          message: response.data.messages,
+        })
+      );
+    });
 };
 
 export const resendActivationCode = (phone, callback) => (dispatch) => {
-  AppAxios.post("/auth/activation/resend", phone).then((res) => {
-    console.log(res.data);
-    callback(res.data.message);
-  });
+  AppAxios.post("/auth/activation/resend", phone)
+    .then((res) => {
+      console.log(res.data);
+      callback(res.data.message);
+    })
+    .catch(({ response }) => {
+      dispatch(
+        setAlert({
+          open: true,
+          severity: "error",
+          message: response.data.messages,
+        })
+      );
+    });
 };
 
 export const restorePassword = (phone) => (dispatch) => {
-  AppAxios.post("/auth/activation/forgot", phone).then((res) => {
-    console.log(res.data);
-  });
+  AppAxios.post("/auth/activation/forgot", phone)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch(({ response }) => {
+      dispatch(
+        setAlert({
+          open: true,
+          severity: "error",
+          message: response.data.messages,
+        })
+      );
+    });
 };
 
 export const changePassword = (fields, callback) => (dispatch) => {

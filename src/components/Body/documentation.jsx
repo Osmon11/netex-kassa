@@ -8,6 +8,7 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { ToggleButtonGroup } from "@material-ui/lab";
+import clsx from "clsx";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GoldToggleButton } from "shared/Buttons/buttons";
@@ -49,13 +50,13 @@ export function DocumentationBody() {
               {tabs.map((tab) => (
                 <Grid item xs={d400 ? 12 : 6} sm={4} md={12}>
                   <span
-                    className="nav_link"
+                    className={clsx("nav_link", {
+                      active: currentTab.value === tab.value,
+                    })}
                     style={{
                       fontSize: xs ? 16 : 20,
                       fontWeight: 400,
                       width: sm || xs ? "50%" : "",
-                      color:
-                        currentTab.value === tab.value ? "#FF9900" : "#fff",
                     }}
                     onClick={() => dispatch(setTab(tab))}
                     key={tab.value}

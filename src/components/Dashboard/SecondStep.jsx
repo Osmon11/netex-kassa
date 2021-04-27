@@ -23,23 +23,23 @@ import {
 import { setAlert } from "store/actionCreators";
 
 const firstTabValues = {
-  country: 1,
-  city: "Tashkent",
+  country: "",
+  city: "",
 };
 
 const secondTabValues = {
-  city: "Bishkek",
+  city: "",
   country: 1,
   organization_type: 1,
-  legal_name: "Netex UZ",
+  legal_name: "",
   activity_type: 6,
-  company_reg_date: "12-04-2020",
-  inn: "INN",
-  okpo: "OKPO",
-  bik: "BIK",
-  bank_name: "Bank Name",
-  checking_account: "Checking Account",
-  iban: "iBan",
+  company_reg_date: "",
+  inn: "",
+  okpo: "",
+  bik: "",
+  bank_name: "",
+  checking_account: "",
+  iban: "",
   decisions: "",
   certificate: "",
   upload_file: "",
@@ -83,6 +83,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
           }
         })
       );
+    }
+    if (!data.organizationTypes) {
       dispatch(
         getOrganizations((error) => {
           if (Boolean(error)) {
@@ -92,6 +94,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
           }
         })
       );
+    }
+    if (!data.activityTypes) {
       dispatch(
         getActivityTypes((error) => {
           if (Boolean(error)) {
@@ -102,7 +106,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
         })
       );
     }
-  }, [dispatch, data]);
+  }, [dispatch, data.countries, data.organizationTypes, data.activityTypes]);
 
   function submitHandler(fields) {
     setPending(true);

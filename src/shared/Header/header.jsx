@@ -130,20 +130,20 @@ export function Header() {
             </NavLink>
           </Typography>
           <Typography variant="body2" style={{ marginBottom: 10 }}>
-            {
-              !user ? 
+            {!user ? (
               <span
                 onClick={() =>
                   dispatch(setAuthDialog({ open: true, login: true }))
                 }
                 className="nav_link"
-                >
+              >
                 Вход в личный кабинет
-              </span> :
+              </span>
+            ) : (
               <NavLink to="/dashboard" className="nav_link">
-                  Профиль
+                Профиль
               </NavLink>
-            }
+            )}
           </Typography>
         </div>
       </ThemeDrawer>
@@ -182,19 +182,26 @@ export function Header() {
               </IconButton>
             ) : (
               <>
-                <NavLink to="/documentation" className="nav_link">
-                  Документация
-                </NavLink>
-                <NavLink to="/about-us" className="nav_link">
-                  О нас
-                </NavLink>
-                <NavLink to="/rates" className="nav_link">
-                  Тарифы
-                </NavLink>
+                <div
+                  className="flex_box"
+                  style={{ justifyContent: "space-between", width: 485 }}
+                >
+                  <NavLink exact to="/" className="nav_link">
+                    Главная
+                  </NavLink>
+                  <NavLink to="/about-us" className="nav_link">
+                    О нас
+                  </NavLink>
+                  <NavLink to="/documentation" className="nav_link">
+                    Документация
+                  </NavLink>
+                  <NavLink to="/rates" className="nav_link">
+                    Тарифы
+                  </NavLink>
+                </div>
 
                 <span className="flex_box">
-                  {
-                    !user ? 
+                  {!user ? (
                     <>
                       <GoldButton
                         style={{ minWidth: 90, minHeight: 40 }}
@@ -213,8 +220,9 @@ export function Header() {
                         }
                       >
                         Регистрация
-                      </p> 
-                    </> :
+                      </p>
+                    </>
+                  ) : (
                     <NavLink to="/dashboard" className="nav_link">
                       <GoldButton
                         style={{ minWidth: 90, minHeight: 40 }}
@@ -223,7 +231,7 @@ export function Header() {
                         Профиль
                       </GoldButton>
                     </NavLink>
-                  }
+                  )}
                 </span>
               </>
             )}

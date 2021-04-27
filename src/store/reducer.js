@@ -1,4 +1,4 @@
-import { AppAxios } from '../axios/axios'
+import { AppAxios } from "../axios/axios";
 import {
   setUser,
   setData,
@@ -53,7 +53,6 @@ function creatRequest(endpoint, data, errorCallback) {
       );
 }
 
-
 export const getTariffPlans = () => (dispatch) => {
   creatRequest("/tariff-plans").then((res) => {
     dispatch(setData({ tariffPlans: res.data.plans }));
@@ -62,7 +61,7 @@ export const getTariffPlans = () => (dispatch) => {
 
 export const getCountries = (callback) => (dispatch) => {
   creatRequest("/countries", undefined, callback).then((res) => {
-    if (Boolean(res)) {
+    if (res.status === 200) {
       dispatch(setData({ countries: res.data.countries }));
     }
   });
@@ -70,7 +69,7 @@ export const getCountries = (callback) => (dispatch) => {
 
 export const getOrganizations = (callback) => (dispatch) => {
   creatRequest("/organization-types", undefined, callback).then((res) => {
-    if (Boolean(res)) {
+    if (res.status === 200) {
       dispatch(setData({ organizationTypes: res.data.list }));
     }
   });
@@ -78,7 +77,7 @@ export const getOrganizations = (callback) => (dispatch) => {
 
 export const getActivityTypes = (callback) => (dispatch) => {
   creatRequest("/activity-types", undefined, callback).then((res) => {
-    if (Boolean(res)) {
+    if (res.status === 200) {
       dispatch(setData({ activityTypes: res.data.list }));
     }
   });
@@ -86,8 +85,8 @@ export const getActivityTypes = (callback) => (dispatch) => {
 
 export const addMerchant = (data, callback) => (dispatch) => {
   creatRequest("/account/add", data, callback).then((res) => {
-    console.log(res)
-    if (Boolean(res)) {
+    console.log(res);
+    if (res.status === 200) {
       callback();
     }
   });
@@ -106,7 +105,7 @@ export const viewMerchant = (id, callback) => (dispatch) => {
       setAlert({ open: true, severity: "error", message: error });
     }
   }).then((res) => {
-    if (Boolean(res)) {
+    if (res.status === 200) {
       callback(res.data);
     }
   });
@@ -127,7 +126,6 @@ export const getMerchants = () => (dispatch) => {
     dispatch(setData({ merchants: res.data.list }));
   });
 };
-
 
 export const confirmMerchant = (confirm_file_id, callback) => (dispatch) => {
   creatRequest(`/account/confirm/${confirm_file_id}`, undefined, callback).then(

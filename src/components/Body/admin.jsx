@@ -6,8 +6,6 @@ import {
   Drawer,
   IconButton,
   makeStyles,
-  Menu,
-  MenuItem,
   Toolbar,
   useMediaQuery,
   useTheme,
@@ -32,10 +30,10 @@ import { logout } from "store/actions/sign";
 let drawerWidth = 280;
 
 export function Admin() {
-  const {state, merchants} = useSelector( store => ({
+  const { state, merchants } = useSelector((store) => ({
     state: store.reducer,
-    merchants: store.merchants
-  }))
+    merchants: store.merchants,
+  }));
   const classes = useStyles();
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
@@ -43,25 +41,18 @@ export function Admin() {
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const dispatch = useDispatch();
   const history = useHistory();
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const { firstname, lastname, avatar } = state.profileInfo
     ? state.profileInfo
     : { firstname: "Not", lastname: "Found", avatar: ava };
 
   useEffect(() => {
     dispatch(getProfile());
-    dispatch(handleGetMerchantsAction())
+    dispatch(handleGetMerchantsAction());
     // if (!merchants.merchants.length > 0) {
     //   dispatch(handleGetMerchantsAction())
     // }
   }, [state.merchants, dispatch]);
 
-  function handleOpen(event) {
-    setAnchorEl(event.currentTarget);
-  }
-  function handleClose() {
-    setAnchorEl(null);
-  }
   function logoutHandler() {
     dispatch(
       logout(() => {
@@ -74,14 +65,10 @@ export function Admin() {
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar style={{ paddingLeft: "15%" }}>
           <div className="flex_box">
-            <span
-              className="subtitle"
-              style={{ cursor: "pointer" }}
-              onClick={handleOpen}
-            >
+            <span className="subtitle" style={{ cursor: "pointer" }}>
               {`${firstname} ${lastname}`}
             </span>
-            <IconButton style={{ marginLeft: 20 }} onClick={handleOpen}>
+            <IconButton style={{ marginLeft: 20 }}>
               <Avatar alt="" src={avatar} />
             </IconButton>
             <Button
@@ -103,15 +90,15 @@ export function Admin() {
         }}
         anchor="left"
       >
-          <NavLink to="/" className="nav_link" style={{position: 'Absolute', left: '0px', top: '70px'}}>
-            <Logo />
-          </NavLink>
+        <NavLink to="/" className="nav_link">
+          <Logo />
+        </NavLink>
 
-        <p className="subtitle" style={{ marginTop: '150px' }}>
+        <p className="subtitle" style={{ marginTop: 50 }}>
           Проекты
         </p>
         <ul className="projects">
-          { merchants.get.success ? (
+          {merchants.get.success ? (
             merchants.merchants.map((merchant) => (
               <li key={merchant.merchant_id}>
                 <Link
@@ -122,12 +109,11 @@ export function Admin() {
                 </Link>
               </li>
             ))
-          ) :
-            merchants.get.loading ? 
+          ) : merchants.get.loading ? (
             <div className="flex_box">
               <CircularProgress />
-            </div> : null
-          }
+            </div>
+          ) : null}
           <li>
             <NavLink
               to="/dashboard/create-project"
@@ -140,12 +126,17 @@ export function Admin() {
           </li>
         </ul>
 
-        <p className="subtitle">
+        <p className="subtitle" style={{ margin: "8px 0" }}>
           <NavLink to="/dashboard/operations" className="nav_link">
             История операций
           </NavLink>
         </p>
-        <p className="subtitle">
+        <p className="subtitle" style={{ margin: "8px 0" }}>
+          <NavLink to="/dashboard/withdrawal-of-funds" className="nav_link">
+            Вывод средств
+          </NavLink>
+        </p>
+        <p className="subtitle" style={{ margin: "8px 0" }}>
           <NavLink to="/dashboard/settings" className="nav_link">
             Настройки
           </NavLink>
@@ -184,32 +175,14 @@ export function Admin() {
         </Switch>
       </section>
 
-      <Menu
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        classes={{
-          paper: classes.paper,
-        }}
+      {/* <NavLink
+        to="/dashboard/get-new-adress"
+        style={{ textDecoration: "none" }}
       >
-        <NavLink
-          to="/dashboard/get-new-adress"
-          style={{ textDecoration: "none" }}
-        >
-          <MenuItem className={classes.menuItem} onClick={handleClose}>
-            Получить новый адрес
-          </MenuItem>
-        </NavLink>
-        <NavLink
-          to="/dashboard/withdrawal-of-funds"
-          style={{ textDecoration: "none" }}
-        >
-          <MenuItem className={classes.menuItem} onClick={handleClose}>
-            Вывод средств
-          </MenuItem>
-        </NavLink>
-      </Menu>
+        <MenuItem className={classes.menuItem} onClick={handleClose}>
+          Получить новый адрес
+        </MenuItem>
+      </NavLink> */}
     </div>
   );
 }

@@ -43,7 +43,10 @@ export function AboutUsBody() {
               О нас
             </p>
             <Typography variant="body1" style={{ fontSize: xs ? 14 : 20 }}>
-               Netex-kassa компания которая имеет многолетний опыт работы с криптовалютами. Наша цель заключается в предоставлении качественной услуги за адекватную цену. Мы гарантируем своим клиентам анонимность и шифрование данных.
+              Netex-kassa компания которая имеет многолетний опыт работы с
+              криптовалютами. Наша цель заключается в предоставлении
+              качественной услуги за адекватную цену. Мы гарантируем своим
+              клиентам анонимность и шифрование данных.
             </Typography>
             <Typography
               variant="body1"
@@ -217,7 +220,7 @@ export function AboutUsBody() {
                   ожидания.
                 </Typography>
               </div>
-              <div className="flex_box" style={{ alignItems: "flex-start" }}>
+              {/* <div className="flex_box" style={{ alignItems: "flex-start" }}>
                 <img
                   src={flag}
                   alt=""
@@ -237,7 +240,7 @@ export function AboutUsBody() {
                   teachings of the great explorer of the truth, the
                   master-builder of human happiness.
                 </Typography>
-              </div>
+              </div> */}
             </Grid>
           ) : null}
 
