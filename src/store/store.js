@@ -1,6 +1,7 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import { reducer } from "./reducer";
+import merchants from './reducers/merchants'
 
 const composeEnhancers =
   (typeof window !== "undefined" &&
@@ -8,7 +9,7 @@ const composeEnhancers =
   compose;
 
 const rootReducer = combineReducers({
-  reducer,
+  reducer, merchants
 });
 
 export const store = createStore(

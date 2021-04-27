@@ -21,7 +21,7 @@ import {
   resendActivationCode,
   restorePassword,
   singup,
-} from "store/reducer";
+} from "store/actions/sign";
 import { setAlert } from "store/actionCreators";
 
 export function Auth({ open, handleClose, login, setLogin }) {
@@ -214,6 +214,7 @@ function SingUp({ sm, setAlert }) {
 
   function submitHandler(fields) {
     setUserPhone(fields.phone);
+    console.log(fields)
     dispatch(
       singup(fields, (data) => {
         if (Boolean(data.messages)) {

@@ -10,7 +10,8 @@ import * as Yup from "yup";
 import React, { useEffect, useRef, useState } from "react";
 import { GoldButton } from "shared/Buttons/buttons";
 import { GoldToggleButton } from "shared/Buttons/buttons";
-import { changePassword, getActionLogs } from "store/reducer";
+import { getActionLogs } from "store/reducer";
+import { changePassword } from "store/actions/sign";
 import { ValidatedInput } from "./Inputs";
 import { useDispatch, useSelector } from "react-redux";
 

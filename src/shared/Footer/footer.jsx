@@ -28,7 +28,7 @@ export function Footer() {
   }
   return (
     <Container>
-      <Grid container spacing={2} style={{ margin: "130px 0" }}>
+      <Grid container spacing={2} style={{ margin: "130px 0 50px 0" }}>
         <Grid
           item
           xs={12}
@@ -156,6 +156,7 @@ export function Footer() {
         setLogin={(login) => setDialog({ open: true, login })}
         handleClose={handleClose}
       />
+       <p style={{textAlign: 'center'}}>2021 © Netex. All rights reserved.</p>
     </Container>
   );
 }

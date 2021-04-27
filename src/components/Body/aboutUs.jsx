@@ -72,7 +72,7 @@ export function AboutUsBody() {
                     список ожидания.
                   </Typography>
                 </div>
-                <div className="flex_box" style={{ alignItems: "flex-start" }}>
+                {/* <div className="flex_box" style={{ alignItems: "flex-start" }}>
                   <img
                     src={flag}
                     alt=""
@@ -85,7 +85,7 @@ export function AboutUsBody() {
                     actual teachings of the great explorer of the truth, the
                     master-builder of human happiness.
                   </Typography>
-                </div>
+                </div> */}
               </>
             ) : null}
           </Grid>

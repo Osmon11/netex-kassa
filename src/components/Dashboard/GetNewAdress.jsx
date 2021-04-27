@@ -13,7 +13,7 @@ export function GetNewAdress() {
   const wallets = ["Bitcoin", "Qiwi"];
 
   return (
-    <section>
+    <section style={{ marginBottom: 30 }}>
       <p
         className="title"
         style={{ fontSize: 25, marginTop: 0, marginBottom: 30 }}

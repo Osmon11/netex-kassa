@@ -8,7 +8,8 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { ValidatedInput } from "./Inputs";
 import { useDispatch } from "react-redux";
-import { addMerchant, getMerchants } from "store/reducer";
+import { addMerchant } from "store/reducer";
+import { handleGetMerchantsAction } from "store/actions/merchants";
 import { setAlert } from "store/actionCreators";
 
 const initialValues = {
@@ -31,6 +32,7 @@ export function CreateProject() {
   function submitHandler(fields) {
     setSecondStep((isSecondStep) => !isSecondStep);
     setNewMerchant(fields);
+  
   }
   function callbackHandler(fields) {
     dispatch(
@@ -39,7 +41,7 @@ export function CreateProject() {
           dispatch(setAlert({ open: true, severity: "error", message: error }));
         } else {
           setSuccess(true);
-          dispatch(getMerchants());
+          dispatch(handleGetMerchantsAction());
         }
       })
     );

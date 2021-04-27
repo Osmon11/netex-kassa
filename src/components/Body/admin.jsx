@@ -25,11 +25,17 @@ import {
 } from "components/Dashboard";
 import { Link, NavLink, Route, Switch, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getMerchants, getProfile, logout } from "store/reducer";
+import { handleGetMerchantsAction } from "store/actions/merchants";
+import { getProfile } from "store/actions/profile";
+import { logout } from "store/actions/sign";
 
 let drawerWidth = 280;
 
 export function Admin() {
+  const {state, merchants} = useSelector( store => ({
+    state: store.reducer,
+    merchants: store.merchants
+  }))
   const classes = useStyles();
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
@@ -38,16 +44,16 @@ export function Admin() {
   const dispatch = useDispatch();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const state = useSelector((store) => store.reducer);
   const { firstname, lastname, avatar } = state.profileInfo
     ? state.profileInfo
     : { firstname: "Not", lastname: "Found", avatar: ava };
 
   useEffect(() => {
-    if (!state.merchants) {
-      dispatch(getMerchants());
-      dispatch(getProfile());
-    }
+    dispatch(getProfile());
+    dispatch(handleGetMerchantsAction())
+    // if (!merchants.merchants.length > 0) {
+    //   dispatch(handleGetMerchantsAction())
+    // }
   }, [state.merchants, dispatch]);
 
   function handleOpen(event) {
@@ -97,30 +103,16 @@ export function Admin() {
         }}
         anchor="left"
       >
-        <span
-          className="flex_box"
-          style={{ flexDirection: xs ? "column" : "row" }}
-        >
-          <Logo />
-          <p
-            className="p_1"
-            style={{
-              margin: xs ? 0 : "0 0 0 10px",
-              fontSize: 10,
-            }}
-          >
-            Excepteur sint
-            <br /> occaecat cupidatat
-            <br /> non proident
-          </p>
-        </span>
+          <NavLink to="/" className="nav_link" style={{position: 'Absolute', left: '0px', top: '70px'}}>
+            <Logo />
+          </NavLink>
 
-        <p className="subtitle" style={{ marginTop: 50 }}>
+        <p className="subtitle" style={{ marginTop: '150px' }}>
           Проекты
         </p>
         <ul className="projects">
-          {Boolean(state.merchants) ? (
-            state.merchants.map((merchant) => (
+          { merchants.get.success ? (
+            merchants.merchants.map((merchant) => (
               <li key={merchant.merchant_id}>
                 <Link
                   to={`/dashboard/project/${merchant.merchant_id}`}
@@ -130,11 +122,12 @@ export function Admin() {
                 </Link>
               </li>
             ))
-          ) : (
+          ) :
+            merchants.get.loading ? 
             <div className="flex_box">
               <CircularProgress />
-            </div>
-          )}
+            </div> : null
+          }
           <li>
             <NavLink
               to="/dashboard/create-project"
@@ -217,7 +210,6 @@ export function Admin() {
           </MenuItem>
         </NavLink>
       </Menu>
-      <div className="bg3_image" />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import axios from "axios";
+import { AppAxios } from '../axios/axios'
 import {
   setUser,
   setData,
@@ -42,12 +42,6 @@ export function reducer(state = initialState, action) {
 }
 
 export const baseURL = "https://api.netex-kassa.com";
-const headers = { "Content-Type": "application/x-www-form-urlencoded" };
-const AppAxios = axios.create({
-  baseURL,
-  headers,
-  withCredentials: true,
-});
 
 function creatRequest(endpoint, data, errorCallback) {
   return data
@@ -59,61 +53,6 @@ function creatRequest(endpoint, data, errorCallback) {
       );
 }
 
-export const login = (data, callback) => (dispatch) => {
-  creatRequest("/auth/login", data).then((res) => {
-    if (Boolean(res)) {
-      AppAxios.interceptors.request.use(
-        (config) => {
-          config.headers.Authorization = `Bearer ${res.data.token}`;
-          dispatch(setData({ token: `Bearer ${res.data.token}` }));
-          return config;
-        },
-        (error) => {
-          return Promise.reject(error);
-        }
-      );
-      dispatch(setUser(Boolean(res.data?.response)));
-      callback({ message: "Logged in", severity: "success", open: true });
-    } else
-      callback({
-        message: "Вы уже авторизованы :(",
-        severity: "error",
-        open: true,
-      });
-  });
-};
-
-export const logout = (callback) => (dispatch) => {
-  creatRequest("/auth/logout").then((res) => {
-    callback();
-    dispatch(setUser(Boolean(res.data.response)));
-  });
-};
-
-export const singup = (data, callback) => (dispatch) => {
-  creatRequest("/auth/registration", data).then((res) => {
-    callback(res.data);
-  });
-};
-
-export const accountActivation = (fields) => (dispatch) => {
-  creatRequest("/auth/activation/activation", fields).then((res) => {
-    console.log(res.data);
-  });
-};
-
-export const resendActivationCode = (phone, callback) => (dispatch) => {
-  creatRequest("/auth/activation/resend", phone).then((res) => {
-    console.log(res.data);
-    callback(res.data.message);
-  });
-};
-
-export const restorePassword = (phone) => (dispatch) => {
-  creatRequest("/auth/activation/forgot", phone).then((res) => {
-    console.log(res.data);
-  });
-};
 
 export const getTariffPlans = () => (dispatch) => {
   creatRequest("/tariff-plans").then((res) => {
@@ -145,14 +84,9 @@ export const getActivityTypes = (callback) => (dispatch) => {
   });
 };
 
-export const getMerchants = () => (dispatch) => {
-  creatRequest("/account/list").then((res) => {
-    dispatch(setData({ merchants: res.data.list }));
-  });
-};
-
 export const addMerchant = (data, callback) => (dispatch) => {
   creatRequest("/account/add", data, callback).then((res) => {
+    console.log(res)
     if (Boolean(res)) {
       callback();
     }
@@ -178,12 +112,6 @@ export const viewMerchant = (id, callback) => (dispatch) => {
   });
 };
 
-export const getProfile = () => (dispatch) => {
-  creatRequest("/profile/personal").then((res) => {
-    dispatch(setData({ profileInfo: res.data.profile }));
-  });
-};
-
 export const getActionLogs = (page) => (dispatch) => {
   creatRequest(`/profile/action-log/${page}`).then((res) => {
     const array = [];
@@ -194,11 +122,12 @@ export const getActionLogs = (page) => (dispatch) => {
   });
 };
 
-export const changePassword = (fields, callback) => (dispatch) => {
-  creatRequest("/profile/password", fields).then((res) => {
-    callback();
+export const getMerchants = () => (dispatch) => {
+  creatRequest("/account/list").then((res) => {
+    dispatch(setData({ merchants: res.data.list }));
   });
 };
+
 
 export const confirmMerchant = (confirm_file_id, callback) => (dispatch) => {
   creatRequest(`/account/confirm/${confirm_file_id}`, undefined, callback).then(

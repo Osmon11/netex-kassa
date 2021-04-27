@@ -107,9 +107,9 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
   function submitHandler(fields) {
     setPending(true);
     callback(fields);
-    setTimeout(() => {
-      setPending(false);
-    }, 3000);
+    // setTimeout(() => {
+    //   setPending(false);
+    // }, 3000);
   }
   function prevStep() {
     setTab(tab - 1);

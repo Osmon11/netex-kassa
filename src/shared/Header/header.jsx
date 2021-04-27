@@ -28,6 +28,7 @@ import { setAuthDialog } from "store/actionCreators";
 
 export function Header() {
   const dialog = useSelector((store) => store.reducer.authdialog);
+  const user = useSelector((store) => store.reducer.user);
   const dispatch = useDispatch();
   const [drawer, setDrawer] = useState(false);
   const theme = useTheme();
@@ -129,14 +130,20 @@ export function Header() {
             </NavLink>
           </Typography>
           <Typography variant="body2" style={{ marginBottom: 10 }}>
-            <span
-              onClick={() =>
-                dispatch(setAuthDialog({ open: true, login: true }))
-              }
-              className="nav_link"
-            >
-              Вход в личный кабинет
-            </span>
+            {
+              !user ? 
+              <span
+                onClick={() =>
+                  dispatch(setAuthDialog({ open: true, login: true }))
+                }
+                className="nav_link"
+                >
+                Вход в личный кабинет
+              </span> :
+              <NavLink to="/dashboard" className="nav_link">
+                  Профиль
+              </NavLink>
+            }
           </Typography>
         </div>
       </ThemeDrawer>
@@ -167,14 +174,6 @@ export function Header() {
               <NavLink to="/" className="nav_link">
                 <Logo />
               </NavLink>
-              {/* <p
-                className="p_1"
-                style={{
-                  margin: sm ? 0 : "0 0 0 10px",
-                }}
-              >
-                Excepteur sint occaecat cupidatat non proident
-              </p> */}
             </span>
 
             {sm ? (
@@ -194,24 +193,37 @@ export function Header() {
                 </NavLink>
 
                 <span className="flex_box">
-                  <GoldButton
-                    style={{ minWidth: 90, minHeight: 40 }}
-                    onClick={() =>
-                      dispatch(setAuthDialog({ open: true, login: true }))
-                    }
-                    variant="outlined"
-                  >
-                    Вход
-                  </GoldButton>
-                  <p
-                    className="nav_link"
-                    style={{ marginLeft: 20 }}
-                    onClick={() =>
-                      dispatch(setAuthDialog({ open: true, login: false }))
-                    }
-                  >
-                    Регистрация
-                  </p>
+                  {
+                    !user ? 
+                    <>
+                      <GoldButton
+                        style={{ minWidth: 90, minHeight: 40 }}
+                        onClick={() =>
+                          dispatch(setAuthDialog({ open: true, login: true }))
+                        }
+                        variant="outlined"
+                      >
+                        Вход
+                      </GoldButton>
+                      <p
+                        className="nav_link"
+                        style={{ marginLeft: 20 }}
+                        onClick={() =>
+                          dispatch(setAuthDialog({ open: true, login: false }))
+                        }
+                      >
+                        Регистрация
+                      </p> 
+                    </> :
+                    <NavLink to="/dashboard" className="nav_link">
+                      <GoldButton
+                        style={{ minWidth: 90, minHeight: 40 }}
+                        // variant="outlined"
+                      >
+                        Профиль
+                      </GoldButton>
+                    </NavLink>
+                  }
                 </span>
               </>
             )}

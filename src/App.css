@@ -9,7 +9,7 @@ body {
 }
 ::-webkit-scrollbar-thumb {
   background: #ff9900;
-  border-radius: 35px;
+  border-radius: 34px;
 }
 .flex_box {
   display: flex;
