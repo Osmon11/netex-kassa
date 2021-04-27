@@ -84,7 +84,7 @@ export function ProjectSettings({ match }) {
             exclusive
             value={tab}
             style={{
-              minWidth: xs ? "100%" : 450,
+              minWidth: "100%",
               margin: "33px 0",
             }}
             onChange={(_, tab) => setTab(tab)}
@@ -232,7 +232,7 @@ export function ProjectSettings({ match }) {
                     <span className="subtitle">URL успешной оплаты:</span>
                     <ValidatedInput
                       name="success_url"
-                      style={{ width: "40%" }}
+                      style={{ width: "100%" }}
                       placeholder={`Например,`}
                     />
                   </div>
@@ -247,7 +247,7 @@ export function ProjectSettings({ match }) {
                     <span className="subtitle">URL неуспешной оплаты:</span>
                     <ValidatedInput
                       name="fail_url"
-                      style={{ width: "40%" }}
+                      style={{ width: "100%" }}
                       placeholder={`Например,`}
                     />
                   </div>
@@ -262,7 +262,7 @@ export function ProjectSettings({ match }) {
                     <span className="subtitle">URL обработчика:</span>
                     <ValidatedInput
                       name="status_url"
-                      style={{ width: "40%" }}
+                      style={{ width: "100%" }}
                       placeholder={`Например,`}
                     />
                   </div>
@@ -314,7 +314,11 @@ export function ProjectSettings({ match }) {
               </Typography>
               <div
                 className="flex_box"
-                style={{ justifyContent: "space-between" }}
+                style={{
+                  marginTop: 20,
+                  alignItems: "flex-start",
+                  flexDirection: "column",
+                }}
               >
                 <span className="subtitle" style={{ fontSize: 16 }}>
                   Ключ безопасности:
@@ -323,7 +327,7 @@ export function ProjectSettings({ match }) {
                   margin="dense"
                   name="key"
                   type="text"
-                  style={{ width: "60%" }}
+                  style={{ width: "100%" }}
                   value="GykVo9jwGElNwJkcY7V8drVEgGLU3oVE"
                   InputProps={{
                     endAdornment: (
@@ -363,7 +367,11 @@ export function ProjectSettings({ match }) {
               </div>
               <div
                 className="flex_box"
-                style={{ justifyContent: "space-between" }}
+                style={{
+                  marginTop: 20,
+                  alignItems: "flex-start",
+                  flexDirection: "column",
+                }}
               >
                 <span className="subtitle" style={{ fontSize: 16 }}>
                   Скопируйте этот токен:
@@ -372,7 +380,7 @@ export function ProjectSettings({ match }) {
                   margin="dense"
                   name="token"
                   type="text"
-                  style={{ width: "60%" }}
+                  style={{ width: "100%" }}
                   value="phnBr6CPBuemFBPgzc2qN1zQEVbw4yp1Qf6OIHLwNRg55Ho39qFYMoUWjmDtY6ZC"
                   InputProps={{
                     endAdornment: (
