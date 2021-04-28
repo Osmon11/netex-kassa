@@ -7,6 +7,7 @@ import {
   IconButton,
   makeStyles,
   Toolbar,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
@@ -14,6 +15,7 @@ import React, { useEffect } from "react";
 import "./style.css";
 import Logo from "../../shared/Logo/logo";
 import ava from "assets/avatar.png";
+import goust from "assets/goust-icon.svg";
 import {
   CreateProject,
   ProjectSettings,
@@ -26,6 +28,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleGetMerchantsAction } from "store/actions/merchants";
 import { getProfile } from "store/actions/profile";
 import { logout } from "store/actions/sign";
+import { ConfirmDeleteProject } from "components/Dashboard/ConfirmDeleteProject";
+import { GoldButton } from "shared/Buttons/buttons";
 
 let drawerWidth = 280;
 
@@ -46,12 +50,16 @@ export function Admin() {
     : { firstname: "Not", lastname: "Found", avatar: ava };
 
   useEffect(() => {
-    dispatch(getProfile());
-    dispatch(handleGetMerchantsAction());
+    if (!state.profileInfo) {
+      dispatch(getProfile());
+    }
+    if (!merchants.merchants) {
+      dispatch(handleGetMerchantsAction());
+    }
     // if (!merchants.merchants.length > 0) {
     //   dispatch(handleGetMerchantsAction())
     // }
-  }, [state.merchants, dispatch]);
+  }, [state.profileInfo, merchants.merchants, dispatch]);
 
   function logoutHandler() {
     dispatch(
@@ -62,17 +70,17 @@ export function Admin() {
   }
   return (
     <div className={classes.root}>
-      <AppBar position="absolute" className={classes.appBar}>
+      <AppBar position='absolute' className={classes.appBar}>
         <Toolbar style={{ paddingLeft: "15%" }}>
-          <div className="flex_box">
-            <span className="subtitle" style={{ cursor: "pointer" }}>
+          <div className='flex_box'>
+            <span className='subtitle' style={{ cursor: "pointer" }}>
               {`${firstname} ${lastname}`}
             </span>
             <IconButton style={{ marginLeft: 20 }}>
-              <Avatar alt="" src={avatar} />
+              <Avatar alt='' src={avatar} />
             </IconButton>
             <Button
-              variant="outlined"
+              variant='outlined'
               className={classes.customButton}
               style={{ marginLeft: 40 }}
               onClick={logoutHandler}
@@ -84,39 +92,39 @@ export function Admin() {
       </AppBar>
       <Drawer
         className={classes.drawer}
-        variant="permanent"
+        variant='permanent'
         classes={{
           paper: classes.drawerPaper,
         }}
-        anchor="left"
+        anchor='left'
       >
-        <NavLink to="/" className="nav_link">
+        <NavLink to='/' className='nav_link'>
           <Logo />
         </NavLink>
 
-        <p className="subtitle" style={{ marginTop: 50 }}>
+        <p className='subtitle' style={{ marginTop: 50 }}>
           Проекты
         </p>
-        <ul className="projects">
+        <ul className='projects'>
           {merchants.get.success ? (
             merchants.merchants.map((merchant) => (
               <li key={merchant.merchant_id}>
                 <Link
                   to={`/dashboard/project/${merchant.merchant_id}`}
-                  className="project_link"
+                  className='project_link'
                 >
                   {merchant.name}
                 </Link>
               </li>
             ))
           ) : merchants.get.loading ? (
-            <div className="flex_box">
+            <div className='flex_box'>
               <CircularProgress />
             </div>
           ) : null}
           <li>
             <NavLink
-              to="/dashboard/create-project"
+              to='/dashboard/create-project'
               style={{ textDecoration: "none" }}
             >
               <span className={classes.createProject}>
@@ -126,18 +134,18 @@ export function Admin() {
           </li>
         </ul>
 
-        <p className="subtitle" style={{ margin: "8px 0" }}>
-          <NavLink to="/dashboard/operations" className="nav_link">
+        <p className='subtitle' style={{ margin: "8px 0" }}>
+          <NavLink to='/dashboard/operations' className='nav_link'>
             История операций
           </NavLink>
         </p>
-        <p className="subtitle" style={{ margin: "8px 0" }}>
-          <NavLink to="/dashboard/withdrawal-of-funds" className="nav_link">
+        <p className='subtitle' style={{ margin: "8px 0" }}>
+          <NavLink to='/dashboard/withdrawal-of-funds' className='nav_link'>
             Вывод средств
           </NavLink>
         </p>
-        <p className="subtitle" style={{ margin: "8px 0" }}>
-          <NavLink to="/dashboard/settings" className="nav_link">
+        <p className='subtitle' style={{ margin: "8px 0" }}>
+          <NavLink to='/dashboard/settings' className='nav_link'>
             Настройки
           </NavLink>
         </p>
@@ -151,30 +159,35 @@ export function Admin() {
         }}
       >
         <Switch>
+          <Route exact path='/dashboard' component={DefaultComponent} />
           <Route
             exact
-            path="/dashboard/project/:id"
+            path='/dashboard/project/:id'
             component={ProjectSettings}
           />
-          <Route exact path="/dashboard/settings" component={Settings} />
+          <Route exact path='/dashboard/settings' component={Settings} />
           <Route
             exact
-            path="/dashboard/create-project"
+            path='/dashboard/create-project'
             component={CreateProject}
           />
           <Route
             exact
-            path="/dashboard/withdrawal-of-funds"
+            path='/dashboard/withdrawal-of-funds'
             component={WithdrawFunds}
           />
           <Route
             exact
-            path="/dashboard/get-new-adress"
+            path='/dashboard/get-new-adress'
             component={GetNewAdress}
+          />
+          <Route
+            path='/dashboard/project/:id/delete'
+            component={ConfirmDeleteProject}
           />
         </Switch>
       </section>
-
+      <div className='bg3_image' />
       {/* <NavLink
         to="/dashboard/get-new-adress"
         style={{ textDecoration: "none" }}
@@ -183,6 +196,25 @@ export function Admin() {
           Получить новый адрес
         </MenuItem>
       </NavLink> */}
+    </div>
+  );
+}
+
+function DefaultComponent() {
+  return (
+    <div className='flex_box'>
+      <div style={{ textAlign: "center", marginTop: 100 }}>
+        <img src={goust} alt='' />
+        <Typography variant='h3' style={{ color: "#3E414E" }}>
+          Пока здесь пусто
+        </Typography>
+        <NavLink
+          to='/dashboard/create-project'
+          style={{ textDecoration: "none" }}
+        >
+          <GoldButton style={{ marginTop: 50 }}>Начать работу</GoldButton>
+        </NavLink>
+      </div>
     </div>
   );
 }
