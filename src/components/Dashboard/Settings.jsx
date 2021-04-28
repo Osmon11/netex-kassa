@@ -67,178 +67,183 @@ export function Settings() {
   }
   return (
     <>
-      <p className="title" style={{ fontSize: 25 }}>
-        {`${firstname} ${lastname}`}
-      </p>
-      <p className="subtitle">{email}</p>
-      <Grid container>
-        <Grid item xs={6} sm={12} md={8} lg={6}>
-          <ToggleButtonGroup
-            exclusive
-            value={tab}
-            style={{ width: "100%", margin: "33px 0" }}
-            onChange={(_, tab) => setTab(tab)}
+      <div className="flex_box">
+        <div style={{ width: "50%" }}>
+          <p
+            className="title"
+            style={{ fontSize: 25, margin: 0, textAlign: "center" }}
           >
-            <GoldToggleButton className={classes.toggleBtn} value="Профиль">
-              Профиль
-            </GoldToggleButton>
-            <GoldToggleButton
-              className={classes.toggleBtn}
-              value="Журнал входа"
-            >
-              Журнал входа
-            </GoldToggleButton>
-            {/* <GoldToggleButton className={classes.toggleBtn} value="Кошельки">
+            {`${firstname} ${lastname}`}
+          </p>
+          <p className="subtitle" style={{ margin: 0, textAlign: "center" }}>
+            {email}
+          </p>
+        </div>
+      </div>
+      <div className="flex_box">
+        <ToggleButtonGroup
+          exclusive
+          value={tab}
+          style={{ width: "50%", margin: "33px 0" }}
+          onChange={(_, tab) => setTab(tab)}
+        >
+          <GoldToggleButton className={classes.toggleBtn} value="Профиль">
+            Профиль
+          </GoldToggleButton>
+          <GoldToggleButton className={classes.toggleBtn} value="Журнал входа">
+            Журнал действий
+          </GoldToggleButton>
+          {/* <GoldToggleButton className={classes.toggleBtn} value="Кошельки">
               Кошельки
             </GoldToggleButton> */}
-          </ToggleButtonGroup>
-          {tab === "Профиль" && (
-            <>
-              <Formik>
-                <Form>
-                  <Typography variant="body2" style={{ marginTop: 15 }}>
-                    Имя
-                  </Typography>
-                  <ValidatedInput
-                    disabled
-                    margin="normal"
-                    placeholder="Введите Ваше имя"
-                    name="username"
-                    type="text"
-                    style={{ marginBottom: 20 }}
-                    fullWidth
-                  />
-                  <Typography variant="body2" style={{ marginTop: 15 }}>
-                    Почта
-                  </Typography>
-                  <ValidatedInput
-                    disabled
-                    margin="normal"
-                    placeholder="Введите почту"
-                    name="email"
-                    type="email"
-                    style={{ marginBottom: 20 }}
-                    fullWidth
-                  />
-                  <Typography variant="body2" style={{ marginTop: 15 }}>
-                    Аватар
-                  </Typography>
-                  <ValidatedInput
-                    disabled
-                    margin="normal"
-                    placeholder="Загрузить изображение"
-                    name="avatar"
-                    type="text"
-                    onClick={() => avatar.current.click()}
-                    style={{ marginBottom: 20 }}
-                    fullWidth
-                  />
-                </Form>
-              </Formik>
-              <Formik
-                initialValues={passwordInitialValues}
-                validationSchema={validateChangePassword}
-                onSubmit={changePasswordHandler}
-              >
-                <Form>
-                  <Typography variant="body2" style={{ marginTop: 15 }}>
-                    Смена пароля
-                  </Typography>
-                  <ValidatedInput
-                    placeholder="Введите текущий пароль"
-                    name="old-password"
-                    margin="normal"
-                    fullWidth
-                  />
-                  <br />
-                  <ValidatedInput
-                    placeholder="Введите новый пароль"
-                    name="new-password"
-                    margin="normal"
-                    fullWidth
-                  />
-                  <br />
-                  <ValidatedInput
-                    placeholder="Повторите новый пароль"
-                    name="confirm-password"
-                    margin="normal"
-                    fullWidth
-                  />
-                  <br />
+        </ToggleButtonGroup>
+      </div>
+      <div className="flex_box">
+        {tab === "Профиль" && (
+          <div style={{ width: "50%" }}>
+            <Formik>
+              <Form>
+                <Typography variant="body2" style={{ marginTop: 15 }}>
+                  Имя
+                </Typography>
+                <ValidatedInput
+                  disabled
+                  margin="normal"
+                  placeholder={`${firstname} ${lastname}`}
+                  name="username"
+                  type="text"
+                  style={{ width: "100%", marginBottom: 20 }}
+                />
+                <Typography variant="body2" style={{ marginTop: 15 }}>
+                  Почта
+                </Typography>
+                <ValidatedInput
+                  disabled
+                  margin="normal"
+                  placeholder={email}
+                  name="email"
+                  type="email"
+                  style={{ width: "100%", marginBottom: 20 }}
+                />
+                <Typography variant="body2" style={{ marginTop: 15 }}>
+                  Аватар
+                </Typography>
+                <ValidatedInput
+                  disabled
+                  margin="normal"
+                  placeholder="Загрузить изображение"
+                  name="avatar"
+                  type="text"
+                  onClick={() => avatar.current.click()}
+                  style={{ width: "100%", marginBottom: 20 }}
+                />
+              </Form>
+            </Formik>
+            <Formik
+              initialValues={passwordInitialValues}
+              validationSchema={validateChangePassword}
+              onSubmit={changePasswordHandler}
+            >
+              <Form>
+                <Typography variant="body2" style={{ marginTop: 15 }}>
+                  Смена пароля
+                </Typography>
+                <ValidatedInput
+                  placeholder="Введите текущий пароль"
+                  name="old-password"
+                  margin="normal"
+                  style={{ width: "100%" }}
+                />
+                <br />
+                <ValidatedInput
+                  placeholder="Введите новый пароль"
+                  name="new-password"
+                  margin="normal"
+                  style={{ width: "100%" }}
+                />
+                <br />
+                <ValidatedInput
+                  placeholder="Повторите новый пароль"
+                  name="confirm-password"
+                  margin="normal"
+                  style={{ width: "100%" }}
+                />
+                <br />
+                <div className="flex_box">
                   <GoldButton
                     type="submit"
                     style={{
                       marginBottom: 64,
                       fontSize: 16,
+                      width: "50%",
                     }}
                   >
                     Сменить пароль
                   </GoldButton>
-                </Form>
-              </Formik>
-            </>
-          )}
-
-          {tab === "Журнал входа" && (
-            <>
+                </div>
+              </Form>
+            </Formik>
+          </div>
+        )}
+      </div>
+      {tab === "Журнал входа" && (
+        <>
+          <Grid
+            item
+            xs={12}
+            container
+            style={{
+              borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+              marginTop: 40,
+              padding: 15,
+            }}
+          >
+            <Grid item xs={3}>
+              <Typography variant="body2">IP</Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography variant="body2">Браузер</Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography variant="body2">Страна</Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography variant="body2">Дата</Typography>
+            </Grid>
+          </Grid>
+          {state.actionLogs ? (
+            state.actionLogs.map((obj) => (
               <Grid
                 item
                 xs={12}
                 container
                 style={{
                   borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-                  marginTop: 40,
-                  padding: 15,
+                  padding: "25px 15px",
                 }}
+                key={obj.ip + obj.date}
               >
                 <Grid item xs={3}>
-                  <Typography variant="body2">IP</Typography>
+                  <Typography variant="body2">{obj.ip}</Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography variant="body2">Браузер</Typography>
+                  <Typography variant="body2">{obj.browser}</Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography variant="body2">Страна</Typography>
+                  <Typography variant="body2">{obj.country}</Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography variant="body2">Дата</Typography>
+                  <Typography variant="body2">{obj.date}</Typography>
                 </Grid>
               </Grid>
-              {state.actionLogs ? (
-                state.actionLogs.map((obj) => (
-                  <Grid
-                    item
-                    xs={12}
-                    container
-                    style={{
-                      borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-                      padding: "25px 15px",
-                    }}
-                    key={obj.ip + obj.date}
-                  >
-                    <Grid item xs={3}>
-                      <Typography variant="body2">{obj.ip}</Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography variant="body2">{obj.browser}</Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography variant="body2">{obj.country}</Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography variant="body2">{obj.date}</Typography>
-                    </Grid>
-                  </Grid>
-                ))
-              ) : (
-                <div className="flex_box">
-                  <CircularProgress />
-                </div>
-              )}
-            </>
+            ))
+          ) : (
+            <div className="flex_box">
+              <CircularProgress />
+            </div>
           )}
-        </Grid>
-      </Grid>
+        </>
+      )}
       <input type="file" ref={avatar} style={{ display: "none" }} />
     </>
   );
@@ -246,7 +251,7 @@ export function Settings() {
 
 const useStyles = makeStyles((theme) => ({
   toggleBtn: {
-    width: "33.33%",
+    width: "50%",
     textTransform: "none",
     color: "#686868",
     backgroundColor: "#f5f5f5",

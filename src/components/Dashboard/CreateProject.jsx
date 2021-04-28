@@ -7,15 +7,10 @@ import { VerticalStepper } from "./VerticalStepper";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { ValidatedInput } from "./Inputs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addMerchant } from "store/reducer";
 import { handleGetMerchantsAction } from "store/actions/merchants";
-import { setAlert } from "store/actionCreators";
-
-const initialValues = {
-  name: "",
-  domain: "",
-};
+import { setAlert, setData } from "store/actionCreators";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Поле должно быть заполнена"),
@@ -26,16 +21,16 @@ export function CreateProject() {
   const classes = useStyles();
   const [isSuccess, setSuccess] = useState(false);
   const [isSecondStep, setSecondStep] = useState(false);
-  const [newMerchant, setNewMerchant] = useState(null);
   const dispatch = useDispatch();
+  const newMerchant = useSelector((store) => store.reducer.addMerchant);
 
   function submitHandler(fields) {
     setSecondStep((isSecondStep) => !isSecondStep);
-    setNewMerchant(fields);
+    dispatch(setData({ addMerchant: { ...newMerchant, ...fields } }));
   }
-  function callbackHandler(fields) {
+  function callbackHandler() {
     dispatch(
-      addMerchant({ ...newMerchant, ...fields }, (error) => {
+      addMerchant(newMerchant, (error) => {
         if (Boolean(error)) {
           dispatch(setAlert({ open: true, severity: "error", message: error }));
         } else {
@@ -56,13 +51,14 @@ export function CreateProject() {
         />
       ) : (
         <Formik
-          initialValues={initialValues}
+          initialValues={{ name: newMerchant.name, domain: newMerchant.domain }}
           validationSchema={validationSchema}
           onSubmit={submitHandler}
         >
           <Form>
             <section
-              style={{ width: "100%", paddingLeft: "10%", paddingTop: 70 }}
+              className="flex_box"
+              style={{ width: "100%", paddingTop: 70 }}
             >
               <Paper
                 style={{
@@ -127,7 +123,7 @@ export function CreateProject() {
   );
 }
 
-function Success() {
+export function Success({ text }) {
   return (
     <div className="flex_vertical">
       <img src={checkIcon} alt="" />
@@ -135,9 +131,9 @@ function Success() {
         Успешно!
       </p>
       <p className="subtitle" style={{ textAlign: "center", marginTop: 40 }}>
-        Ваш проект был успешно создан, для дальнейшем работы ваш проект должен
-        пройти модерацию. Ожидайте проверку, ответ мы вышли Вам на почту в
-        течении 72 часов
+        {text
+          ? text
+          : "Ваш проект был успешно создан, для дальнейшем работы ваш проект должен пройти модерацию. Ожидайте проверку, ответ мы вышли Вам на почту в течении 72 часов"}
       </p>
       <NavLink
         to="/dashboard"

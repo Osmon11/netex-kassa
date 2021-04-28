@@ -27,16 +27,6 @@ export function VerticalStepper({ callback, handlePrev }) {
       subtitle:
         "Согласование со стороны PayBox. Для завершения этого шага, менеджер может попросить вас внести изменения в анкету или предоставить дополнительные документы",
     },
-    {
-      title: "Отправка документов",
-      subtitle:
-        'Отправка оригиналов подписанной с вашей стороны анкеты присоединения и заверенных руководителем копии раннее загруженных документов с подписью "копия верна" и печатью компании Скачайте документы ниже.',
-    },
-    {
-      title: "Запуск системы",
-      subtitle:
-        "На данном этапе вы переходите в режим приема платежей Если у Вас завершена интеграция можете запросить перевод в боевой режим.",
-    },
   ];
 
   function handleNext() {
@@ -70,7 +60,7 @@ export function VerticalStepper({ callback, handlePrev }) {
     <Stepper
       activeStep={activeStep}
       style={{ backgroundColor: "transparent" }}
-      orientation='vertical'
+      orientation="vertical"
     >
       {steps.map((label, index) => {
         return (

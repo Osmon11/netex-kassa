@@ -1,5 +1,6 @@
 import { Button, Switch, withStyles } from "@material-ui/core";
 import { ToggleButton } from "@material-ui/lab";
+import { useField } from "formik";
 
 export const GoldButton = withStyles({
   root: {

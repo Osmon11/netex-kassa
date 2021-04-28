@@ -28,9 +28,17 @@ export function ValidatedInput({ children, style, ...props }) {
   );
 }
 
-export function Inputs({ label, select, upload, date, items, ...props }) {
+export function Inputs({
+  label,
+  value,
+  handleChange,
+  select,
+  upload,
+  date,
+  items,
+  ...props
+}) {
   const classes = useStyles();
-  const [item, setItem] = useState(items ? items[0].id : null);
   const avatar = useRef();
 
   return (
@@ -46,12 +54,7 @@ export function Inputs({ label, select, upload, date, items, ...props }) {
       </Typography>
       {/* if type select */}
       {select ? (
-        <ValidatedInput
-          {...props}
-          value={item}
-          select
-          onChange={(e) => setItem(e.target.value)}
-        >
+        <ValidatedInput {...props} value={value} select onChange={handleChange}>
           {items.map((value) => (
             <MenuItem
               key={"country" + value.id}

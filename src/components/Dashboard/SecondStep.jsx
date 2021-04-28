@@ -20,33 +20,10 @@ import {
   getCountries,
   getOrganizations,
 } from "store/reducer";
-import { setAlert } from "store/actionCreators";
-
-const firstTabValues = {
-  country: "",
-  city: "",
-};
-
-const secondTabValues = {
-  city: "",
-  country: 1,
-  organization_type: 1,
-  legal_name: "",
-  activity_type: 6,
-  company_reg_date: "",
-  inn: "",
-  okpo: "",
-  bik: "",
-  bank_name: "",
-  checking_account: "",
-  iban: "",
-  decisions: "",
-  certificate: "",
-  upload_file: "",
-};
+import { setAlert, setData } from "store/actionCreators";
+import { NavLink } from "react-router-dom";
 
 const validateFirstTab = Yup.object({
-  country: Yup.string().required("Поле должно быть заполнена"),
   city: Yup.string().required("Поле должно быть заполнена"),
 });
 
@@ -70,7 +47,12 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
   const [tab, setTab] = React.useState(1);
   const [isPending, setPending] = React.useState(false);
   const data = useSelector((store) => store.reducer);
+  const newMerchant = data.addMerchant;
   const dispatch = useDispatch();
+  const [checkBoxes, setCheckbox] = React.useState({
+    rates: false,
+    contract: false,
+  });
 
   useEffect(() => {
     if (!data.countries) {
@@ -108,9 +90,24 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
     }
   }, [dispatch, data.countries, data.organizationTypes, data.activityTypes]);
 
-  function submitHandler(fields) {
+  function submitFirstTab(fields) {
+    console.log(fields);
+    if (checkBoxes.contract && checkBoxes.rates) {
+      dispatch(setData({ addMerchant: { ...newMerchant, ...fields } }));
+      nextStep();
+    } else {
+      dispatch(
+        setAlert({ open: true, severity: "error", message: "Отметьте флажок" })
+      );
+    }
+  }
+  function submitSecondTab(fields) {
     setPending(true);
-    callback(fields);
+    dispatch(setData({ addMerchant: { ...newMerchant, ...fields } }));
+    callback();
+    setTimeout(() => {
+      setPending(false);
+    }, 3000);
     // setTimeout(() => {
     //   setPending(false);
     // }, 3000);
@@ -136,7 +133,6 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
         exclusive
         value={tab}
         style={{ minWidth: xs ? "100%" : 454, maxHeight: 50, marginBottom: 33 }}
-        onChange={(_, tab) => setTab(tab)}
       >
         <GoldToggleButton className={classes.toggleBtn} value={1}>
           Шаг 1
@@ -148,14 +144,25 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
 
       {tab === 1 && (
         <Formik
-          initialValues={firstTabValues}
+          initialValues={{
+            country: newMerchant.country,
+            city: newMerchant.city,
+          }}
           validationSchema={validateFirstTab}
-          onSubmit={submitHandler}
+          onSubmit={submitFirstTab}
         >
           <Form>
             {data.countries ? (
               <Inputs
                 label="Страна регистрации вашей компании"
+                value={data.countries[0].id}
+                handleChange={(e) => {
+                  dispatch(
+                    setData({
+                      addMerchant: { ...newMerchant, country: e.target.value },
+                    })
+                  );
+                }}
                 items={data.countries}
                 name="country"
                 select
@@ -173,34 +180,48 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               className="flex_box"
               style={{ justifyContent: "flex-start", marginTop: 20 }}
             >
-              <CustomSwitch />
+              <CustomSwitch
+                checked={checkBoxes.rates}
+                onChange={(e) =>
+                  setCheckbox({ ...checkBoxes, rates: e.target.checked })
+                }
+              />
               <Typography variant="body2" style={{ marginLeft: 20 }}>
                 Ознакомлен и согласен с{" "}
-                <span
+                <NavLink
+                  to="/rates"
                   style={{
                     color: "#ff9900",
                     borderBottom: "1px dashed #ff9900",
+                    textDecoration: "none",
                   }}
                 >
                   тарифом
-                </span>
+                </NavLink>
               </Typography>
             </div>
             <div
               className="flex_box"
               style={{ justifyContent: "flex-start", marginTop: 20 }}
             >
-              <CustomSwitch />
+              <CustomSwitch
+                checked={checkBoxes.contract}
+                onChange={(e) =>
+                  setCheckbox({ ...checkBoxes, contract: e.target.checked })
+                }
+              />
               <Typography variant="body2" style={{ marginLeft: 20 }}>
                 Согласен на сбор персональных данных и с{" "}
-                <span
+                <a
+                  href="http://odigital.app"
                   style={{
                     color: "#ff9900",
                     borderBottom: "1px dashed #ff9900",
+                    textDecoration: "none",
                   }}
                 >
                   договором присоединения
-                </span>
+                </a>
               </Typography>
             </div>
 
@@ -219,7 +240,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               >
                 Назад
               </Button>
-              <GoldButton style={{ width: "40%" }} onClick={nextStep}>
+              <GoldButton style={{ width: "40%" }} type="submit">
                 Далее
               </GoldButton>
             </div>
@@ -229,9 +250,23 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
 
       {tab === 2 && (
         <Formik
-          initialValues={secondTabValues}
+          initialValues={{
+            organization_type: newMerchant.organization_type,
+            legal_name: newMerchant.legal_name,
+            activity_type: newMerchant.activity_type,
+            company_reg_date: newMerchant.company_reg_date,
+            inn: newMerchant.inn,
+            okpo: newMerchant.okpo,
+            bik: newMerchant.bik,
+            bank_name: newMerchant.bank_name,
+            checking_account: newMerchant.checking_account,
+            iban: newMerchant.iban,
+            decisions: newMerchant.decisions,
+            certificate: newMerchant.certificate,
+            upload_file: newMerchant.upload_file,
+          }}
           validationSchema={validateSecondTab}
-          onSubmit={submitHandler}
+          onSubmit={submitSecondTab}
         >
           <Form>
             <p
@@ -243,7 +278,18 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
             {data.organizationTypes ? (
               <Inputs
                 label="Тип организации"
+                value={data.organizationTypes[0].id}
                 items={data.organizationTypes}
+                handleChange={(e) => {
+                  dispatch(
+                    setData({
+                      addMerchant: {
+                        ...newMerchant,
+                        organizationTypes: e.target.value,
+                      },
+                    })
+                  );
+                }}
                 name="organization_type"
                 select
               />
@@ -259,6 +305,17 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               <Inputs
                 label="Вид деятельности"
                 items={data.activityTypes}
+                value={data.activityTypes[0].id}
+                handleChange={(e) => {
+                  dispatch(
+                    setData({
+                      addMerchant: {
+                        ...newMerchant,
+                        activityTypes: e.target.value,
+                      },
+                    })
+                  );
+                }}
                 name="activity_type"
                 select
               />
