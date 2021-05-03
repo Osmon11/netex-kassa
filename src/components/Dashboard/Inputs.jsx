@@ -5,9 +5,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import { ThemeInput } from "components/Auth/auth";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import uploadIcon from "assets/upload-icon.png";
-import calendarIcon from "assets/calendar-icon.png";
 import { ErrorMessage, useField } from "formik";
 
 export function ValidatedInput({ children, style, ...props }) {
@@ -19,8 +18,8 @@ export function ValidatedInput({ children, style, ...props }) {
       {...props}
       error={Boolean(meta.touched && meta.error)}
       helperText={meta.error ? <ErrorMessage name={field.name} /> : ""}
-      margin="dense"
-      variant="outlined"
+      margin='dense'
+      variant='outlined'
       style={{ marginBottom: 20, width: 334, ...style }}
     >
       {children}
@@ -43,11 +42,11 @@ export function Inputs({
 
   return (
     <div
-      className="flex_box"
+      className='flex_box'
       style={{ justifyContent: "space-between", paddingRight: "25%" }}
     >
       <Typography
-        variant="body2"
+        variant='body2'
         style={{ fontSize: 16, fontWeight: 300, width: "40%" }}
       >
         {label}
@@ -69,12 +68,12 @@ export function Inputs({
       upload ? (
         <ValidatedInput
           {...props}
-          placeholder="Загрузить изображение"
+          placeholder='Загрузить изображение'
           onClick={() => avatar.current.click()}
           InputProps={{
             endAdornment: (
-              <InputAdornment position="end">
-                <img src={uploadIcon} alt="" />
+              <InputAdornment position='end'>
+                <img src={uploadIcon} alt='' />
               </InputAdornment>
             ),
           }}
@@ -82,25 +81,17 @@ export function Inputs({
         />
       ) : // if date then input with mask
       date ? (
-        <ValidatedInput
-          {...props}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <img src={calendarIcon} alt="" />
-              </InputAdornment>
-            ),
-          }}
-        />
+        <ValidatedInput {...props} type='date' />
       ) : (
         // simple input
         <ValidatedInput {...props} />
       )}
       {/* it required to select and upload file  */}
       <input
-        name="upload_file"
-        type="file"
+        name='upload_file'
+        type='file'
         ref={avatar}
+        on={() => console.log(avatar.current.files)}
         style={{ display: "none" }}
       />
     </div>

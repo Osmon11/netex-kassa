@@ -122,7 +122,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
   }
   function Loader() {
     return (
-      <div className="flex_box">
+      <div className='flex_box'>
         <CircularProgress />
       </div>
     );
@@ -154,8 +154,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
           <Form>
             {data.countries ? (
               <Inputs
-                label="Страна регистрации вашей компании"
-                value={data.countries[0].id}
+                label='Страна регистрации вашей компании'
+                value={newMerchant.country}
                 handleChange={(e) => {
                   dispatch(
                     setData({
@@ -164,20 +164,20 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                   );
                 }}
                 items={data.countries}
-                name="country"
+                name='country'
                 select
               />
             ) : (
               <Loader />
             )}
             <Inputs
-              label="Город регистрации вашей компании"
-              name="city"
-              placeholder="Введите свой город"
+              label='Город регистрации вашей компании'
+              name='city'
+              placeholder='Введите свой город'
             />
 
             <div
-              className="flex_box"
+              className='flex_box'
               style={{ justifyContent: "flex-start", marginTop: 20 }}
             >
               <CustomSwitch
@@ -186,10 +186,10 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                   setCheckbox({ ...checkBoxes, rates: e.target.checked })
                 }
               />
-              <Typography variant="body2" style={{ marginLeft: 20 }}>
+              <Typography variant='body2' style={{ marginLeft: 20 }}>
                 Ознакомлен и согласен с{" "}
                 <NavLink
-                  to="/rates"
+                  to='/rates'
                   style={{
                     color: "#ff9900",
                     borderBottom: "1px dashed #ff9900",
@@ -201,7 +201,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               </Typography>
             </div>
             <div
-              className="flex_box"
+              className='flex_box'
               style={{ justifyContent: "flex-start", marginTop: 20 }}
             >
               <CustomSwitch
@@ -210,10 +210,10 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                   setCheckbox({ ...checkBoxes, contract: e.target.checked })
                 }
               />
-              <Typography variant="body2" style={{ marginLeft: 20 }}>
+              <Typography variant='body2' style={{ marginLeft: 20 }}>
                 Согласен на сбор персональных данных и с{" "}
                 <a
-                  href="http://odigital.app"
+                  href='http://odigital.app'
                   style={{
                     color: "#ff9900",
                     borderBottom: "1px dashed #ff9900",
@@ -226,7 +226,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
             </div>
 
             <div
-              className="flex_box"
+              className='flex_box'
               style={{
                 justifyContent: "space-between",
                 width: "50%",
@@ -236,11 +236,11 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               <Button
                 className={classes.customBtn}
                 onClick={handlePrev}
-                variant="outlined"
+                variant='outlined'
               >
                 Назад
               </Button>
-              <GoldButton style={{ width: "40%" }} type="submit">
+              <GoldButton style={{ width: "40%" }} type='submit'>
                 Далее
               </GoldButton>
             </div>
@@ -270,77 +270,86 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
         >
           <Form>
             <p
-              className="subtitle"
+              className='subtitle'
               style={{ textTransform: "uppercase", color: "#ff9900" }}
             >
               Общие сведения о вашей компании
             </p>
             {data.organizationTypes ? (
               <Inputs
-                label="Тип организации"
-                value={data.organizationTypes[0].id}
+                label='Тип организации'
+                value={newMerchant.organization_type}
                 items={data.organizationTypes}
                 handleChange={(e) => {
                   dispatch(
                     setData({
                       addMerchant: {
                         ...newMerchant,
-                        organizationTypes: e.target.value,
+                        organization_type: e.target.value,
                       },
                     })
                   );
                 }}
-                name="organization_type"
+                name='organization_type'
                 select
               />
             ) : (
               <Loader />
             )}
             <Inputs
-              label="Юридиеское название организации"
-              name="legal_name"
-              placeholder="Введите название организации"
+              label='Юридиеское название организации'
+              name='legal_name'
+              placeholder='Введите название организации'
+              value={newMerchant.legal_name}
             />
             {data.activityTypes ? (
               <Inputs
-                label="Вид деятельности"
+                label='Вид деятельности'
                 items={data.activityTypes}
-                value={data.activityTypes[0].id}
+                value={newMerchant.activity_type}
                 handleChange={(e) => {
                   dispatch(
                     setData({
                       addMerchant: {
                         ...newMerchant,
-                        activityTypes: e.target.value,
+                        activity_type: e.target.value,
                       },
                     })
                   );
                 }}
-                name="activity_type"
+                name='activity_type'
                 select
               />
             ) : (
               <Loader />
             )}
             <Inputs
-              label="Скан копия свидетельства о государственной регистрации"
-              name="certificate"
-              upload
-            />
-            <Inputs label="Скан копия устава" name="charter" upload />
-            <Inputs
-              label="Скан решения о создании компании"
-              name="decisions"
+              label='Скан копия свидетельства о государственной регистрации'
+              name='certificate'
+              value={newMerchant.certificate}
               upload
             />
             <Inputs
-              label="Дата регистрации компании"
-              name="company_reg_date"
-              placeholder="Введите в формате dd-mm-yyyy"
+              label='Скан копия устава'
+              name='charter'
+              value={newMerchant.charter}
+              upload
+            />
+            <Inputs
+              label='Скан решения о создании компании'
+              name='decisions'
+              value={newMerchant.decisions}
+              upload
+            />
+            <Inputs
+              label='Дата регистрации компании'
+              name='company_reg_date'
+              placeholder='Введите в формате dd-mm-yyyy'
+              value={newMerchant.company_reg_date}
               date
             />
             <p
-              className="subtitle"
+              className='subtitle'
               style={{
                 textTransform: "uppercase",
                 color: "#ff9900",
@@ -349,31 +358,53 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
             >
               Реквизиты
             </p>
-            <Inputs label="ИНН" name="inn" placeholder="Введите ИНН" />
-            <Inputs label="ОКПО" name="okpo" placeholder="Введите ОКПО" />
             <Inputs
-              label="Наименование банка"
-              name="bank_name"
-              placeholder="Введите наименование банка"
+              label='ИНН'
+              name='inn'
+              placeholder='Введите ИНН'
+              value={newMerchant.inn}
             />
-            <Inputs label="БИК" name="bik" placeholder="Введите БИК" />
             <Inputs
-              label="Расчетный счет"
-              name="checking_account"
-              placeholder="Введите счет"
+              label='ОКПО'
+              name='okpo'
+              placeholder='Введите ОКПО'
+              value={newMerchant.okpo}
             />
-            <Inputs label="IBAN" name="iban" placeholder="Введите IBAN" />
+            <Inputs
+              label='Наименование банка'
+              name='bank_name'
+              placeholder='Введите наименование банка'
+              value={newMerchant.bank_name}
+            />
+            <Inputs
+              label='БИК'
+              name='bik'
+              placeholder='Введите БИК'
+              value={newMerchant.bik}
+            />
+            <Inputs
+              label='Расчетный счет'
+              name='checking_account'
+              placeholder='Введите счет'
+              value={newMerchant.checking_account}
+            />
+            <Inputs
+              label='IBAN'
+              name='iban'
+              placeholder='Введите IBAN'
+              value={newMerchant.iban}
+            />
             <div
-              className="flex_box"
+              className='flex_box'
               style={{ justifyContent: "flex-start", marginTop: 20 }}
             >
               <CustomSwitch />
-              <Typography variant="body2" style={{ marginLeft: 20 }}>
+              <Typography variant='body2' style={{ marginLeft: 20 }}>
                 Организация является плательщиком НДС
               </Typography>
             </div>
             <p
-              className="subtitle"
+              className='subtitle'
               style={{
                 textTransform: "uppercase",
                 color: "#ff9900",
@@ -382,19 +413,29 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
             >
               Юридический адрес
             </p>
-            <Inputs label="Индекс" name="index" placeholder="Введите индекс" />
-            <Inputs label="Адрес" name="adress" placeholder="Введите aдрес" />
+            <Inputs
+              label='Индекс'
+              name='index'
+              placeholder='Введите индекс'
+              value={newMerchant.index}
+            />
+            <Inputs
+              label='Адрес'
+              name='adress'
+              placeholder='Введите aдрес'
+              value={newMerchant.adress}
+            />
             <div
-              className="flex_box"
+              className='flex_box'
               style={{ justifyContent: "flex-start", marginTop: 20 }}
             >
               <CustomSwitch />
-              <Typography variant="body2" style={{ marginLeft: 20 }}>
+              <Typography variant='body2' style={{ marginLeft: 20 }}>
                 Фактический адрес не совпадает с юридическим
               </Typography>
             </div>
             <div
-              className="flex_box"
+              className='flex_box'
               style={{
                 justifyContent: "space-between",
                 width: "50%",
@@ -404,13 +445,13 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               <Button
                 className={classes.customBtn}
                 onClick={prevStep}
-                variant="outlined"
+                variant='outlined'
               >
                 Отмена
               </Button>
               <GoldButton
                 style={{ width: "40%" }}
-                type="submit"
+                type='submit'
                 disabled={isPending}
               >
                 Далее
