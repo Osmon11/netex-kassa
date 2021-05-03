@@ -6,3 +6,5 @@ export * from "./VerticalStepper";
 export * from "./ProjectSettings";
 export * from "./Inputs";
 export * from "./GetNewAdress";
+export * from "./ConfirmDeleteProject";
+export * from "./OperationsHistory";

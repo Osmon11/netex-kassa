@@ -93,8 +93,8 @@ export function ProjectSettings({ match }) {
 
           {tab === "Инфо" && (
             <>
-              <p className='subtitle'>Всего: 0.008525172 BTC</p>
-              <p className='subtitle'>Ожидание: 0.00000000 BTC</p>
+              <p className='subtitle'>Всего: 0.008525172 USD</p>
+              <p className='subtitle'>Ожидание: 0.00000000 USD</p>
               <div
                 className='flex_box'
                 style={{ justifyContent: "space-between" }}

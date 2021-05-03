@@ -27,13 +27,14 @@ import {
   WithdrawFunds,
   Settings,
   GetNewAdress,
+  ConfirmDeleteProject,
+  OperationsHistory,
 } from "components/Dashboard";
 import { Link, NavLink, Route, Switch, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { handleGetMerchantsAction } from "store/actions/merchants";
 import { getProfile } from "store/actions/profile";
 import { logout } from "store/actions/sign";
-import { ConfirmDeleteProject } from "components/Dashboard/ConfirmDeleteProject";
 import { GoldButton } from "shared/Buttons/buttons";
 
 let drawerWidth = 280;
@@ -105,7 +106,7 @@ export function Admin() {
           <Logo />
         </NavLink>
         <p className='subtitle' style={{ margin: "30px 0 0" }}>
-          <NavLink to='/dashboard' className='nav_link'>
+          <NavLink exact to='/dashboard' className='nav_link'>
             Проекты
           </NavLink>
         </p>
@@ -155,41 +156,42 @@ export function Admin() {
         </p>
       </Drawer>
 
-      <section
-        style={{
-          marginTop: 130,
-          width: "100%",
-          padding: md ? "0 30px" : "0 90px",
-        }}
-      >
-        <Switch>
-          <Route exact path='/dashboard' component={DefaultComponent} />
-          <Route
-            exact
-            path='/dashboard/project/:id'
-            component={ProjectSettings}
-          />
-          <Route exact path='/dashboard/settings' component={Settings} />
-          <Route
-            exact
-            path='/dashboard/create-project'
-            component={CreateProject}
-          />
-          <Route
-            exact
-            path='/dashboard/withdrawal-of-funds'
-            component={WithdrawFunds}
-          />
-          <Route
-            exact
-            path='/dashboard/get-new-adress'
-            component={GetNewAdress}
-          />
-          <Route
-            path='/dashboard/project/:id/delete'
-            component={ConfirmDeleteProject}
-          />
-        </Switch>
+      <section className={classes.dashboardContent_root}>
+        <div className={classes.dashboardContent}>
+          <Switch>
+            <Route exact path='/dashboard' component={DefaultComponent} />
+            <Route
+              exact
+              path='/dashboard/project/:id'
+              component={ProjectSettings}
+            />
+            <Route exact path='/dashboard/settings' component={Settings} />
+            <Route
+              exact
+              path='/dashboard/create-project'
+              component={CreateProject}
+            />
+            <Route
+              exact
+              path='/dashboard/withdrawal-of-funds'
+              component={WithdrawFunds}
+            />
+            <Route
+              exact
+              path='/dashboard/get-new-adress'
+              component={GetNewAdress}
+            />
+            <Route
+              exact
+              path='/dashboard/operations'
+              component={OperationsHistory}
+            />
+            <Route
+              path='/dashboard/project/:id/delete'
+              component={ConfirmDeleteProject}
+            />
+          </Switch>
+        </div>
       </section>
       <div className='bg3_image' />
       {/* <NavLink
@@ -213,14 +215,13 @@ function DefaultComponent() {
         Мои проекты
       </Typography>
       {Boolean(merchants) ? (
-        <>
+        <div style={{ margin: "40px 0" }}>
           <Grid
             item
             xs={12}
             container
             style={{
               borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-              marginTop: 40,
               padding: 15,
             }}
           >
@@ -318,7 +319,7 @@ function DefaultComponent() {
               </Grid>
             </Grid>
           ))}
-        </>
+        </div>
       ) : (
         <div className='flex_box'>
           <div style={{ textAlign: "center", marginTop: 100 }}>
@@ -342,6 +343,31 @@ function DefaultComponent() {
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    height: "100vh",
+    overflow: "hidden",
+    width: "100%",
+  },
+  dashboardContent_root: {
+    marginTop: 130,
+    width: "100%",
+    maxWidth: "100%",
+    display: "flex",
+    paddingLeft: 90,
+    flex: "1 1 auto",
+    overflow: "hidden",
+    [theme.breakpoints.down("md")]: {
+      paddingLeft: 30,
+    },
+  },
+  dashboardContent: {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    outline: 0,
+    zIndex: 1200,
+    overflowY: "auto",
+    flexDirection: "column",
+    WebkitOverflowScrolling: "touch",
   },
   paper: {
     backgroundColor: "#1a1b20",

@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     width: "50%",
     background: "#2A2B31",
     padding: "73px 8%",
-    marginTop: 100,
+    margin: "100px 0",
   },
   customBtn: {
     width: "45%",

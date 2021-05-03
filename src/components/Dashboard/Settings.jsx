@@ -67,30 +67,28 @@ export function Settings() {
   }
   return (
     <>
-      <div className="flex_box">
-        <div style={{ width: "50%" }}>
-          <p
-            className="title"
-            style={{ fontSize: 25, margin: 0, textAlign: "center" }}
-          >
-            {`${firstname} ${lastname}`}
-          </p>
-          <p className="subtitle" style={{ margin: 0, textAlign: "center" }}>
-            {email}
-          </p>
-        </div>
+      <div className='flex_box'>
+        <p
+          className='title'
+          style={{ fontSize: 25, margin: 0, textAlign: "center" }}
+        >
+          {`${firstname} ${lastname}`}
+        </p>
+        <p className='subtitle' style={{ margin: 0, textAlign: "center" }}>
+          {email}
+        </p>
       </div>
-      <div className="flex_box">
+      <div className='flex_box'>
         <ToggleButtonGroup
           exclusive
           value={tab}
           style={{ width: "50%", margin: "33px 0" }}
           onChange={(_, tab) => setTab(tab)}
         >
-          <GoldToggleButton className={classes.toggleBtn} value="Профиль">
+          <GoldToggleButton className={classes.toggleBtn} value='Профиль'>
             Профиль
           </GoldToggleButton>
-          <GoldToggleButton className={classes.toggleBtn} value="Журнал входа">
+          <GoldToggleButton className={classes.toggleBtn} value='Журнал входа'>
             Журнал действий
           </GoldToggleButton>
           {/* <GoldToggleButton className={classes.toggleBtn} value="Кошельки">
@@ -98,42 +96,42 @@ export function Settings() {
             </GoldToggleButton> */}
         </ToggleButtonGroup>
       </div>
-      <div className="flex_box">
+      <div className='flex_box'>
         {tab === "Профиль" && (
           <div style={{ width: "50%" }}>
             <Formik>
               <Form>
-                <Typography variant="body2" style={{ marginTop: 15 }}>
+                <Typography variant='body2' style={{ marginTop: 15 }}>
                   Имя
                 </Typography>
                 <ValidatedInput
                   disabled
-                  margin="normal"
+                  margin='normal'
                   placeholder={`${firstname} ${lastname}`}
-                  name="username"
-                  type="text"
+                  name='username'
+                  type='text'
                   style={{ width: "100%", marginBottom: 20 }}
                 />
-                <Typography variant="body2" style={{ marginTop: 15 }}>
+                <Typography variant='body2' style={{ marginTop: 15 }}>
                   Почта
                 </Typography>
                 <ValidatedInput
                   disabled
-                  margin="normal"
+                  margin='normal'
                   placeholder={email}
-                  name="email"
-                  type="email"
+                  name='email'
+                  type='email'
                   style={{ width: "100%", marginBottom: 20 }}
                 />
-                <Typography variant="body2" style={{ marginTop: 15 }}>
+                <Typography variant='body2' style={{ marginTop: 15 }}>
                   Аватар
                 </Typography>
                 <ValidatedInput
                   disabled
-                  margin="normal"
-                  placeholder="Загрузить изображение"
-                  name="avatar"
-                  type="text"
+                  margin='normal'
+                  placeholder='Загрузить изображение'
+                  name='avatar'
+                  type='text'
                   onClick={() => avatar.current.click()}
                   style={{ width: "100%", marginBottom: 20 }}
                 />
@@ -145,33 +143,33 @@ export function Settings() {
               onSubmit={changePasswordHandler}
             >
               <Form>
-                <Typography variant="body2" style={{ marginTop: 15 }}>
+                <Typography variant='body2' style={{ marginTop: 15 }}>
                   Смена пароля
                 </Typography>
                 <ValidatedInput
-                  placeholder="Введите текущий пароль"
-                  name="old-password"
-                  margin="normal"
+                  placeholder='Введите текущий пароль'
+                  name='old-password'
+                  margin='normal'
                   style={{ width: "100%" }}
                 />
                 <br />
                 <ValidatedInput
-                  placeholder="Введите новый пароль"
-                  name="new-password"
-                  margin="normal"
+                  placeholder='Введите новый пароль'
+                  name='new-password'
+                  margin='normal'
                   style={{ width: "100%" }}
                 />
                 <br />
                 <ValidatedInput
-                  placeholder="Повторите новый пароль"
-                  name="confirm-password"
-                  margin="normal"
+                  placeholder='Повторите новый пароль'
+                  name='confirm-password'
+                  margin='normal'
                   style={{ width: "100%" }}
                 />
                 <br />
-                <div className="flex_box">
+                <div className='flex_box'>
                   <GoldButton
-                    type="submit"
+                    type='submit'
                     style={{
                       marginBottom: 64,
                       fontSize: 16,
@@ -198,17 +196,25 @@ export function Settings() {
               padding: 15,
             }}
           >
-            <Grid item xs={3}>
-              <Typography variant="body2">IP</Typography>
+            <Grid item xs={2}>
+              <Typography variant='body2' style={{ fontWeight: 500 }}>
+                IP
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography variant='body2' style={{ fontWeight: 500 }}>
+                Тип действий
+              </Typography>
             </Grid>
             <Grid item xs={3}>
-              <Typography variant="body2">Браузер</Typography>
+              <Typography variant='body2' style={{ fontWeight: 500 }}>
+                Браузер
+              </Typography>
             </Grid>
             <Grid item xs={3}>
-              <Typography variant="body2">Страна</Typography>
-            </Grid>
-            <Grid item xs={3}>
-              <Typography variant="body2">Дата</Typography>
+              <Typography variant='body2' style={{ fontWeight: 500 }}>
+                Дата
+              </Typography>
             </Grid>
           </Grid>
           {state.actionLogs ? (
@@ -223,28 +229,28 @@ export function Settings() {
                 }}
                 key={obj.ip + obj.date}
               >
-                <Grid item xs={3}>
-                  <Typography variant="body2">{obj.ip}</Typography>
+                <Grid item xs={2}>
+                  <Typography variant='body2'>{obj.ip}</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography variant='body2'>{obj.action}</Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography variant="body2">{obj.browser}</Typography>
+                  <Typography variant='body2'>{obj.browser}</Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography variant="body2">{obj.country}</Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography variant="body2">{obj.date}</Typography>
+                  <Typography variant='body2'>{obj.date}</Typography>
                 </Grid>
               </Grid>
             ))
           ) : (
-            <div className="flex_box">
+            <div className='flex_box'>
               <CircularProgress />
             </div>
           )}
         </>
       )}
-      <input type="file" ref={avatar} style={{ display: "none" }} />
+      <input type='file' ref={avatar} style={{ display: "none" }} />
     </>
   );
 }
