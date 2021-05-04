@@ -199,7 +199,7 @@ function SingIn({ sm, setAlert, handleClose }) {
 function SingUp({ sm, setAlert }) {
   const [enterCode, setCodeField] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(true);
-  const [userPhone, setUserPhone] = useState("0709683738");
+  const [userPhone, setUserPhone] = useState("");
   const [timeleft, setTimeLeft] = useState(30);
   const dispatch = useDispatch();
   let seconds = Math.floor(timeleft % 60);
@@ -302,12 +302,12 @@ function SingUp({ sm, setAlert }) {
         <Formik
           onSubmit={submitHandler}
           initialValues={{
-            firstname: "askar",
-            lastname: "begaliev",
-            email: "askarrbegaliev@gmail.com",
-            phone: "0709683738",
-            password: "Askar0102",
-            password_two: "Askar0102",
+            firstname: "",
+            lastname: "",
+            email: "",
+            phone: "",
+            password: "",
+            password_two: "",
           }}
           validationSchema={validate}
         >
