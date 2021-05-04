@@ -78,8 +78,8 @@ function SingIn({ sm, setAlert, handleClose }) {
   const [fogetPassword, setPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [values, setValues] = useState({
-    phone: "",
-    password: "",
+    phone: "504543444",
+    password: "123",
   });
   const validate = Yup.object({
     phone: Yup.string()

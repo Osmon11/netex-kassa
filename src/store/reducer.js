@@ -42,7 +42,7 @@ export function reducer(state = initialState, action) {
 
 export const baseURL = "https://api.netex-kassa.com";
 
-function creatRequest(endpoint, data, errorCallback) {
+export function creatRequest(endpoint, data, errorCallback) {
   return data
     ? AppAxios.post(endpoint, JSON.stringify(data)).catch(({ response }) =>
         errorCallback(response.data.messages)

@@ -41,10 +41,10 @@ export function ProjectSettings({ match }) {
   const [currentMerchant, setCurrentMerchant] = useState(null);
 
   useEffect(() => {
-    if (!currentMerchant || currentMerchant.id !== match.params.id) {
+    if (!currentMerchant || currentMerchant.merchant_id !== match.params.id) {
       dispatch(
         viewMerchant(match.params.id, (data) => {
-          setCurrentMerchant(data);
+          setCurrentMerchant(data.view);
         })
       );
     }
@@ -64,7 +64,7 @@ export function ProjectSettings({ match }) {
   }
   return (
     <>
-      {!currentMerchant || currentMerchant.id !== match.params.id ? (
+      {!currentMerchant || currentMerchant.merchant_id !== match.params.id ? (
         <div className='flex_box'>
           <CircularProgress />
         </div>
@@ -72,7 +72,7 @@ export function ProjectSettings({ match }) {
         <section>
           <div className='flex_box' style={{ justifyContent: "space-between" }}>
             <span className='title' style={{ fontSize: 25 }}>
-              {currentMerchant.view.name}
+              {currentMerchant.name}
             </span>
             <span className='subtitle'>Настройки проекта</span>
           </div>
@@ -148,7 +148,7 @@ export function ProjectSettings({ match }) {
 
           {tab === "Настройки" && (
             <>
-              {currentMerchant.view.status.name === "Не подтвержден" && (
+              {currentMerchant.status.name === "Не подтвержден" && (
                 <>
                   <Typography variant='h4' style={{ color: "#C51A2C" }}>
                     Домен не подтвержден:
@@ -199,7 +199,7 @@ export function ProjectSettings({ match }) {
                 </>
               )}
               <Formik
-                initialValues={{ ...currentMerchant.view.params }}
+                initialValues={{ ...currentMerchant.params }}
                 validationSchema={settingsFormValidation}
               >
                 <Form>
