@@ -1,5 +1,6 @@
 import { Button, makeStyles, Paper, Typography } from "@material-ui/core";
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { GoldButton } from "shared/Buttons/buttons";
 
 export function ConfirmDeleteProject() {
@@ -25,9 +26,14 @@ export function ConfirmDeleteProject() {
           className='flex_box'
           style={{ justifyContent: "space-between", marginTop: 50 }}
         >
-          <Button className={classes.customBtn} variant='outlined'>
-            Отменить
-          </Button>
+          <NavLink
+            to='/dashboard'
+            style={{ textDecoration: "none", width: "45%" }}
+          >
+            <Button className={classes.customBtn} variant='outlined'>
+              Отменить
+            </Button>
+          </NavLink>
           <GoldButton style={{ width: "45%" }}>Удалить</GoldButton>
         </div>
       </Paper>
@@ -43,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "100px 0",
   },
   customBtn: {
-    width: "45%",
+    width: "100%",
     minHeight: 50,
     fontSize: 16,
     color: "rgba(255, 255, 255, 0.3)",

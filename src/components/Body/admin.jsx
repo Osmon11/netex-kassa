@@ -281,7 +281,9 @@ function DefaultComponent() {
                 <Typography variant='body2'>{merchant.name}</Typography>
               </Grid>
               <Grid item xs={2}>
-                <Typography variant='body2'></Typography>
+                <Typography variant='body2' style={{ textAlign: "center" }}>
+                  {merchant.balance}
+                </Typography>
               </Grid>
               <Grid item xs={2}>
                 <Typography variant='body2' style={{ textAlign: "center" }}>
@@ -368,6 +370,10 @@ const useStyles = makeStyles((theme) => ({
     overflowY: "auto",
     flexDirection: "column",
     WebkitOverflowScrolling: "touch",
+    paddingRight: 90,
+    [theme.breakpoints.down("md")]: {
+      paddingRight: 30,
+    },
   },
   paper: {
     backgroundColor: "#1a1b20",

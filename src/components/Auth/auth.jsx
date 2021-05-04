@@ -37,11 +37,11 @@ export function Auth({ open, handleClose, login, setLogin }) {
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="auth-dialog"
-      className="dialog"
+      aria-labelledby='auth-dialog'
+      className='dialog'
     >
       <DialogContent
-        className="auth-container"
+        className='auth-container'
         style={{
           backgroundColor: "#2A2B31",
           padding: "55px 80px 20px",
@@ -53,9 +53,9 @@ export function Auth({ open, handleClose, login, setLogin }) {
           <SingUp sm={sm} setAlert={alertHandler} />
         )}
 
-        <div className="flex_box" style={{ margin: "20px 0" }}>
+        <div className='flex_box' style={{ margin: "20px 0" }}>
           <Typography
-            variant="body2"
+            variant='body2'
             style={{ width: "100%", textAlign: "center" }}
           >
             {login ? "У вас нет учетной записи?" : "У вас уже есть аккаунт?"}{" "}
@@ -78,8 +78,8 @@ function SingIn({ sm, setAlert, handleClose }) {
   const [fogetPassword, setPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [values, setValues] = useState({
-    phone: "0504543444",
-    password: "123",
+    phone: "",
+    password: "",
   });
   const validate = Yup.object({
     phone: Yup.string()
@@ -120,10 +120,10 @@ function SingIn({ sm, setAlert, handleClose }) {
         initialValues={values}
         validationSchema={validate}
       >
-        <Form className="auth-form">
+        <Form className='auth-form'>
           {sm ? (
             <p
-              className="title"
+              className='title'
               style={{
                 fontSize: 25,
                 textAlign: "center",
@@ -134,39 +134,39 @@ function SingIn({ sm, setAlert, handleClose }) {
               {fogetPassword ? "Восстановление пароля" : "Вход"}
             </p>
           ) : null}
-          <Typography variant="body2" style={{ marginTop: 15 }}>
+          <Typography variant='body2' style={{ marginTop: 15 }}>
             Телефон
           </Typography>
           <InputComponent
-            placeholder="Введите номер"
-            name="phone"
-            type="number"
+            placeholder='Введите номер'
+            name='phone'
+            type='number'
           />
           {!fogetPassword ? (
             <>
-              <Typography variant="body2" style={{ marginTop: 15 }}>
+              <Typography variant='body2' style={{ marginTop: 15 }}>
                 Пароль
               </Typography>
               <InputComponent
-                placeholder="Введите пароль"
-                name="password"
-                type="password"
+                placeholder='Введите пароль'
+                name='password'
+                type='password'
               />
               <div
-                className="flex_box"
+                className='flex_box'
                 style={{ justifyContent: "space-between" }}
               >
-                <span className="flex_box">
+                <span className='flex_box'>
                   <Checkbox
-                    name="rememberMe"
+                    name='rememberMe'
                     style={{ color: "#fff" }}
                     onClick={() => setRemember(true)}
                   />
-                  <Typography variant="body2">Запомнить пароль</Typography>
+                  <Typography variant='body2'>Запомнить пароль</Typography>
                 </span>
 
                 <span
-                  className="nav_link"
+                  className='nav_link'
                   style={{ fontSize: 16 }}
                   onClick={() => setPassword(true)}
                 >
@@ -245,13 +245,13 @@ function SingUp({ sm, setAlert }) {
           }
         >
           <Form>
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Введите полученный код сюда
             </Typography>
             <ValidatedInput
-              placeholder="Код активации"
-              name="code"
-              type="number"
+              placeholder='Код активации'
+              name='code'
+              type='number'
               style={{ width: "100%", marginBottom: 0 }}
             />
             <GoldButton
@@ -274,7 +274,7 @@ function SingUp({ sm, setAlert }) {
               Отправить повторно {seconds > 0 && `через ${seconds}сек`}
             </GoldButton>
             <GoldButton
-              type="submit"
+              type='submit'
               style={{
                 minHeight: 50,
                 minWidth: 195,
@@ -303,7 +303,7 @@ function SingUp({ sm, setAlert }) {
           <Form>
             {sm ? (
               <p
-                className="title"
+                className='title'
                 style={{
                   fontSize: 25,
                   textAlign: "center",
@@ -314,50 +314,50 @@ function SingUp({ sm, setAlert }) {
                 Регистрация
               </p>
             ) : null}
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Имя
             </Typography>
             <InputComponent
-              placeholder="Введите Ваше имя"
-              name="firstname"
-              type="text"
+              placeholder='Введите Ваше имя'
+              name='firstname'
+              type='text'
             />
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Фамилия
             </Typography>
             <InputComponent
-              placeholder="Введите Вашу фамилию"
-              name="lastname"
-              type="text"
+              placeholder='Введите Вашу фамилию'
+              name='lastname'
+              type='text'
             />
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Почта
             </Typography>
             <InputComponent
-              placeholder="Введите email"
-              name="email"
-              type="email"
+              placeholder='Введите email'
+              name='email'
+              type='email'
             />
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Телефон
             </Typography>
             <InputComponent
-              placeholder="Введите номер"
-              name="phone"
-              type="number"
+              placeholder='Введите номер'
+              name='phone'
+              type='number'
             />
-            <Typography variant="body2" style={{ marginTop: 15 }}>
+            <Typography variant='body2' style={{ marginTop: 15 }}>
               Пароль
             </Typography>
             <InputComponent
-              placeholder="Введите пароль"
-              name="password"
-              type="password"
+              placeholder='Введите пароль'
+              name='password'
+              type='password'
             />
             <InputComponent
-              placeholder="Повторите пароль"
-              name="password_two"
-              type="password"
+              placeholder='Повторите пароль'
+              name='password_two'
+              type='password'
             />
             <GoldButton style={{ ...btnStyle }} type={"submit"}>
               Зарегистрироваться
@@ -374,12 +374,12 @@ const InputComponent = ({ ...props }) => {
 
   return (
     <ThemeInput
-      margin="dense"
+      margin='dense'
       {...field}
       {...props}
       error={Boolean(meta.touched && meta.error)}
       helperText={meta.error ? <ErrorMessage name={field.name} /> : ""}
-      variant="outlined"
+      variant='outlined'
       fullWidth
     />
   );

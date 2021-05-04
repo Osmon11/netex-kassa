@@ -29,10 +29,10 @@ export function WithdrawFunds() {
     setSkipped(newSkipped);
   };
   return (
-    <div className="flex_box">
+    <div className='flex_box'>
       <section style={{ width: "50%" }}>
         <div
-          className="title"
+          className='title'
           style={{ fontSize: 25, marginTop: 36, textAlign: "center" }}
         >
           Вывод средств
@@ -54,23 +54,23 @@ export function WithdrawFunds() {
           })}
         </Stepper>
         {activeStep === 2 ? (
-          <Success text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel necessitatibus nihil excepturi! Rem fugit commodi esse saepe distinctio consequatur eius suscipit adipisci, placeat sit quaerat molestias ipsam quisquam reiciendis impedit pariatur similique tempore dignissimos quod ipsum nostrum. Nam modi amet iusto, temporibus excepturi facilis neque commodi dolores eos veritatis aliquam." />
+          <Success text='Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel necessitatibus nihil excepturi! Rem fugit commodi esse saepe distinctio consequatur eius suscipit adipisci, placeat sit quaerat molestias ipsam quisquam reiciendis impedit pariatur similique tempore dignissimos quod ipsum nostrum. Nam modi amet iusto, temporibus excepturi facilis neque commodi dolores eos veritatis aliquam.' />
         ) : (
-          <div className="flex_box">
+          <div className='flex_box'>
             <form>
-              <Typography variant="body2" style={{ marginTop: 15 }}>
+              <Typography variant='body2' style={{ marginTop: 15 }}>
                 Проект
               </Typography>
               <div
-                className="flex_box"
+                className='flex_box'
                 style={{ justifyContent: "flex-start", marginBottom: 20 }}
               >
                 <ThemeInput
-                  margin="dense"
-                  name="username"
+                  margin='dense'
+                  name='username'
                   select
                   disabled={activeStep > 0}
-                  variant="outlined"
+                  variant='outlined'
                   value={project}
                   onChange={(e) => setProject(e.target.value)}
                   style={{ width: 334 }}
@@ -87,10 +87,14 @@ export function WithdrawFunds() {
                   ))}
                 </ThemeInput>
                 <Typography
-                  variant="body2"
+                  variant='body2'
                   style={{ color: "#FF9900", marginLeft: 15 }}
                 >
-                  100 USD
+                  {
+                    projects.filter((merchant) => merchant.name === project)[0]
+                      .balance
+                  }{" "}
+                  USD
                 </Typography>
               </div>
               {/* <Typography variant="body2" style={{ marginTop: 15 }}>
@@ -127,18 +131,18 @@ export function WithdrawFunds() {
           variant="outlined"
           style={{ width: 334 }}
         /> */}
-              <Typography variant="body2">Введите сумму (USD)</Typography>
+              <Typography variant='body2'>Введите сумму (USD)</Typography>
               <ThemeInput
-                margin="dense"
-                placeholder="Cумма"
-                name="btcamount"
-                type="number"
-                variant="outlined"
+                margin='dense'
+                placeholder='Cумма'
+                name='btcamount'
+                type='number'
+                variant='outlined'
                 disabled={activeStep > 0}
                 style={{ width: 334 }}
               />
               <br />
-              <div className="flex_box">
+              <div className='flex_box'>
                 <GoldButton
                   style={{
                     width: "50%",

@@ -91,7 +91,6 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
   }, [dispatch, data.countries, data.organizationTypes, data.activityTypes]);
 
   function submitFirstTab(fields) {
-    console.log(fields);
     if (checkBoxes.contract && checkBoxes.rates) {
       dispatch(setData({ addMerchant: { ...newMerchant, ...fields } }));
       nextStep();

@@ -5,7 +5,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { ThemeInput } from "components/Auth/auth";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import uploadIcon from "assets/upload-icon.png";
 import { ErrorMessage, useField } from "formik";
 
@@ -39,6 +39,8 @@ export function Inputs({
 }) {
   const classes = useStyles();
   const avatar = useRef();
+  const [fileInputsState, setInputState] = useState({});
+  const [currentFileInput, setCurrentInput] = useState("");
 
   return (
     <div
@@ -68,8 +70,15 @@ export function Inputs({
       upload ? (
         <ValidatedInput
           {...props}
-          placeholder='Загрузить изображение'
-          onClick={() => avatar.current.click()}
+          placeholder={
+            Boolean(currentFileInput[props.name])
+              ? currentFileInput[props.name].name
+              : "Загрузить изображение"
+          }
+          onClick={() => {
+            avatar.current.click();
+            setCurrentInput(props.name);
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position='end'>
@@ -91,7 +100,13 @@ export function Inputs({
         name='upload_file'
         type='file'
         ref={avatar}
-        on={() => console.log(avatar.current.files)}
+        onChange={(e) => {
+          setInputState({
+            ...fileInputsState,
+            [currentFileInput]: e.target.files[0],
+          });
+          console.log(setInputState);
+        }}
         style={{ display: "none" }}
       />
     </div>

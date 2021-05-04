@@ -46,7 +46,7 @@ export function OperationsHistory() {
       </div>
     ),
   };
-  const statusKey = ["Все", "Платеж", "Вывод", "Ожидание"];
+  const statusKey = ["Все", "Платеж", "Вывод"];
 
   return (
     <Grid container style={{ paddingRight: md ? 30 : 90 }}>
@@ -72,7 +72,7 @@ export function OperationsHistory() {
             ))}
           </ThemeInput>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <div className='flex_box' style={{ justifyContent: "space-between" }}>
             <ThemeInput
               name='date_from'
@@ -89,7 +89,7 @@ export function OperationsHistory() {
             />
           </div>
         </Grid>
-        <Grid item xs={5}></Grid>
+        <Grid item xs={4}></Grid>
         <Grid item xs={2}>
           <div className='flex_box' style={{ justifyContent: "flex-end" }}>
             <ThemeInput
@@ -132,7 +132,7 @@ export function OperationsHistory() {
           <Typography variant='body2'>Дата</Typography>
         </Grid>
         <Grid item xs={2}>
-          <Typography variant='body2'>Сумма</Typography>
+          <Typography variant='body2'>Приход</Typography>
         </Grid>
         <Grid item xs={2}>
           <Typography variant='body2' style={{ textAlign: "center" }}>
@@ -205,15 +205,15 @@ const data = [
   {
     date: "2021-01-13 18:37:46",
     operation: "Платеж",
-    sum: "0.000025172 BTC",
+    sum: "0.000025172 USD",
     consumption: "------------",
     ps: "creditCard",
     status: "success",
   },
   {
     date: "2021-01-07 10:21:51",
-    operation: "Ожидание",
-    sum: "0.008500000 BTC",
+    operation: "Платеж",
+    sum: "0.008500000 USD",
     consumption: "------------",
     ps: "paypal",
     status: "fail",
