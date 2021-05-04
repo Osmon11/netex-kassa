@@ -104,13 +104,19 @@ function SingIn({ sm, setAlert, handleClose }) {
       return dispatch(restorePassword(fields.phone));
     }
     dispatch(
-      login(fields, (alert) => {
-        setAlert(alert);
-        if (alert.severity === "success") {
-          handleClose();
-          history.push("/dashboard");
+      login(
+        {
+          ...fields,
+          phone: fields.phone[0] === "9" ? fields.phone : "0" + fields.phone,
+        },
+        (alert) => {
+          setAlert(alert);
+          if (alert.severity === "success") {
+            handleClose();
+            history.push("/dashboard");
+          }
         }
-      })
+      )
     );
   }
   return (
