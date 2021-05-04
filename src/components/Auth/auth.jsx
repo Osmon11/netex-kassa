@@ -200,8 +200,9 @@ function SingUp({ sm, setAlert }) {
   const [enterCode, setCodeField] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(true);
   const [userPhone, setUserPhone] = useState("");
-  const [timeleft, setTimeLeft] = useState(30);
+  const [timeleft, setTimeLeft] = useState(90);
   const dispatch = useDispatch();
+  let minutes = Math.floor((timeleft % (60 * 60)) / 60);
   let seconds = Math.floor(timeleft % 60);
   const validate = Yup.object({
     firstname: Yup.string().required("Поле должно быть заполнена"),
@@ -230,7 +231,6 @@ function SingUp({ sm, setAlert }) {
 
   function submitHandler({ phone, ...fields }) {
     let phoneIsCorrect = phone[0] === "0" ? phone : "0" + phone;
-    console.log(phoneIsCorrect);
     setUserPhone({ phone: phoneIsCorrect });
     dispatch(
       singup({ ...fields, phone: phoneIsCorrect }, (data) => {
@@ -252,7 +252,7 @@ function SingUp({ sm, setAlert }) {
             code: Yup.number().required("Поле должно быть заполнена"),
           })}
           onSubmit={({ code }) =>
-            dispatch(accountActivation({ phone: userPhone, code }))
+            dispatch(accountActivation({ ...userPhone, code }))
           }
         >
           <Form>
@@ -273,16 +273,19 @@ function SingUp({ sm, setAlert }) {
                 marginTop: 20,
               }}
               disabled={btnDisabled}
-              onClick={() =>
+              onClick={() => {
                 dispatch(
                   resendActivationCode(userPhone, (message) =>
                     setAlert({ ...alert, message })
                   )
-                )
-              }
+                );
+                setBtnDisabled(true);
+                setTimeLeft(90);
+              }}
               fullWidth
             >
-              Отправить повторно {seconds > 0 && `через ${seconds}сек`}
+              Отправить повторно{" "}
+              {seconds > 0 && `через ${minutes}мин ${seconds}сек`}
             </GoldButton>
             <GoldButton
               type='submit'
