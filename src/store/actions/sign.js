@@ -25,20 +25,12 @@ export const login = (data, callback) => (dispatch) => {
           open: true,
         });
     })
-    .catch((e) => {
-      if (e.message === "Request failed with status code 401") {
-        callback({
-          message: "Неверный пароль",
-          severity: "error",
-          open: true,
-        });
-      } else {
-        callback({
-          message: "Что то пошло не так, повторите снова",
-          severity: "error",
-          open: true,
-        });
-      }
+    .catch(({ response }) => {
+      callback({
+        message: response.data.messages,
+        severity: "error",
+        open: true,
+      });
     });
 };
 
@@ -66,10 +58,10 @@ export const singup = (data, callback) => (dispatch) => {
     });
 };
 
-export const accountActivation = (fields) => (dispatch) => {
+export const accountActivation = (fields, callback) => (dispatch) => {
   AppAxios.post("/auth/activation", fields)
     .then((res) => {
-      console.log(res.data);
+      callback(res.data.response);
     })
     .catch(({ response }) => {
       dispatch(

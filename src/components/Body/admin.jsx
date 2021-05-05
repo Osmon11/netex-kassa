@@ -111,7 +111,7 @@ export function Admin() {
           </NavLink>
         </p>
         <ul className='projects'>
-          {merchants.get.success ? (
+          {merchants.merchant ? (
             merchants.merchants.map((merchant) => (
               <li key={merchant.name}>
                 <Link
@@ -128,14 +128,11 @@ export function Admin() {
             </div>
           ) : null}
           <li>
-            <NavLink
-              to='/dashboard/create-project'
-              style={{ textDecoration: "none" }}
-            >
-              <span className={classes.createProject}>
+            <span className={classes.createProject}>
+              <NavLink to='/dashboard/create-project' className='nav_link'>
                 + Создать новый проект
-              </span>
-            </NavLink>
+              </NavLink>
+            </span>
           </li>
         </ul>
 

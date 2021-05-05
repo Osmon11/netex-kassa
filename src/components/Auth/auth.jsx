@@ -50,7 +50,7 @@ export function Auth({ open, handleClose, login, setLogin }) {
         {login ? (
           <SingIn sm={sm} setAlert={alertHandler} handleClose={handleClose} />
         ) : (
-          <SingUp sm={sm} setAlert={alertHandler} />
+          <SingUp sm={sm} setAlert={alertHandler} setLogin={setLogin} />
         )}
 
         <div className='flex_box' style={{ margin: "20px 0" }}>
@@ -196,7 +196,7 @@ function SingIn({ sm, setAlert, handleClose }) {
   );
 }
 
-function SingUp({ sm, setAlert }) {
+function SingUp({ sm, setAlert, setLogin }) {
   const [enterCode, setCodeField] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(true);
   const [userPhone, setUserPhone] = useState("");
@@ -242,6 +242,18 @@ function SingUp({ sm, setAlert }) {
       })
     );
   }
+  function codeSubmit({ code }) {
+    dispatch(
+      accountActivation({ ...userPhone, code }, (success) => {
+        setAlert({
+          open: true,
+          severity: "success",
+          message: "Ваш аккаунт был успешно активирован",
+        });
+        setLogin(true);
+      })
+    );
+  }
 
   return (
     <>
@@ -251,9 +263,7 @@ function SingUp({ sm, setAlert }) {
           validationSchema={Yup.object({
             code: Yup.number().required("Поле должно быть заполнена"),
           })}
-          onSubmit={({ code }) =>
-            dispatch(accountActivation({ ...userPhone, code }))
-          }
+          onSubmit={codeSubmit}
         >
           <Form>
             <Typography variant='body2' style={{ marginTop: 15 }}>
@@ -285,7 +295,7 @@ function SingUp({ sm, setAlert }) {
               fullWidth
             >
               Отправить повторно{" "}
-              {seconds > 0 && `через ${minutes}мин ${seconds}сек`}
+              {timeleft > 0 && `через ${minutes}мин ${seconds}сек`}
             </GoldButton>
             <GoldButton
               type='submit'

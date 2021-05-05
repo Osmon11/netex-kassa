@@ -28,9 +28,9 @@ export function CreateProject() {
     setSecondStep((isSecondStep) => !isSecondStep);
     dispatch(setData({ addMerchant: { ...newMerchant, ...fields } }));
   }
-  function callbackHandler() {
+  function callbackHandler(newMerchantObj) {
     dispatch(
-      addMerchant(newMerchant, (error) => {
+      addMerchant(newMerchantObj, (error) => {
         if (Boolean(error)) {
           dispatch(setAlert({ open: true, severity: "error", message: error }));
         } else {

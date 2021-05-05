@@ -9,7 +9,7 @@ import {
 import { ToggleButtonGroup } from "@material-ui/lab";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { GoldToggleButton } from "shared/Buttons/buttons";
 import { CustomSwitch } from "shared/Buttons/buttons";
 import { GoldButton } from "shared/Buttons/buttons";
@@ -42,6 +42,7 @@ const validateSecondTab = Yup.object({
 
 export function SecondStep({ handleNext, callback, handlePrev }) {
   const classes = useStyles();
+  const firstTabBtn = useRef();
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const [tab, setTab] = React.useState(1);
@@ -102,8 +103,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
   }
   function submitSecondTab(fields) {
     setPending(true);
+    callback({ ...newMerchant, ...fields });
     dispatch(setData({ addMerchant: { ...newMerchant, ...fields } }));
-    callback();
     setTimeout(() => {
       setPending(false);
     }, 3000);
@@ -133,10 +134,18 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
         value={tab}
         style={{ minWidth: xs ? "100%" : 454, maxHeight: 50, marginBottom: 33 }}
       >
-        <GoldToggleButton className={classes.toggleBtn} value={1}>
+        <GoldToggleButton
+          className={classes.toggleBtn}
+          onClick={() => tab > 1 && setTab(1)}
+          value={1}
+        >
           Шаг 1
         </GoldToggleButton>
-        <GoldToggleButton className={classes.toggleBtn} value={2}>
+        <GoldToggleButton
+          className={classes.toggleBtn}
+          onClick={() => firstTabBtn.current.click()}
+          value={2}
+        >
           Шаг 2
         </GoldToggleButton>
       </ToggleButtonGroup>
@@ -239,7 +248,11 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               >
                 Назад
               </Button>
-              <GoldButton style={{ width: "40%" }} type='submit'>
+              <GoldButton
+                style={{ width: "40%" }}
+                type='submit'
+                ref={firstTabBtn}
+              >
                 Далее
               </GoldButton>
             </div>

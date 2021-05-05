@@ -266,7 +266,7 @@ export function ProjectSettings({ match }) {
                     fontSize: 16,
                     width: 175,
                     height: 50,
-                    marginTop: 20,
+                    margin: "20px 0",
                   }}
                   variant='outlined'
                 >
