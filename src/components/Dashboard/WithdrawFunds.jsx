@@ -11,93 +11,99 @@ import clsx from "clsx";
 import { ThemeInput } from "components/Auth/auth";
 import React from "react";
 import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 import { GoldButton } from "shared/Buttons/buttons";
 import { Success } from "./CreateProject";
+import goust from "assets/goust-icon.svg";
 
 export function WithdrawFunds() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const projects = useSelector((store) => store.merchants.merchants);
-  const [project, setProject] = React.useState(projects[0].name);
+  const [project, setProject] = React.useState(
+    projects ? projects[0].name : ""
+  );
   const steps = ["Создать", "Потвердить", "Успешно"];
 
   const handleNext = () => {
     let newSkipped = skipped;
-    console.log(activeStep + 1);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
   return (
-    <div className='flex_box'>
-      <section style={{ width: "50%" }}>
-        <div
-          className='title'
-          style={{ fontSize: 25, marginTop: 36, textAlign: "center" }}
-        >
-          Вывод средств
-        </div>
-        <Stepper
-          activeStep={activeStep}
-          style={{ backgroundColor: "transparent" }}
-        >
-          {steps.map((label, index) => {
-            return (
-              <Step key={label}>
-                <CustomLabel
-                  StepIconComponent={(props) => StepIcon(props, index + 1)}
-                >
-                  {label}
-                </CustomLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
-        {activeStep === 2 ? (
-          <Success text='Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel necessitatibus nihil excepturi! Rem fugit commodi esse saepe distinctio consequatur eius suscipit adipisci, placeat sit quaerat molestias ipsam quisquam reiciendis impedit pariatur similique tempore dignissimos quod ipsum nostrum. Nam modi amet iusto, temporibus excepturi facilis neque commodi dolores eos veritatis aliquam.' />
-        ) : (
-          <div className='flex_box'>
-            <form>
-              <Typography variant='body2' style={{ marginTop: 15 }}>
-                Проект
-              </Typography>
-              <div
-                className='flex_box'
-                style={{ justifyContent: "flex-start", marginBottom: 20 }}
-              >
-                <ThemeInput
-                  margin='dense'
-                  name='username'
-                  select
-                  disabled={activeStep > 0}
-                  variant='outlined'
-                  value={project}
-                  onChange={(e) => setProject(e.target.value)}
-                  style={{ width: 334 }}
-                >
-                  {projects.map((merchant) => (
-                    <MenuItem
-                      key={merchant.name}
-                      value={merchant.name}
-                      className={classes.menuItem}
-                      classes={{ selected: classes.selected }}
+    <>
+      {projects ? (
+        <div className="flex_box">
+          <section style={{ width: "50%" }}>
+            <div
+              className="title"
+              style={{ fontSize: 25, marginTop: 36, textAlign: "center" }}
+            >
+              Вывод средств
+            </div>
+            <Stepper
+              activeStep={activeStep}
+              style={{ backgroundColor: "transparent" }}
+            >
+              {steps.map((label, index) => {
+                return (
+                  <Step key={label}>
+                    <CustomLabel
+                      StepIconComponent={(props) => StepIcon(props, index + 1)}
                     >
-                      {merchant.name}
-                    </MenuItem>
-                  ))}
-                </ThemeInput>
-                <Typography
-                  variant='body2'
-                  style={{ color: "#FF9900", marginLeft: 15 }}
-                >
-                  {
-                    projects.filter((merchant) => merchant.name === project)[0]
-                      .balance
-                  }{" "}
-                  USD
-                </Typography>
-              </div>
-              {/* <Typography variant="body2" style={{ marginTop: 15 }}>
+                      {label}
+                    </CustomLabel>
+                  </Step>
+                );
+              })}
+            </Stepper>
+            {activeStep === 2 ? (
+              <Success text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel necessitatibus nihil excepturi! Rem fugit commodi esse saepe distinctio consequatur eius suscipit adipisci, placeat sit quaerat molestias ipsam quisquam reiciendis impedit pariatur similique tempore dignissimos quod ipsum nostrum. Nam modi amet iusto, temporibus excepturi facilis neque commodi dolores eos veritatis aliquam." />
+            ) : (
+              <div className="flex_box">
+                <form>
+                  <Typography variant="body2" style={{ marginTop: 15 }}>
+                    Проект
+                  </Typography>
+                  <div
+                    className="flex_box"
+                    style={{ justifyContent: "flex-start", marginBottom: 20 }}
+                  >
+                    <ThemeInput
+                      margin="dense"
+                      name="username"
+                      select
+                      disabled={activeStep > 0}
+                      variant="outlined"
+                      value={project}
+                      onChange={(e) => setProject(e.target.value)}
+                      style={{ width: 334 }}
+                    >
+                      {projects.map((merchant) => (
+                        <MenuItem
+                          key={merchant.name}
+                          value={merchant.name}
+                          className={classes.menuItem}
+                          classes={{ selected: classes.selected }}
+                        >
+                          {merchant.name}
+                        </MenuItem>
+                      ))}
+                    </ThemeInput>
+                    <Typography
+                      variant="body2"
+                      style={{ color: "#FF9900", marginLeft: 15 }}
+                    >
+                      {
+                        projects.filter(
+                          (merchant) => merchant.name === project
+                        )[0].balance
+                      }{" "}
+                      USD
+                    </Typography>
+                  </div>
+                  {/* <Typography variant="body2" style={{ marginTop: 15 }}>
           Выберите кошелек
         </Typography>
         <ThemeInput
@@ -131,35 +137,52 @@ export function WithdrawFunds() {
           variant="outlined"
           style={{ width: 334 }}
         /> */}
-              <Typography variant='body2'>Введите сумму (USD)</Typography>
-              <ThemeInput
-                margin='dense'
-                placeholder='Cумма'
-                name='btcamount'
-                type='number'
-                variant='outlined'
-                disabled={activeStep > 0}
-                style={{ width: 334 }}
-              />
-              <br />
-              <div className='flex_box'>
-                <GoldButton
-                  style={{
-                    width: "50%",
-                    minHeight: 50,
-                    marginTop: 30,
-                    marginRight: 50,
-                  }}
-                  onClick={handleNext}
-                >
-                  {activeStep > 0 ? "Потвердить" : "Далее"}
-                </GoldButton>
+                  <Typography variant="body2">Введите сумму (USD)</Typography>
+                  <ThemeInput
+                    margin="dense"
+                    placeholder="Cумма"
+                    name="btcamount"
+                    type="number"
+                    variant="outlined"
+                    disabled={activeStep > 0}
+                    style={{ width: 334 }}
+                  />
+                  <br />
+                  <div className="flex_box">
+                    <GoldButton
+                      style={{
+                        width: "50%",
+                        minHeight: 50,
+                        marginTop: 30,
+                        marginRight: 50,
+                      }}
+                      onClick={handleNext}
+                    >
+                      {activeStep > 0 ? "Потвердить" : "Далее"}
+                    </GoldButton>
+                  </div>
+                </form>
               </div>
-            </form>
+            )}
+          </section>
+        </div>
+      ) : (
+        <div className="flex_box">
+          <div style={{ textAlign: "center", marginTop: 100 }}>
+            <img src={goust} alt="" />
+            <Typography variant="h3" style={{ color: "#3E414E" }}>
+              Пока здесь пусто
+            </Typography>
+            <NavLink
+              to="/dashboard/create-project"
+              style={{ textDecoration: "none" }}
+            >
+              <GoldButton style={{ marginTop: 50 }}>Начать работу</GoldButton>
+            </NavLink>
           </div>
-        )}
-      </section>
-    </div>
+        </div>
+      )}
+    </>
   );
 }
 

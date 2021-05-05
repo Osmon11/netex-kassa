@@ -18,8 +18,8 @@ export function ValidatedInput({ children, style, ...props }) {
       {...props}
       error={Boolean(meta.touched && meta.error)}
       helperText={meta.error ? <ErrorMessage name={field.name} /> : ""}
-      margin='dense'
-      variant='outlined'
+      margin="dense"
+      variant="outlined"
       style={{ marginBottom: 20, width: 334, ...style }}
     >
       {children}
@@ -44,11 +44,11 @@ export function Inputs({
 
   return (
     <div
-      className='flex_box'
+      className="flex_box"
       style={{ justifyContent: "space-between", paddingRight: "25%" }}
     >
       <Typography
-        variant='body2'
+        variant="body2"
         style={{ fontSize: 16, fontWeight: 300, width: "40%" }}
       >
         {label}
@@ -71,8 +71,8 @@ export function Inputs({
         <ValidatedInput
           {...props}
           placeholder={
-            Boolean(currentFileInput[props.name])
-              ? currentFileInput[props.name].name
+            Boolean(fileInputsState[props.name])
+              ? fileInputsState[props.name].name
               : "Загрузить изображение"
           }
           onClick={() => {
@@ -81,8 +81,8 @@ export function Inputs({
           }}
           InputProps={{
             endAdornment: (
-              <InputAdornment position='end'>
-                <img src={uploadIcon} alt='' />
+              <InputAdornment position="end">
+                <img src={uploadIcon} alt="" />
               </InputAdornment>
             ),
           }}
@@ -90,22 +90,20 @@ export function Inputs({
         />
       ) : // if date then input with mask
       date ? (
-        <ValidatedInput {...props} type='date' />
+        <ValidatedInput {...props} type="date" />
       ) : (
         // simple input
         <ValidatedInput {...props} />
       )}
       {/* it required to select and upload file  */}
       <input
-        name='upload_file'
-        type='file'
+        name="upload_file"
+        type="file"
         ref={avatar}
         onChange={(e) => {
-          setInputState({
-            ...fileInputsState,
-            [currentFileInput]: e.target.files[0],
-          });
-          console.log(setInputState);
+          let newState = { ...fileInputsState };
+          newState[currentFileInput] = e.target.files[0];
+          setInputState(newState);
         }}
         style={{ display: "none" }}
       />

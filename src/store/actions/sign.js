@@ -1,4 +1,4 @@
-import { setUser, setData, setAlert } from "../actionCreators";
+import { setUser, setData, setAlert, setAuthDialog } from "../actionCreators";
 import { AppAxios, AppAxios2 } from "../../axios/axios";
 
 export const login = (data, callback) => (dispatch) => {
@@ -91,10 +91,19 @@ export const resendActivationCode = (phone, callback) => (dispatch) => {
     });
 };
 
-export const restorePassword = (phone) => (dispatch) => {
-  AppAxios.post("/auth/activation/forgot", phone)
+export const restorePassword = (phone, callback) => (dispatch) => {
+  AppAxios.post("/auth/forgot", phone)
     .then((res) => {
-      console.log(res.data);
+      if (Boolean(res.data.response)) {
+        dispatch(
+          setAlert({
+            open: true,
+            severity: "success",
+            message: res.data.messages,
+          })
+        );
+        callback();
+      }
     })
     .catch(({ response }) => {
       dispatch(

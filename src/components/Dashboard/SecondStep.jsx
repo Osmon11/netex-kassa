@@ -108,9 +108,11 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
     setTimeout(() => {
       setPending(false);
     }, 3000);
-    // setTimeout(() => {
-    //   setPending(false);
-    // }, 3000);
+  }
+  function inputChangeHandler(target) {
+    const { name, value } = target;
+    let fieldValue = { [name]: value };
+    dispatch(setData({ addMerchant: { ...newMerchant, ...fieldValue } }));
   }
   function prevStep() {
     setTab(tab - 1);
@@ -122,7 +124,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
   }
   function Loader() {
     return (
-      <div className='flex_box'>
+      <div className="flex_box">
         <CircularProgress />
       </div>
     );
@@ -162,7 +164,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
           <Form>
             {data.countries ? (
               <Inputs
-                label='Страна регистрации вашей компании'
+                label="Страна регистрации вашей компании"
                 value={newMerchant.country}
                 handleChange={(e) => {
                   dispatch(
@@ -172,20 +174,20 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                   );
                 }}
                 items={data.countries}
-                name='country'
+                name="country"
                 select
               />
             ) : (
               <Loader />
             )}
             <Inputs
-              label='Город регистрации вашей компании'
-              name='city'
-              placeholder='Введите свой город'
+              label="Город регистрации вашей компании"
+              name="city"
+              placeholder="Введите свой город"
             />
 
             <div
-              className='flex_box'
+              className="flex_box"
               style={{ justifyContent: "flex-start", marginTop: 20 }}
             >
               <CustomSwitch
@@ -194,22 +196,23 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                   setCheckbox({ ...checkBoxes, rates: e.target.checked })
                 }
               />
-              <Typography variant='body2' style={{ marginLeft: 20 }}>
+              <Typography variant="body2" style={{ marginLeft: 20 }}>
                 Ознакомлен и согласен с{" "}
-                <NavLink
-                  to='/rates'
+                <a
+                  href={`${window.location.origin}/rates`}
                   style={{
                     color: "#ff9900",
                     borderBottom: "1px dashed #ff9900",
                     textDecoration: "none",
                   }}
+                  target="_blanck"
                 >
                   тарифом
-                </NavLink>
+                </a>
               </Typography>
             </div>
             <div
-              className='flex_box'
+              className="flex_box"
               style={{ justifyContent: "flex-start", marginTop: 20 }}
             >
               <CustomSwitch
@@ -218,15 +221,16 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                   setCheckbox({ ...checkBoxes, contract: e.target.checked })
                 }
               />
-              <Typography variant='body2' style={{ marginLeft: 20 }}>
+              <Typography variant="body2" style={{ marginLeft: 20 }}>
                 Согласен на сбор персональных данных и с{" "}
                 <a
-                  href='http://odigital.app'
+                  href="http://odigital.app"
                   style={{
                     color: "#ff9900",
                     borderBottom: "1px dashed #ff9900",
                     textDecoration: "none",
                   }}
+                  target="_blanck"
                 >
                   договором присоединения
                 </a>
@@ -234,7 +238,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
             </div>
 
             <div
-              className='flex_box'
+              className="flex_box"
               style={{
                 justifyContent: "space-between",
                 width: "50%",
@@ -244,13 +248,13 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               <Button
                 className={classes.customBtn}
                 onClick={handlePrev}
-                variant='outlined'
+                variant="outlined"
               >
                 Назад
               </Button>
               <GoldButton
                 style={{ width: "40%" }}
-                type='submit'
+                type="submit"
                 ref={firstTabBtn}
               >
                 Далее
@@ -262,214 +266,263 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
 
       {tab === 2 && (
         <Formik
-          initialValues={{
-            organization_type: newMerchant.organization_type,
-            legal_name: newMerchant.legal_name,
-            activity_type: newMerchant.activity_type,
-            company_reg_date: newMerchant.company_reg_date,
-            inn: newMerchant.inn,
-            okpo: newMerchant.okpo,
-            bik: newMerchant.bik,
-            bank_name: newMerchant.bank_name,
-            checking_account: newMerchant.checking_account,
-            iban: newMerchant.iban,
-            decisions: newMerchant.decisions,
-            certificate: newMerchant.certificate,
-            upload_file: newMerchant.upload_file,
-          }}
+          initialValues={newMerchant}
           validationSchema={validateSecondTab}
           onSubmit={submitSecondTab}
         >
-          <Form>
-            <p
-              className='subtitle'
-              style={{ textTransform: "uppercase", color: "#ff9900" }}
-            >
-              Общие сведения о вашей компании
-            </p>
-            {data.organizationTypes ? (
-              <Inputs
-                label='Тип организации'
-                value={newMerchant.organization_type}
-                items={data.organizationTypes}
-                handleChange={(e) => {
-                  dispatch(
-                    setData({
-                      addMerchant: {
-                        ...newMerchant,
-                        organization_type: e.target.value,
-                      },
-                    })
-                  );
-                }}
-                name='organization_type'
-                select
-              />
-            ) : (
-              <Loader />
-            )}
-            <Inputs
-              label='Юридиеское название организации'
-              name='legal_name'
-              placeholder='Введите название организации'
-              value={newMerchant.legal_name}
-            />
-            {data.activityTypes ? (
-              <Inputs
-                label='Вид деятельности'
-                items={data.activityTypes}
-                value={newMerchant.activity_type}
-                handleChange={(e) => {
-                  dispatch(
-                    setData({
-                      addMerchant: {
-                        ...newMerchant,
-                        activity_type: e.target.value,
-                      },
-                    })
-                  );
-                }}
-                name='activity_type'
-                select
-              />
-            ) : (
-              <Loader />
-            )}
-            <Inputs
-              label='Скан копия свидетельства о государственной регистрации'
-              name='certificate'
-              value={newMerchant.certificate}
-              upload
-            />
-            <Inputs
-              label='Скан копия устава'
-              name='charter'
-              value={newMerchant.charter}
-              upload
-            />
-            <Inputs
-              label='Скан решения о создании компании'
-              name='decisions'
-              value={newMerchant.decisions}
-              upload
-            />
-            <Inputs
-              label='Дата регистрации компании'
-              name='company_reg_date'
-              placeholder='Введите в формате dd-mm-yyyy'
-              value={newMerchant.company_reg_date}
-              date
-            />
-            <p
-              className='subtitle'
-              style={{
-                textTransform: "uppercase",
-                color: "#ff9900",
-                marginTop: 30,
-              }}
-            >
-              Реквизиты
-            </p>
-            <Inputs
-              label='ИНН'
-              name='inn'
-              placeholder='Введите ИНН'
-              value={newMerchant.inn}
-            />
-            <Inputs
-              label='ОКПО'
-              name='okpo'
-              placeholder='Введите ОКПО'
-              value={newMerchant.okpo}
-            />
-            <Inputs
-              label='Наименование банка'
-              name='bank_name'
-              placeholder='Введите наименование банка'
-              value={newMerchant.bank_name}
-            />
-            <Inputs
-              label='БИК'
-              name='bik'
-              placeholder='Введите БИК'
-              value={newMerchant.bik}
-            />
-            <Inputs
-              label='Расчетный счет'
-              name='checking_account'
-              placeholder='Введите счет'
-              value={newMerchant.checking_account}
-            />
-            <Inputs
-              label='IBAN'
-              name='iban'
-              placeholder='Введите IBAN'
-              value={newMerchant.iban}
-            />
-            <div
-              className='flex_box'
-              style={{ justifyContent: "flex-start", marginTop: 20 }}
-            >
-              <CustomSwitch />
-              <Typography variant='body2' style={{ marginLeft: 20 }}>
-                Организация является плательщиком НДС
-              </Typography>
-            </div>
-            <p
-              className='subtitle'
-              style={{
-                textTransform: "uppercase",
-                color: "#ff9900",
-                marginTop: 50,
-              }}
-            >
-              Юридический адрес
-            </p>
-            <Inputs
-              label='Индекс'
-              name='index'
-              placeholder='Введите индекс'
-              value={newMerchant.index}
-            />
-            <Inputs
-              label='Адрес'
-              name='adress'
-              placeholder='Введите aдрес'
-              value={newMerchant.adress}
-            />
-            <div
-              className='flex_box'
-              style={{ justifyContent: "flex-start", marginTop: 20 }}
-            >
-              <CustomSwitch />
-              <Typography variant='body2' style={{ marginLeft: 20 }}>
-                Фактический адрес не совпадает с юридическим
-              </Typography>
-            </div>
-            <div
-              className='flex_box'
-              style={{
-                justifyContent: "space-between",
-                width: "50%",
-                marginTop: 40,
-              }}
-            >
-              <Button
-                className={classes.customBtn}
-                onClick={prevStep}
-                variant='outlined'
+          {(formik) => (
+            <Form>
+              <p
+                className="subtitle"
+                style={{ textTransform: "uppercase", color: "#ff9900" }}
               >
-                Отмена
-              </Button>
-              <GoldButton
-                style={{ width: "40%" }}
-                type='submit'
-                disabled={isPending}
+                Общие сведения о вашей компании
+              </p>
+              {data.organizationTypes ? (
+                <Inputs
+                  label="Тип организации"
+                  value={newMerchant.organization_type}
+                  onChange={(e) => {
+                    inputChangeHandler(e.target);
+                    formik.handleChange(e);
+                  }}
+                  items={data.organizationTypes}
+                  handleChange={(e) => {
+                    dispatch(
+                      setData({
+                        addMerchant: {
+                          ...newMerchant,
+                          organization_type: e.target.value,
+                        },
+                      })
+                    );
+                  }}
+                  name="organization_type"
+                  select
+                />
+              ) : (
+                <Loader />
+              )}
+              <Inputs
+                label="Юридиеское название организации"
+                name="legal_name"
+                placeholder="Введите название организации"
+                value={newMerchant.legal_name}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+              />
+              {data.activityTypes ? (
+                <Inputs
+                  label="Вид деятельности"
+                  items={data.activityTypes}
+                  value={newMerchant.activity_type}
+                  onChange={(e) => {
+                    inputChangeHandler(e.target);
+                    formik.handleChange(e);
+                  }}
+                  handleChange={(e) => {
+                    dispatch(
+                      setData({
+                        addMerchant: {
+                          ...newMerchant,
+                          activity_type: e.target.value,
+                        },
+                      })
+                    );
+                  }}
+                  name="activity_type"
+                  select
+                />
+              ) : (
+                <Loader />
+              )}
+              <Inputs
+                label="Скан копия свидетельства о государственной регистрации"
+                name="certificate"
+                value={newMerchant.certificate}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+                upload
+              />
+              <Inputs
+                label="Скан копия устава"
+                name="charter"
+                value={newMerchant.charter}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+                upload
+              />
+              <Inputs
+                label="Скан решения о создании компании"
+                name="decisions"
+                value={newMerchant.decisions}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+                upload
+              />
+              <Inputs
+                label="Дата регистрации компании"
+                name="company_reg_date"
+                placeholder="Введите в формате dd-mm-yyyy"
+                value={newMerchant.company_reg_date}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+                inputProps={{ max: new Date().toISOString().split("T")[0] }}
+                date
+              />
+              <p
+                className="subtitle"
+                style={{
+                  textTransform: "uppercase",
+                  color: "#ff9900",
+                  marginTop: 30,
+                }}
               >
-                Далее
-              </GoldButton>
-            </div>
-          </Form>
+                Реквизиты
+              </p>
+              <Inputs
+                label="ИНН"
+                name="inn"
+                placeholder="Введите ИНН"
+                value={newMerchant.inn}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+              />
+              <Inputs
+                label="ОКПО"
+                name="okpo"
+                placeholder="Введите ОКПО"
+                value={newMerchant.okpo}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+              />
+              <Inputs
+                label="Наименование банка"
+                name="bank_name"
+                placeholder="Введите наименование банка"
+                value={newMerchant.bank_name}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+              />
+              <Inputs
+                label="БИК"
+                name="bik"
+                placeholder="Введите БИК"
+                value={newMerchant.bik}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+              />
+              <Inputs
+                label="Расчетный счет"
+                name="checking_account"
+                placeholder="Введите счет"
+                value={newMerchant.checking_account}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+              />
+              <Inputs
+                label="IBAN"
+                name="iban"
+                placeholder="Введите IBAN"
+                value={newMerchant.iban}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+              />
+              <div
+                className="flex_box"
+                style={{ justifyContent: "flex-start", marginTop: 20 }}
+              >
+                <CustomSwitch />
+                <Typography variant="body2" style={{ marginLeft: 20 }}>
+                  Организация является плательщиком НДС
+                </Typography>
+              </div>
+              <p
+                className="subtitle"
+                style={{
+                  textTransform: "uppercase",
+                  color: "#ff9900",
+                  marginTop: 50,
+                }}
+              >
+                Юридический адрес
+              </p>
+              <Inputs
+                label="Индекс"
+                name="index"
+                placeholder="Введите индекс"
+                value={newMerchant.index}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+              />
+              <Inputs
+                label="Адрес"
+                name="adress"
+                placeholder="Введите aдрес"
+                value={newMerchant.adress}
+                onChange={(e) => {
+                  inputChangeHandler(e.target);
+                  formik.handleChange(e);
+                }}
+              />
+              <div
+                className="flex_box"
+                style={{ justifyContent: "flex-start", marginTop: 20 }}
+              >
+                <CustomSwitch />
+                <Typography variant="body2" style={{ marginLeft: 20 }}>
+                  Фактический адрес не совпадает с юридическим
+                </Typography>
+              </div>
+              <div
+                className="flex_box"
+                style={{
+                  justifyContent: "space-between",
+                  width: "50%",
+                  marginTop: 40,
+                }}
+              >
+                <Button
+                  className={classes.customBtn}
+                  onClick={prevStep}
+                  variant="outlined"
+                >
+                  Отмена
+                </Button>
+                <GoldButton
+                  style={{ width: "40%" }}
+                  type="submit"
+                  disabled={isPending}
+                >
+                  Далее
+                </GoldButton>
+              </div>
+            </Form>
+          )}
         </Formik>
       )}
     </div>
