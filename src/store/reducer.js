@@ -132,3 +132,51 @@ export const confirmMerchant = (confirm_file_id, callback) => (dispatch) => {
     }
   );
 };
+
+export const getHistoryList = (errorHandler, options) => (dispatch) => {
+  creatRequest("/operations/list", options, errorHandler).then((res) => {
+    if (Boolean(res)) {
+      dispatch(
+        setData({
+          historyList: res.data.list ? getArrFromObj(res.data.list) : false,
+        })
+      );
+    }
+  });
+};
+
+export const getStatusList = (errorHandler) => (dispatch) => {
+  creatRequest("/operations/options/status", undefined, errorHandler).then(
+    (res) => {
+      if (Boolean(res)) {
+        dispatch(
+          setData({ statusList: getArrFromObj(res.data.list, "withValue") })
+        );
+      }
+    }
+  );
+};
+
+export const getTypeList = (errorHandler) => (dispatch) => {
+  creatRequest("/operations/options/type", undefined, errorHandler).then(
+    (res) => {
+      if (Boolean(res)) {
+        dispatch(
+          setData({ typeList: getArrFromObj(res.data.list, "withValue") })
+        );
+      }
+    }
+  );
+};
+
+function getArrFromObj(obj, withValue) {
+  let arr = [];
+  for (let key in obj) {
+    if (withValue) {
+      arr.push({ value: key, name: obj[key].name });
+    } else {
+      arr.push(obj[key]);
+    }
+  }
+  return arr;
+}

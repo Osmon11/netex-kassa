@@ -32,7 +32,11 @@ import goust from "assets/goust-icon.svg";
 //     </div>
 //   ),
 // };
-import { creatRequest } from "../../store/reducer";
+import {
+  getStatusList,
+  getTypeList,
+  getHistoryList,
+} from "../../store/reducer";
 import { setAlert } from "store/actionCreators";
 
 export function OperationsHistory() {
@@ -40,17 +44,17 @@ export function OperationsHistory() {
   const dispatch = useDispatch();
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
+  const state = useSelector((store) => store.reducer);
   const merchants = useSelector((store) => store.merchants.merchants);
-  const [data, setData] = useState([]);
-  const [statusSelect, setStatus] = useState(null);
-  const [operationTypeSelect, setOperationType] = useState(null);
-  const [listOfOperations, setListOfOperations] = useState({
+  let t = new Date();
+  t.setDate(t.getDate() - 7);
+  const [options, setOptions] = useState({
     operation_type: 1,
-    date_from: "20.04.2021",
-    date_to: "21.04.2021",
+    date_from: t.toISOString().split("T")[0],
+    date_to: new Date().toISOString().split("T")[0],
     status: 2,
+    merchant_id: Boolean(merchants) ? merchants[0].merchant_id : "",
   });
-
   const errorHandler = useCallback(
     function (error) {
       if (Boolean(error)) {
@@ -59,94 +63,40 @@ export function OperationsHistory() {
     },
     [dispatch]
   );
-  useEffect(() => {
-    if (data.length === 0) {
-      creatRequest("/operations/list", undefined, errorHandler).then((res) => {
-        if (Boolean(res)) {
-          let list = res.data.list;
-          let arr = [];
-          for (let key in list) {
-            arr.push(list[key]);
-          }
-          setData(arr);
-        }
-      });
-    }
-    if (merchants && Boolean(listOfOperations.merchant_id)) {
-      setListOfOperations({
-        ...listOfOperations,
-        merchant_id: merchants[0].merchant_id,
-      });
-    }
-    if (!statusSelect) {
-      creatRequest("/operations/options/status", undefined, errorHandler).then(
-        (res) => {
-          if (Boolean(res)) {
-            let list = res.data.list;
-            let arr = [];
-            for (let key in list) {
-              arr.push({ value: key, name: list[key].name });
-            }
-            setStatus(arr);
-          }
-        }
-      );
-    }
-    if (!operationTypeSelect) {
-      creatRequest("/operations/options/type", undefined, errorHandler).then(
-        (res) => {
-          if (Boolean(res)) {
-            let list = res.data.list;
-            let arr = [];
-            for (let key in list) {
-              arr.push({ value: key, name: list[key].name });
-            }
-            setOperationType(arr);
-          }
-        }
-      );
-    }
-  }, [
-    statusSelect,
-    operationTypeSelect,
-    errorHandler,
-    data,
-    merchants,
-    listOfOperations,
-  ]);
 
   useEffect(() => {
-    if (listOfOperations)
-      creatRequest("/operations/list", listOfOperations, errorHandler).then(
-        (res) => {
-          if (Boolean(res)) {
-            console.log(res.data);
-          }
-        }
-      );
-  }, [listOfOperations, errorHandler]);
+    if (!state.statusList) {
+      dispatch(getHistoryList(errorHandler, options));
+      dispatch(getStatusList(errorHandler));
+      dispatch(getTypeList(errorHandler));
+    }
+  }, [state.statusList, dispatch, errorHandler, merchants, options]);
+  function filterChangeHandler() {
+    dispatch(getHistoryList(errorHandler, options));
+  }
   return (
     <>
-      {data.length > 0 ? (
+      {state.statusList ? (
         <Grid container>
           <Grid item xs={12} container spacing={6}>
             <Grid item xs={2}>
-              {operationTypeSelect && (
+              {state.typeList && (
                 <ThemeInput
-                  margin="dense"
-                  name="operationType"
+                  margin='dense'
+                  name='operationType'
                   select
-                  variant="outlined"
-                  value={listOfOperations.operation_type}
-                  onChange={(e) =>
-                    setListOfOperations({
-                      ...listOfOperations,
+                  variant='outlined'
+                  value={options.operation_type}
+                  onChange={(e) => {
+                    setOptions({
+                      ...options,
                       operation_type: e.target.value,
-                    })
-                  }
+                    });
+                    filterChangeHandler();
+                  }}
                   fullWidth
                 >
-                  {operationTypeSelect.map((type) => (
+                  {state.typeList.map((type) => (
                     <MenuItem
                       key={type.name}
                       value={type.value}
@@ -161,17 +111,18 @@ export function OperationsHistory() {
             </Grid>
             <Grid item xs={2}>
               <ThemeInput
-                margin="dense"
-                name="projects"
+                margin='dense'
+                name='projects'
                 select
-                variant="outlined"
-                value={listOfOperations.merchant_id}
-                onChange={(e) =>
-                  setListOfOperations({
-                    ...listOfOperations,
+                variant='outlined'
+                value={options.merchant_id}
+                onChange={(e) => {
+                  setOptions({
+                    ...options,
                     merchant_id: e.target.value,
-                  })
-                }
+                  });
+                  filterChangeHandler();
+                }}
                 fullWidth
               >
                 {merchants.map((merchant) => (
@@ -188,57 +139,62 @@ export function OperationsHistory() {
             </Grid>
             <Grid item xs={4}>
               <div
-                className="flex_box"
+                className='flex_box'
                 style={{ justifyContent: "space-between" }}
               >
                 <ThemeInput
-                  name="date_from"
-                  type="date"
-                  variant="outlined"
-                  margin="dense"
-                  value={listOfOperations.date_from}
-                  onChange={(e) =>
-                    setListOfOperations({
-                      ...listOfOperations,
+                  name='date_from'
+                  type='date'
+                  variant='outlined'
+                  margin='dense'
+                  value={options.date_from}
+                  onChange={(e) => {
+                    setOptions({
+                      ...options,
                       date_from: e.target.value,
-                    })
-                  }
+                    });
+                    filterChangeHandler();
+                  }}
+                  inputProps={{ max: new Date().toISOString().split("T")[0] }}
                 />
                 <div style={{ margin: "0 10px" }}>-</div>
                 <ThemeInput
-                  name="date_to"
-                  type="date"
-                  variant="outlined"
-                  margin="dense"
-                  value={listOfOperations.date_to}
-                  onChange={(e) =>
-                    setListOfOperations({
-                      ...listOfOperations,
+                  name='date_to'
+                  type='date'
+                  variant='outlined'
+                  margin='dense'
+                  value={options.date_to}
+                  onChange={(e) => {
+                    setOptions({
+                      ...options,
                       date_to: e.target.value,
-                    })
-                  }
+                    });
+                    filterChangeHandler();
+                  }}
+                  inputProps={{ max: new Date().toISOString().split("T")[0] }}
                 />
               </div>
             </Grid>
             <Grid item xs={2}></Grid>
             <Grid item xs={2}>
-              <div className="flex_box" style={{ justifyContent: "flex-end" }}>
-                {statusSelect && (
+              <div className='flex_box' style={{ justifyContent: "flex-end" }}>
+                {state.statusList && (
                   <ThemeInput
-                    margin="dense"
-                    name="status"
+                    margin='dense'
+                    name='status'
                     select
-                    variant="outlined"
-                    value={listOfOperations.status}
-                    onChange={(e) =>
-                      setListOfOperations({
-                        ...listOfOperations,
+                    variant='outlined'
+                    value={options.status}
+                    onChange={(e) => {
+                      setOptions({
+                        ...options,
                         status: e.target.value,
-                      })
-                    }
+                      });
+                      filterChangeHandler();
+                    }}
                     fullWidth
                   >
-                    {statusSelect.map((type) => (
+                    {state.statusList.map((type) => (
                       <MenuItem
                         key={type.name}
                         value={type.value}
@@ -264,69 +220,69 @@ export function OperationsHistory() {
             }}
           >
             <Grid item xs={2}>
-              <Typography variant="body2">Операция</Typography>
+              <Typography variant='body2'>Операция</Typography>
             </Grid>
             <Grid item xs={3}>
-              <Typography variant="body2">Дата</Typography>
+              <Typography variant='body2'>Дата</Typography>
             </Grid>
             <Grid item xs={2}>
-              <Typography variant="body2">Приход</Typography>
+              <Typography variant='body2'>Приход</Typography>
             </Grid>
             <Grid item xs={2}>
-              <Typography variant="body2" style={{ textAlign: "center" }}>
+              <Typography variant='body2' style={{ textAlign: "center" }}>
                 Расход
               </Typography>
             </Grid>
             <Grid item xs={1}>
-              <Typography variant="body2" style={{ textAlign: "center" }}>
+              <Typography variant='body2' style={{ textAlign: "center" }}>
                 Валюта
               </Typography>
             </Grid>
             <Grid item xs={2}>
-              <Typography variant="body2" style={{ textAlign: "center" }}>
+              <Typography variant='body2' style={{ textAlign: "center" }}>
                 Статус
               </Typography>
             </Grid>
           </Grid>
-          {data ? (
-            data.map((obj) => {
+          {state.historyList ? (
+            state.historyList.map((obj) => {
               const statusImg = [
                 null,
                 <img
                   src={pending}
                   style={{ width: 24 }}
                   title={obj.status.name}
-                  alt=""
+                  alt=''
                 />,
                 <img
                   src={success}
                   style={{ width: 24 }}
                   title={obj.status.name}
-                  alt=""
+                  alt=''
                 />,
                 <img
                   src={fail}
                   style={{ width: 24 }}
                   title={obj.status.name}
-                  alt=""
+                  alt=''
                 />,
                 <img
                   src={fail}
                   style={{ width: 24 }}
                   title={obj.status.name}
-                  alt=""
+                  alt=''
                 />,
                 <img
                   src={warning}
                   style={{ width: 24 }}
                   title={obj.status.name}
-                  alt=""
+                  alt=''
                 />,
                 <img
                   src={success}
                   style={{ width: 24 }}
                   title={obj.status.name}
-                  alt=""
+                  alt=''
                 />,
               ];
               return (
@@ -341,23 +297,23 @@ export function OperationsHistory() {
                   key={obj.order_id + obj.date}
                 >
                   <Grid item xs={2}>
-                    <Typography variant="body2">
+                    <Typography variant='body2'>
                       {obj.operation_type.name}
                     </Typography>
                   </Grid>
                   <Grid item xs={3}>
-                    <Typography variant="body2">{obj.date}</Typography>
+                    <Typography variant='body2'>{obj.date}</Typography>
                   </Grid>
                   <Grid item xs={2}>
-                    <Typography variant="body2">{obj.debit}</Typography>
+                    <Typography variant='body2'>{obj.debit}</Typography>
                   </Grid>
                   <Grid item xs={2}>
-                    <Typography variant="body2" style={{ textAlign: "center" }}>
+                    <Typography variant='body2' style={{ textAlign: "center" }}>
                       {obj.credit}
                     </Typography>
                   </Grid>
                   <Grid item xs={1}>
-                    <Typography variant="body2" style={{ textAlign: "center" }}>
+                    <Typography variant='body2' style={{ textAlign: "center" }}>
                       {obj.currency}
                     </Typography>
                   </Grid>
@@ -369,21 +325,23 @@ export function OperationsHistory() {
             })
           ) : (
             <Grid item xs={12}>
-              <div className="flex_box">
-                <CircularProgress />
+              <div className='flex_box'>
+                <div style={{ textAlign: "center", marginTop: 100 }}>
+                  <img src={goust} alt='' />
+                  <Typography variant='h3' style={{ color: "#3E414E" }}>
+                    История операций не найдено
+                  </Typography>
+                </div>
               </div>
             </Grid>
           )}
         </Grid>
       ) : (
-        <div className="flex_box">
-          <div style={{ textAlign: "center", marginTop: 100 }}>
-            <img src={goust} alt="" />
-            <Typography variant="h3" style={{ color: "#3E414E" }}>
-              Пока здесь пусто
-            </Typography>
+        <Grid item xs={12}>
+          <div className='flex_box'>
+            <CircularProgress />
           </div>
-        </div>
+        </Grid>
       )}
     </>
   );
