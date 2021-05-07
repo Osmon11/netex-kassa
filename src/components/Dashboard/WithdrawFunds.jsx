@@ -1,4 +1,7 @@
 import {
+  Button,
+  CircularProgress,
+  InputAdornment,
   makeStyles,
   MenuItem,
   Step,
@@ -10,27 +13,70 @@ import {
 import clsx from "clsx";
 import { ThemeInput } from "components/Auth/auth";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { GoldButton } from "shared/Buttons/buttons";
 import { Success } from "./CreateProject";
 import goust from "assets/goust-icon.svg";
+import { cashOut } from "store/reducer";
+import { setAlert } from "store/actionCreators";
 
 export function WithdrawFunds() {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const projects = useSelector((store) => store.merchants.merchants);
   const [project, setProject] = React.useState(
     projects ? projects[0].name : ""
   );
+  const [sum, setSum] = React.useState(0);
+  const [err, setErr] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
   const steps = ["Создать", "Потвердить", "Успешно"];
 
+  React.useEffect(() => {
+    if (
+      projects.filter((merchant) => merchant.name === project)[0].balance < sum
+    ) {
+      setErr("Введенная сумма слишком большая");
+    }
+  }, [projects, project, sum]);
+
   const handleNext = () => {
-    let newSkipped = skipped;
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
+    if (!err && sum > 0) {
+      let newSkipped = skipped;
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setSkipped(newSkipped);
+    } else {
+      setErr("Введите сумму");
+    }
   };
+  function sendRequest() {
+    setLoading(true);
+    dispatch(
+      cashOut(
+        {
+          merchant_id: projects.filter(
+            (merchant) => merchant.name === project
+          )[0].merchant_id,
+          sum,
+        },
+        function (error) {
+          setLoading(false);
+          if (Boolean(error)) {
+            dispatch(
+              setAlert({ open: true, severity: "error", message: error })
+            );
+          } else {
+            let newSkipped = skipped;
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setSkipped(newSkipped);
+          }
+        }
+      )
+    );
+  }
   return (
     <>
       {projects ? (
@@ -71,7 +117,6 @@ export function WithdrawFunds() {
                     style={{ justifyContent: "flex-start", marginBottom: 20 }}
                   >
                     <ThemeInput
-                      margin="dense"
                       name="username"
                       select
                       disabled={activeStep > 0}
@@ -103,60 +148,55 @@ export function WithdrawFunds() {
                       USD
                     </Typography>
                   </div>
-                  {/* <Typography variant="body2" style={{ marginTop: 15 }}>
-          Выберите кошелек
-        </Typography>
-        <ThemeInput
-          margin="dense"
-          name="username"
-          select
-          variant="outlined"
-          value={wallet}
-          onChange={(e) => setWallet(e.target.value)}
-          style={{ marginBottom: 20, width: 334 }}
-        >
-          {wallets.map((value) => (
-            <MenuItem
-              key={value}
-              value={value}
-              className={classes.menuItem}
-              classes={{ selected: classes.selected }}
-            >
-              {value}
-            </MenuItem>
-          ))}
-        </ThemeInput>
-        <Typography variant="body2" style={{ marginTop: 15 }}>
-          Адрес
-        </Typography>
-        <ThemeInput
-          margin="dense"
-          placeholder="Введите адрес"
-          name="adress"
-          type="text"
-          variant="outlined"
-          style={{ width: 334 }}
-        /> */}
                   <Typography variant="body2">Введите сумму (USD)</Typography>
                   <ThemeInput
-                    margin="dense"
                     placeholder="Cумма"
                     name="btcamount"
                     type="number"
                     variant="outlined"
+                    error={Boolean(err)}
+                    helperText={err}
                     disabled={activeStep > 0}
+                    onChange={(e) => {
+                      setErr("");
+                      setSum(e.target.value);
+                    }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {loading && <CircularProgress />}
+                        </InputAdornment>
+                      ),
+                    }}
                     style={{ width: 334 }}
                   />
                   <br />
-                  <div className="flex_box">
+                  <div
+                    className="flex_box"
+                    style={{
+                      marginTop: 30,
+                      justifyContent:
+                        activeStep > 0 ? "space-between" : "center",
+                    }}
+                  >
+                    {activeStep > 0 && (
+                      <Button
+                        className={classes.customBtn}
+                        onClick={() =>
+                          setActiveStep((prevActiveStep) => prevActiveStep - 1)
+                        }
+                        variant="outlined"
+                      >
+                        Назад
+                      </Button>
+                    )}
                     <GoldButton
                       style={{
-                        width: "50%",
+                        width: "40%",
                         minHeight: 50,
-                        marginTop: 30,
                         marginRight: 50,
                       }}
-                      onClick={handleNext}
+                      onClick={activeStep > 0 ? sendRequest : handleNext}
                     >
                       {activeStep > 0 ? "Потвердить" : "Далее"}
                     </GoldButton>
@@ -215,6 +255,17 @@ const useStyles = makeStyles({
   selected: {
     "&:hover": {
       color: "#ff9900",
+    },
+  },
+  customBtn: {
+    width: "40%",
+    minHeight: 50,
+    fontSize: 16,
+    color: "rgba(255, 255, 255, 0.3)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    "&:hover": {
+      color: "#fff",
+      borderColor: "#fff",
     },
   },
 });

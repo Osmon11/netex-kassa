@@ -91,10 +91,7 @@ export const addMerchant = (data, callback) => (dispatch) => {
 };
 
 export const editMerchant = (data, id, callback) => (dispatch) => {
-  creatRequest(`/account/edit/${id}`, data).then((res) => {
-    callback();
-    console.log(res.data);
-  });
+  creatRequest(`/account/edit/${id}`, data, callback).then((res) => {});
 };
 
 export const viewMerchant = (id, callback) => (dispatch) => {
@@ -167,6 +164,15 @@ export const getTypeList = (errorHandler) => (dispatch) => {
       }
     }
   );
+};
+
+export const cashOut = (data, callback) => (dispatch) => {
+  creatRequest("/cashout/send-request", data, callback).then((res) => {
+    if (Boolean(res)) {
+      callback();
+      console.log(res.data);
+    }
+  });
 };
 
 function getArrFromObj(obj, withValue) {

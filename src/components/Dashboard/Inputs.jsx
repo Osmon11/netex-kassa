@@ -18,7 +18,6 @@ export function ValidatedInput({ children, style, ...props }) {
       {...props}
       error={Boolean(meta.touched && meta.error)}
       helperText={meta.error ? <ErrorMessage name={field.name} /> : ""}
-      margin="dense"
       variant="outlined"
       style={{ marginBottom: 20, width: 334, ...style }}
     >

@@ -11,16 +11,16 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from '@material-ui/core'
-import React, { useEffect } from 'react'
-import './style.css'
-import Logo from '../../shared/Logo/logo'
-import ava from 'assets/avatar.png'
-import goust from 'assets/goust-icon.svg'
-import success from 'assets/success.svg'
-import fail from 'assets/fail.svg'
-import settings from 'assets/settings.svg'
-import trash from 'assets/trash.svg'
+} from "@material-ui/core";
+import React, { useEffect } from "react";
+import "./style.css";
+import Logo from "../../shared/Logo/logo";
+import ava from "assets/avatar.png";
+import goust from "assets/goust-icon.svg";
+import success from "assets/success.svg";
+import fail from "assets/fail.svg";
+import settings from "assets/settings.svg";
+import trash from "assets/trash.svg";
 import {
   CreateProject,
   ProjectSettings,
@@ -29,55 +29,61 @@ import {
   GetNewAdress,
   ConfirmDeleteProject,
   OperationsHistory,
-} from 'components/Dashboard'
-import { Link, NavLink, Route, Switch, useHistory } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { handleGetMerchantsAction } from 'store/actions/merchants'
-import { getProfile } from 'store/actions/profile'
-import { logout } from 'store/actions/sign'
-import { GoldButton } from 'shared/Buttons/buttons'
+} from "components/Dashboard";
+import { Link, NavLink, Route, Switch, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { handleGetMerchantsAction } from "store/actions/merchants";
+import { getProfile } from "store/actions/profile";
+import { logout } from "store/actions/sign";
+import { GoldButton } from "shared/Buttons/buttons";
+import { AppAxios } from "axios/axios";
+import { getMerchants } from "store/reducer";
 
-let drawerWidth = 280
+let drawerWidth = 280;
 
 export function Admin() {
   const { state, merchants } = useSelector((store) => ({
     state: store.reducer,
     merchants: store.merchants,
-  }))
-  const classes = useStyles()
-  const theme = useTheme()
-  const md = useMediaQuery(theme.breakpoints.down('md'))
+  }));
+  const classes = useStyles();
+  const theme = useTheme();
+  const md = useMediaQuery(theme.breakpoints.down("md"));
   // const sm = useMediaQuery(theme.breakpoints.down("sm"));
-  const xs = useMediaQuery(theme.breakpoints.down('xs'))
-  const dispatch = useDispatch()
-  const history = useHistory()
+  const xs = useMediaQuery(theme.breakpoints.down("xs"));
+  const dispatch = useDispatch();
+  const history = useHistory();
   const { firstname, lastname, avatar } = state.profileInfo
     ? state.profileInfo
-    : { firstname: 'Not', lastname: 'Found', avatar: ava }
+    : { firstname: "Not", lastname: "Found", avatar: ava };
 
   useEffect(() => {
     if (!state.profileInfo) {
-      dispatch(getProfile())
-      dispatch(handleGetMerchantsAction())
+      dispatch(getProfile());
+      dispatch(handleGetMerchantsAction());
     }
     // if (!merchants.merchants.length > 0) {
     //   dispatch(handleGetMerchantsAction())
     // }
-  }, [state.profileInfo, merchants.merchants, dispatch])
+  }, [state.profileInfo, merchants.merchants, dispatch]);
 
   function logoutHandler() {
     dispatch(
       logout(() => {
-        history.push('/')
-      }),
-    )
+        history.push("/");
+        dispatch({
+          type: "GET_MERCHANTS",
+          merchants: [],
+        });
+      })
+    );
   }
   return (
     <div className={classes.root}>
       <AppBar position="absolute" className={classes.appBar}>
-        <Toolbar style={{ paddingLeft: '15%' }}>
+        <Toolbar style={{ paddingLeft: "15%" }}>
           <div className="flex_box">
-            <span className="subtitle" style={{ cursor: 'pointer' }}>
+            <span className="subtitle" style={{ cursor: "pointer" }}>
               {`${firstname} ${lastname}`}
             </span>
             <IconButton style={{ marginLeft: 20 }}>
@@ -105,7 +111,7 @@ export function Admin() {
         <NavLink to="/" className="nav_link">
           <Logo />
         </NavLink>
-        <p className="subtitle" style={{ margin: '30px 0 0' }}>
+        <p className="subtitle" style={{ margin: "30px 0 0" }}>
           <NavLink exact to="/dashboard" className="nav_link">
             Проекты
           </NavLink>
@@ -136,17 +142,17 @@ export function Admin() {
           </li>
         </ul>
 
-        <p className="subtitle" style={{ margin: '8px 0' }}>
+        <p className="subtitle" style={{ margin: "8px 0" }}>
           <NavLink to="/dashboard/operations" className="nav_link">
             История операций
           </NavLink>
         </p>
-        <p className="subtitle" style={{ margin: '8px 0' }}>
+        <p className="subtitle" style={{ margin: "8px 0" }}>
           <NavLink to="/dashboard/withdrawal-of-funds" className="nav_link">
             Вывод средств
           </NavLink>
         </p>
-        <p className="subtitle" style={{ margin: '8px 0' }}>
+        <p className="subtitle" style={{ margin: "8px 0" }}>
           <NavLink to="/dashboard/settings" className="nav_link">
             Настройки
           </NavLink>
@@ -200,25 +206,38 @@ export function Admin() {
         </MenuItem>
       </NavLink> */}
     </div>
-  )
+  );
 }
 
 function DefaultComponent() {
-  const merchants = useSelector((store) => store.merchants.merchants)
+  const [merchants, setMerchants] = React.useState(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!merchants) {
+      AppAxios.get("/account/list")
+        .then((res) => {
+          setMerchants(res.data.list);
+        })
+        .catch(() => {
+          dispatch(dispatch({ type: "GET_MERCHANTS_FAILED" }));
+        });
+    }
+  }, [merchants, dispatch]);
 
   return (
     <>
-      <Typography variant="h4" style={{ color: '#fff' }}>
+      <Typography variant="h4" style={{ color: "#fff" }}>
         Мои проекты
       </Typography>
       {Boolean(merchants) ? (
-        <div style={{ margin: '40px 0' }}>
+        <div style={{ margin: "40px 0" }}>
           <Grid
             item
             xs={12}
             container
             style={{
-              borderBottom: '1px solid rgba(255, 255, 255, 0.5)',
+              borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
               padding: 15,
             }}
           >
@@ -230,7 +249,7 @@ function DefaultComponent() {
             <Grid item xs={2}>
               <Typography
                 variant="body2"
-                style={{ textAlign: 'center', fontWeight: 700 }}
+                style={{ textAlign: "center", fontWeight: 700 }}
               >
                 Баланс
               </Typography>
@@ -238,7 +257,7 @@ function DefaultComponent() {
             <Grid item xs={2}>
               <Typography
                 variant="body2"
-                style={{ textAlign: 'center', fontWeight: 700 }}
+                style={{ textAlign: "center", fontWeight: 700 }}
               >
                 ID
               </Typography>
@@ -246,7 +265,7 @@ function DefaultComponent() {
             <Grid item xs={2}>
               <Typography
                 variant="body2"
-                style={{ textAlign: 'center', fontWeight: 700 }}
+                style={{ textAlign: "center", fontWeight: 700 }}
               >
                 Потвержден
               </Typography>
@@ -254,7 +273,7 @@ function DefaultComponent() {
             <Grid item xs={2}>
               <Typography
                 variant="body2"
-                style={{ textAlign: 'center', fontWeight: 700 }}
+                style={{ textAlign: "center", fontWeight: 700 }}
               >
                 Модерация
               </Typography>
@@ -269,8 +288,8 @@ function DefaultComponent() {
               xs={12}
               container
               style={{
-                borderBottom: '1px solid rgba(255, 255, 255, 0.5)',
-                padding: '25px 15px',
+                borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+                padding: "25px 15px",
               }}
               key={merchant.name}
             >
@@ -278,12 +297,12 @@ function DefaultComponent() {
                 <Typography variant="body2">{merchant.name}</Typography>
               </Grid>
               <Grid item xs={2}>
-                <Typography variant="body2" style={{ textAlign: 'center' }}>
+                <Typography variant="body2" style={{ textAlign: "center" }}>
                   {merchant.balance}
                 </Typography>
               </Grid>
               <Grid item xs={2}>
-                <Typography variant="body2" style={{ textAlign: 'center' }}>
+                <Typography variant="body2" style={{ textAlign: "center" }}>
                   {merchant.merchant_id}
                 </Typography>
               </Grid>
@@ -291,7 +310,7 @@ function DefaultComponent() {
                 <div className="flex_box">
                   <img
                     src={
-                      merchant.status.slug === 'not-confirmed' ? fail : success
+                      merchant.status.slug === "not-confirmed" ? fail : success
                     }
                     style={{ width: 24 }}
                     alt=""
@@ -306,7 +325,7 @@ function DefaultComponent() {
               <Grid item xs={1}>
                 <div className="flex_box">
                   <NavLink
-                    to={`/dashboard/project/${merchant.name}/`}
+                    to={`/dashboard/project/${merchant.merchant_id}/`}
                     style={{ marginRight: 20 }}
                   >
                     <img src={settings} alt="" />
@@ -321,14 +340,14 @@ function DefaultComponent() {
         </div>
       ) : (
         <div className="flex_box">
-          <div style={{ textAlign: 'center', marginTop: 100 }}>
+          <div style={{ textAlign: "center", marginTop: 100 }}>
             <img src={goust} alt="" />
-            <Typography variant="h3" style={{ color: '#3E414E' }}>
+            <Typography variant="h3" style={{ color: "#3E414E" }}>
               Пока здесь пусто
             </Typography>
             <NavLink
               to="/dashboard/create-project"
-              style={{ textDecoration: 'none' }}
+              style={{ textDecoration: "none" }}
             >
               <GoldButton style={{ marginTop: 50 }}>Начать работу</GoldButton>
             </NavLink>
@@ -336,58 +355,58 @@ function DefaultComponent() {
         </div>
       )}
     </>
-  )
+  );
 }
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    height: '100vh',
-    overflow: 'hidden',
-    width: '100%',
+    display: "flex",
+    height: "100vh",
+    overflow: "hidden",
+    width: "100%",
   },
   dashboardContent_root: {
     marginTop: 100,
-    width: '100%',
-    maxWidth: '100%',
-    display: 'flex',
+    width: "100%",
+    maxWidth: "100%",
+    display: "flex",
     paddingLeft: 60,
     paddingBottom: 50,
-    flex: '1 1 auto',
-    overflow: 'hidden',
-    [theme.breakpoints.down('md')]: {
+    flex: "1 1 auto",
+    overflow: "hidden",
+    [theme.breakpoints.down("md")]: {
       paddingLeft: 30,
     },
-    [theme.breakpoints.down('lg')]: {
+    [theme.breakpoints.down("lg")]: {
       paddingLeft: 60,
     },
   },
   dashboardContent: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
+    width: "100%",
+    height: "100%",
+    display: "flex",
     outline: 0,
     zIndex: 1200,
-    overflowY: 'auto',
-    flexDirection: 'column',
-    WebkitOverflowScrolling: 'touch',
+    overflowY: "auto",
+    flexDirection: "column",
+    WebkitOverflowScrolling: "touch",
     paddingRight: 60,
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down("md")]: {
       paddingRight: 30,
     },
-    [theme.breakpoints.down('lg')]: {
+    [theme.breakpoints.down("lg")]: {
       paddingRight: 60,
     },
   },
   paper: {
-    backgroundColor: '#1a1b20',
+    backgroundColor: "#1a1b20",
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    flexDirection: 'row-reverse',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.5);',
-    backgroundColor: 'transparent',
+    flexDirection: "row-reverse",
+    borderBottom: "1px solid rgba(255, 255, 255, 0.5);",
+    backgroundColor: "transparent",
   },
   drawer: {
     width: drawerWidth,
@@ -395,29 +414,29 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    background: 'linear-gradient(270deg, #2A2B31 0%, #18191D 100%), #C4C4C4',
+    background: "linear-gradient(270deg, #2A2B31 0%, #18191D 100%), #C4C4C4",
     padding: 20,
   },
   customButton: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
     fontWeight: 300,
-    border: '1px solid #fff',
+    border: "1px solid #fff",
     borderRadius: 8,
   },
   createProject: {
     fontSize: 16,
-    cursor: 'pointer',
-    color: '#fff',
-    '&:hover': {
-      color: '#ff9900',
+    cursor: "pointer",
+    color: "#fff",
+    "&:hover": {
+      color: "#ff9900",
     },
   },
   menuItem: {
-    color: '#ff9900',
-    '&:hover': {
-      backgroundColor: '#ff9900',
-      color: '#fff',
+    color: "#ff9900",
+    "&:hover": {
+      backgroundColor: "#ff9900",
+      color: "#fff",
     },
   },
-}))
+}));

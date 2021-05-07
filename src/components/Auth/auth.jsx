@@ -84,7 +84,7 @@ function SingIn({ sm, setAlert, handleClose, setLogin }) {
   const [remember, setRemember] = useState(false);
   const [values, setValues] = useState({
     phone: "0504543444",
-    password: "YJpixWtK",
+    password: "tilekkg-1",
   });
   const validate = Yup.object({
     phone: Yup.string()
@@ -282,7 +282,6 @@ function SingUp({ sm, setAlert, setLogin }) {
             <ValidatedInput
               placeholder="Код активации"
               name="code"
-              type="number"
               style={{ width: "100%", marginBottom: 0 }}
             />
             <GoldButton
@@ -304,7 +303,7 @@ function SingUp({ sm, setAlert, setLogin }) {
               }}
               fullWidth
             >
-              Отправить повторно{" "}
+              Отправить повторно
               {timeleft > 0 && `через ${minutes}мин ${seconds}сек`}
             </GoldButton>
             <GoldButton
@@ -387,6 +386,7 @@ function SingUp({ sm, setAlert, setLogin }) {
               placeholder="Введите пароль"
               name="password"
               type="password"
+              style={{ marginBottom: 16 }}
             />
             <InputComponent
               placeholder="Повторите пароль"
@@ -408,7 +408,6 @@ const InputComponent = ({ ...props }) => {
 
   return (
     <ThemeInput
-      margin="dense"
       {...field}
       {...props}
       error={Boolean(meta.touched && meta.error)}

@@ -3,6 +3,8 @@ import {
   CircularProgress,
   Grid,
   InputAdornment,
+  makeStyles,
+  MenuItem,
   Tooltip,
   Typography,
   useMediaQuery,
@@ -11,14 +13,26 @@ import {
 } from "@material-ui/core";
 import { ToggleButtonGroup } from "@material-ui/lab";
 import { ThemeInput } from "components/Auth/auth";
-import React, { useEffect, useState } from "react";
-import searchIcon from "assets/search-icon.png";
+import React, { useCallback, useEffect, useState } from "react";
+import goust from "assets/goust-icon.svg";
+import success from "../../assets/success.svg";
+import fail from "../../assets/fail.svg";
+import warning from "../../assets/warning.svg";
+import pending from "../../assets/pending.svg";
 import copyIcon from "assets/copy-icon.png";
 import { GoldToggleButton } from "shared/Buttons/buttons";
 import { GoldButton } from "shared/Buttons/buttons";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useDispatch } from "react-redux";
-import { viewMerchant, confirmMerchant, baseURL } from "store/reducer";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  viewMerchant,
+  confirmMerchant,
+  baseURL,
+  getHistoryList,
+  getStatusList,
+  getTypeList,
+  editMerchant,
+} from "store/reducer";
 import { ValidatedInput } from "./Inputs";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -32,6 +46,7 @@ const settingsFormValidation = Yup.object({
 });
 
 export function ProjectSettings({ match }) {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const theme = useTheme();
   // const md = useMediaQuery(theme.breakpoints.down("md"));
@@ -39,6 +54,25 @@ export function ProjectSettings({ match }) {
   const [tab, setTab] = useState("Инфо");
   const [tooltip, setTooltip] = useState({ a: false, b: false });
   const [currentMerchant, setCurrentMerchant] = useState(null);
+  let t = new Date();
+  t.setDate(t.getDate() - 7);
+  const [options, setOptions] = useState({
+    operation_type: 1,
+    date_from: t.toISOString().split("T")[0],
+    date_to: new Date().toISOString().split("T")[0],
+    status: 2,
+    merchant_id: match.params.id,
+  });
+  const state = useSelector((store) => store.reducer);
+
+  const errorHandler = useCallback(
+    function (error) {
+      if (Boolean(error)) {
+        dispatch(setAlert({ open: true, severity: "error", message: error }));
+      }
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     if (!currentMerchant || currentMerchant.merchant_id !== match.params.id) {
@@ -49,6 +83,18 @@ export function ProjectSettings({ match }) {
       );
     }
   }, [currentMerchant, match.params.id, dispatch]);
+  useEffect(() => {
+    if (!state.statusList) {
+      dispatch(getHistoryList(errorHandler, options));
+      dispatch(getStatusList(errorHandler));
+      dispatch(getTypeList(errorHandler));
+    }
+  }, [state.statusList, dispatch, errorHandler, options]);
+
+  function filterChangeHandler(newOptions) {
+    setOptions(newOptions);
+    dispatch(getHistoryList(errorHandler, newOptions));
+  }
 
   function confirmMerchantHandler() {
     dispatch(
@@ -61,6 +107,9 @@ export function ProjectSettings({ match }) {
   }
   function closeTooltip() {
     setTimeout(() => setTooltip({ a: false, b: false }), 1500);
+  }
+  function settingSubmit(fields) {
+    dispatch(editMerchant(fields, match.params.id, errorHandler));
   }
   return (
     <>
@@ -107,42 +156,240 @@ export function ProjectSettings({ match }) {
                 container
                 style={{
                   borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-                  marginTop: 40,
+                  marginTop: 20,
                   padding: 15,
                 }}
               >
-                <Grid item xs={3}>
-                  <Typography variant="body2">Дата</Typography>
+                <Grid item xs={12} container spacing={6}>
+                  <Grid item xs={3} lg={3}>
+                    {state.typeList && (
+                      <ThemeInput
+                        margin="dense"
+                        name="operationType"
+                        select
+                        variant="outlined"
+                        value={options.operation_type}
+                        onChange={(e) => {
+                          filterChangeHandler({
+                            ...options,
+                            operation_type: e.target.value,
+                          });
+                        }}
+                        fullWidth
+                      >
+                        {state.typeList.map((type) => (
+                          <MenuItem
+                            key={type.name}
+                            value={type.value}
+                            className={classes.menuItem}
+                            classes={{ selected: classes.selected }}
+                          >
+                            {type.name}
+                          </MenuItem>
+                        ))}
+                      </ThemeInput>
+                    )}
+                  </Grid>
+                  <Grid item xs={6} lg={4}>
+                    <div
+                      className="flex_box"
+                      style={{ justifyContent: "space-between" }}
+                    >
+                      <ThemeInput
+                        name="date_from"
+                        type="date"
+                        variant="outlined"
+                        margin="dense"
+                        value={options.date_from}
+                        onChange={(e) => {
+                          filterChangeHandler({
+                            ...options,
+                            date_from: e.target.value,
+                          });
+                        }}
+                        inputProps={{
+                          max: new Date().toISOString().split("T")[0],
+                        }}
+                      />
+                      <div style={{ margin: "0 10px" }}>-</div>
+                      <ThemeInput
+                        name="date_to"
+                        type="date"
+                        variant="outlined"
+                        margin="dense"
+                        value={options.date_to}
+                        onChange={(e) => {
+                          filterChangeHandler({
+                            ...options,
+                            date_to: e.target.value,
+                          });
+                        }}
+                        inputProps={{
+                          max: new Date().toISOString().split("T")[0],
+                        }}
+                      />
+                    </div>
+                  </Grid>
+                  <Grid item xs={2}></Grid>
+                  <Grid item xs={3}>
+                    <div
+                      className="flex_box"
+                      style={{ justifyContent: "flex-end" }}
+                    >
+                      {state.statusList && (
+                        <ThemeInput
+                          margin="dense"
+                          name="status"
+                          select
+                          variant="outlined"
+                          value={options.status}
+                          onChange={(e) => {
+                            filterChangeHandler({
+                              ...options,
+                              status: e.target.value,
+                            });
+                          }}
+                          fullWidth
+                        >
+                          {state.statusList.map((type) => (
+                            <MenuItem
+                              key={type.name}
+                              value={type.value}
+                              className={classes.menuItem}
+                              classes={{ selected: classes.selected }}
+                            >
+                              {type.name}
+                            </MenuItem>
+                          ))}
+                        </ThemeInput>
+                      )}
+                    </div>
+                  </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="body2">Адрес</Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography variant="body2">Сумма</Typography>
+                <Grid item xs={12} container style={{ marginTop: 25 }}>
+                  <Grid item xs={2}>
+                    <Typography variant="body2">Операция</Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography variant="body2">Дата</Typography>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Typography variant="body2">Приход</Typography>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Typography variant="body2" style={{ textAlign: "center" }}>
+                      Расход
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={1}>
+                    <Typography variant="body2" style={{ textAlign: "center" }}>
+                      Валюта
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Typography variant="body2" style={{ textAlign: "center" }}>
+                      Статус
+                    </Typography>
+                  </Grid>
                 </Grid>
               </Grid>
-              {data.map((obj) => (
-                <Grid
-                  item
-                  xs={12}
-                  container
-                  style={{
-                    borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-                    padding: "25px 15px",
-                  }}
-                  key={obj.adress + obj.date}
-                >
-                  <Grid item xs={3}>
-                    <Typography variant="body2">{obj.date}</Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography variant="body2">{obj.adress}</Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography variant="body2">{obj.sum}</Typography>
-                  </Grid>
+              {state.historyList ? (
+                state.historyList.map((obj) => {
+                  const statusImg = [
+                    null,
+                    <img
+                      src={pending}
+                      style={{ width: 24 }}
+                      title={obj.status.name}
+                      alt=""
+                    />,
+                    <img
+                      src={success}
+                      style={{ width: 24 }}
+                      title={obj.status.name}
+                      alt=""
+                    />,
+                    <img
+                      src={fail}
+                      style={{ width: 24 }}
+                      title={obj.status.name}
+                      alt=""
+                    />,
+                    <img
+                      src={fail}
+                      style={{ width: 24 }}
+                      title={obj.status.name}
+                      alt=""
+                    />,
+                    <img
+                      src={warning}
+                      style={{ width: 24 }}
+                      title={obj.status.name}
+                      alt=""
+                    />,
+                    <img
+                      src={success}
+                      style={{ width: 24 }}
+                      title={obj.status.name}
+                      alt=""
+                    />,
+                  ];
+                  return (
+                    <Grid
+                      item
+                      xs={12}
+                      container
+                      style={{
+                        borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+                        padding: "25px 15px",
+                      }}
+                      key={obj.order_id + obj.date}
+                    >
+                      <Grid item xs={2}>
+                        <Typography variant="body2">
+                          {obj.operation_type.name}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={3}>
+                        <Typography variant="body2">{obj.date}</Typography>
+                      </Grid>
+                      <Grid item xs={2}>
+                        <Typography variant="body2">{obj.debit}</Typography>
+                      </Grid>
+                      <Grid item xs={2}>
+                        <Typography
+                          variant="body2"
+                          style={{ textAlign: "center" }}
+                        >
+                          {Boolean(obj.credit) ? obj.credit : "---"}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={1}>
+                        <Typography
+                          variant="body2"
+                          style={{ textAlign: "center" }}
+                        >
+                          {obj.currency}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={2} style={{ textAlign: "center" }}>
+                        {statusImg[obj.status.value]}
+                      </Grid>
+                    </Grid>
+                  );
+                })
+              ) : (
+                <Grid item xs={12}>
+                  <div className="flex_box">
+                    <div style={{ textAlign: "center", marginTop: 100 }}>
+                      <img src={goust} alt="" />
+                      <Typography variant="h3" style={{ color: "#3E414E" }}>
+                        Ничего не найдено
+                      </Typography>
+                    </div>
+                  </div>
                 </Grid>
-              ))}
+              )}
             </>
           )}
 
@@ -201,6 +448,7 @@ export function ProjectSettings({ match }) {
               <Formik
                 initialValues={{ ...currentMerchant.params }}
                 validationSchema={settingsFormValidation}
+                onSubmit={settingSubmit}
               >
                 <Form>
                   <div
@@ -248,6 +496,9 @@ export function ProjectSettings({ match }) {
                       placeholder={`Например,`}
                     />
                   </div>
+                  <GoldButton type="submit" style={{ width: 175 }}>
+                    Сохранить
+                  </GoldButton>
                 </Form>
               </Formik>
               <p className="subtitle">Удалить кошелек</p>
@@ -289,7 +540,7 @@ export function ProjectSettings({ match }) {
                 <span
                   style={{ color: "#ff9900", marginLeft: 15, fontWeight: 450 }}
                 >
-                  1665870464
+                  {match.params.id}
                 </span>
               </Typography>
 
@@ -322,7 +573,7 @@ export function ProjectSettings({ match }) {
                   name="key"
                   type="text"
                   style={{ width: "100%" }}
-                  value="GykVo9jwGElNwJkcY7V8drVEgGLU3oVE"
+                  value={currentMerchant.params.secret_key}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -339,7 +590,7 @@ export function ProjectSettings({ match }) {
                           TransitionComponent={Zoom}
                         >
                           <CopyToClipboard
-                            text="GykVo9jwGElNwJkcY7V8drVEgGLU3oVE"
+                            text={currentMerchant.params.secret_key}
                             onCopy={() => {
                               setTooltip({ ...tooltip, a: true });
                               closeTooltip();
@@ -375,7 +626,7 @@ export function ProjectSettings({ match }) {
                   name="token"
                   type="text"
                   style={{ width: "100%" }}
-                  value="phnBr6CPBuemFBPgzc2qN1zQEVbw4yp1Qf6OIHLwNRg55Ho39qFYMoUWjmDtY6ZC"
+                  value={currentMerchant.params.api_key}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -392,7 +643,7 @@ export function ProjectSettings({ match }) {
                           TransitionComponent={Zoom}
                         >
                           <CopyToClipboard
-                            text="phnBr6CPBuemFBPgzc2qN1zQEVbw4yp1Qf6OIHLwNRg55Ho39qFYMoUWjmDtY6ZC"
+                            text={currentMerchant.params.api_key}
                             onCopy={() => {
                               setTooltip({ ...tooltip, b: true });
                               closeTooltip();
@@ -430,15 +681,17 @@ export function ProjectSettings({ match }) {
   );
 }
 
-const data = [
-  {
-    date: "2021-01-13 18:37:46",
-    adress: "https://my.biwse.com",
-    sum: "0.000025172 BTC",
+const useStyles = makeStyles((theme) => ({
+  menuItem: {
+    color: "#ff9900",
+    "&:hover": {
+      backgroundColor: "#ff9900",
+      color: "#fff",
+    },
   },
-  {
-    date: "2021-01-07 10:21:51",
-    adress: "https://my.biwse.com",
-    sum: "0.008500000 BTC",
+  selected: {
+    "&:hover": {
+      color: "#ff9900",
+    },
   },
-];
+}));

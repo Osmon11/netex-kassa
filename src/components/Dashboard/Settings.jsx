@@ -91,6 +91,9 @@ export function Settings() {
           <GoldToggleButton className={classes.toggleBtn} value="Журнал входа">
             Журнал действий
           </GoldToggleButton>
+          <GoldToggleButton className={classes.toggleBtn} value="Пароль">
+            Пароль
+          </GoldToggleButton>
           {/* <GoldToggleButton className={classes.toggleBtn} value="Кошельки">
               Кошельки
             </GoldToggleButton> */}
@@ -135,50 +138,6 @@ export function Settings() {
                   onClick={() => avatar.current.click()}
                   style={{ width: "100%", marginBottom: 20 }}
                 />
-              </Form>
-            </Formik>
-            <Formik
-              initialValues={passwordInitialValues}
-              validationSchema={validateChangePassword}
-              onSubmit={changePasswordHandler}
-            >
-              <Form>
-                <Typography variant="body2" style={{ marginTop: 15 }}>
-                  Смена пароля
-                </Typography>
-                <ValidatedInput
-                  placeholder="Введите текущий пароль"
-                  name="old-password"
-                  margin="normal"
-                  style={{ width: "100%" }}
-                />
-                <br />
-                <ValidatedInput
-                  placeholder="Введите новый пароль"
-                  name="new-password"
-                  margin="normal"
-                  style={{ width: "100%" }}
-                />
-                <br />
-                <ValidatedInput
-                  placeholder="Повторите новый пароль"
-                  name="confirm-password"
-                  margin="normal"
-                  style={{ width: "100%" }}
-                />
-                <br />
-                <div className="flex_box">
-                  <GoldButton
-                    type="submit"
-                    style={{
-                      marginBottom: 64,
-                      fontSize: 16,
-                      width: "50%",
-                    }}
-                  >
-                    Сменить пароль
-                  </GoldButton>
-                </div>
               </Form>
             </Formik>
           </div>
@@ -250,6 +209,56 @@ export function Settings() {
           )}
         </>
       )}
+      {tab === "Пароль" && (
+        <div className="flex_box">
+          <div style={{ width: "50%" }}>
+            <Formik
+              initialValues={passwordInitialValues}
+              validationSchema={validateChangePassword}
+              onSubmit={changePasswordHandler}
+            >
+              <Form>
+                <Typography variant="body2" style={{ marginTop: 15 }}>
+                  Смена пароля
+                </Typography>
+                <ValidatedInput
+                  placeholder="Введите текущий пароль"
+                  name="old-password"
+                  margin="normal"
+                  style={{ width: "100%" }}
+                />
+                <br />
+                <ValidatedInput
+                  placeholder="Введите новый пароль"
+                  name="new-password"
+                  margin="normal"
+                  style={{ width: "100%" }}
+                />
+                <br />
+                <ValidatedInput
+                  placeholder="Повторите новый пароль"
+                  name="confirm-password"
+                  margin="normal"
+                  style={{ width: "100%" }}
+                />
+                <br />
+                <div className="flex_box">
+                  <GoldButton
+                    type="submit"
+                    style={{
+                      marginBottom: 64,
+                      fontSize: 16,
+                      width: "50%",
+                    }}
+                  >
+                    Сменить пароль
+                  </GoldButton>
+                </div>
+              </Form>
+            </Formik>
+          </div>
+        </div>
+      )}
       <input type="file" ref={avatar} style={{ display: "none" }} />
     </>
   );
@@ -257,7 +266,7 @@ export function Settings() {
 
 const useStyles = makeStyles((theme) => ({
   toggleBtn: {
-    width: "50%",
+    width: "33.33%",
     textTransform: "none",
     color: "#686868",
     backgroundColor: "#f5f5f5",
