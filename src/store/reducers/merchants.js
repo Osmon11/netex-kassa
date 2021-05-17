@@ -81,7 +81,8 @@ const reducer = (state = initialState, action) => {
           failed: true,
         },
       }
-    default: return state
+    default:
+      return state
   }
 }
 
