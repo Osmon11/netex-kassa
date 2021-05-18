@@ -33,6 +33,7 @@ export const login = (data, callback) => (dispatch) => {
       });
     });
 };
+const r = (1, 2, 3);
 
 export const logout = (callback) => (dispatch) => {
   AppAxios.post("/auth/logout").then((res) => {

@@ -166,6 +166,18 @@ export const getTypeList = (errorHandler) => (dispatch) => {
   );
 };
 
+export const getToken = (merchant_id, errorHandler) => (dispatch) => {
+  creatRequest(
+    `/account/get-api-token/${merchant_id}`,
+    undefined,
+    errorHandler
+  ).then((res) => {
+    if (Boolean(res)) {
+      errorHandler(undefined, res.data);
+    }
+  });
+};
+
 export const cashOut = (data, callback) => (dispatch) => {
   creatRequest("/cashout/send-request", data, callback).then((res) => {
     if (Boolean(res)) {

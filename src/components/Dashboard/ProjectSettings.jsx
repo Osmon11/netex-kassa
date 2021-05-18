@@ -32,6 +32,7 @@ import {
   getStatusList,
   getTypeList,
   editMerchant,
+  getToken,
 } from "store/reducer";
 import { ValidatedInput } from "./Inputs";
 import { Form, Formik } from "formik";
@@ -66,12 +67,18 @@ export function ProjectSettings({ match }) {
   const state = useSelector((store) => store.reducer);
 
   const errorHandler = useCallback(
-    function (error) {
+    function (error, new_api_token) {
       if (Boolean(error)) {
         dispatch(setAlert({ open: true, severity: "error", message: error }));
       }
+      if (Boolean(new_api_token)) {
+        setCurrentMerchant({
+          ...currentMerchant,
+          params: { ...currentMerchant.params, ...new_api_token },
+        });
+      }
     },
-    [dispatch]
+    [dispatch, currentMerchant]
   );
 
   useEffect(() => {
@@ -111,19 +118,22 @@ export function ProjectSettings({ match }) {
   function settingSubmit(fields) {
     dispatch(editMerchant(fields, match.params.id, errorHandler));
   }
+  function getTokenHandler() {
+    dispatch(getToken(currentMerchant.merchant_id, errorHandler));
+  }
   return (
     <>
       {!currentMerchant || currentMerchant.merchant_id !== match.params.id ? (
-        <div className="flex_box">
+        <div className='flex_box'>
           <CircularProgress />
         </div>
       ) : (
         <section>
-          <div className="flex_box" style={{ justifyContent: "space-between" }}>
-            <span className="title" style={{ fontSize: 25 }}>
+          <div className='flex_box' style={{ justifyContent: "space-between" }}>
+            <span className='title' style={{ fontSize: 25 }}>
               {currentMerchant.name}
             </span>
-            <span className="subtitle">Настройки проекта</span>
+            <span className='subtitle'>Настройки проекта</span>
           </div>
 
           <ToggleButtonGroup
@@ -135,39 +145,37 @@ export function ProjectSettings({ match }) {
             }}
             onChange={(_, tab) => setTab(tab)}
           >
-            <GoldToggleButton value="Инфо">Инфо</GoldToggleButton>
-            <GoldToggleButton value="Настройки">Настройки</GoldToggleButton>
-            <GoldToggleButton value="API">API</GoldToggleButton>
+            <GoldToggleButton value='Инфо'>Инфо</GoldToggleButton>
+            <GoldToggleButton value='Настройки'>Настройки</GoldToggleButton>
+            <GoldToggleButton value='API'>API</GoldToggleButton>
           </ToggleButtonGroup>
 
           {tab === "Инфо" && (
-            <>
-              <p className="subtitle">Всего: 0.008525172 USD</p>
-              <p className="subtitle">Ожидание: 0.00000000 USD</p>
-              <div
-                className="flex_box"
-                style={{ justifyContent: "space-between" }}
-              >
-                <span className="subtitle">История транзакций</span>
-              </div>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <div
+                  className='flex_box'
+                  style={{ justifyContent: "space-between" }}
+                >
+                  <span className='subtitle'>История транзакций</span>
+                </div>
+              </Grid>
               <Grid
                 item
                 xs={12}
                 container
                 style={{
-                  borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
                   marginTop: 20,
-                  padding: 15,
                 }}
               >
                 <Grid item xs={12} container spacing={6}>
                   <Grid item xs={3} lg={3}>
                     {state.typeList && (
                       <ThemeInput
-                        margin="dense"
-                        name="operationType"
+                        margin='dense'
+                        name='operationType'
                         select
-                        variant="outlined"
+                        variant='outlined'
                         value={options.operation_type}
                         onChange={(e) => {
                           filterChangeHandler({
@@ -192,14 +200,14 @@ export function ProjectSettings({ match }) {
                   </Grid>
                   <Grid item xs={6} lg={4}>
                     <div
-                      className="flex_box"
+                      className='flex_box'
                       style={{ justifyContent: "space-between" }}
                     >
                       <ThemeInput
-                        name="date_from"
-                        type="date"
-                        variant="outlined"
-                        margin="dense"
+                        name='date_from'
+                        type='date'
+                        variant='outlined'
+                        margin='dense'
                         value={options.date_from}
                         onChange={(e) => {
                           filterChangeHandler({
@@ -213,10 +221,10 @@ export function ProjectSettings({ match }) {
                       />
                       <div style={{ margin: "0 10px" }}>-</div>
                       <ThemeInput
-                        name="date_to"
-                        type="date"
-                        variant="outlined"
-                        margin="dense"
+                        name='date_to'
+                        type='date'
+                        variant='outlined'
+                        margin='dense'
                         value={options.date_to}
                         onChange={(e) => {
                           filterChangeHandler({
@@ -233,15 +241,15 @@ export function ProjectSettings({ match }) {
                   <Grid item xs={2}></Grid>
                   <Grid item xs={3}>
                     <div
-                      className="flex_box"
+                      className='flex_box'
                       style={{ justifyContent: "flex-end" }}
                     >
                       {state.statusList && (
                         <ThemeInput
-                          margin="dense"
-                          name="status"
+                          margin='dense'
+                          name='status'
                           select
-                          variant="outlined"
+                          variant='outlined'
                           value={options.status}
                           onChange={(e) => {
                             filterChangeHandler({
@@ -266,31 +274,46 @@ export function ProjectSettings({ match }) {
                     </div>
                   </Grid>
                 </Grid>
-                <Grid item xs={12} container style={{ marginTop: 25 }}>
-                  <Grid item xs={2}>
-                    <Typography variant="body2">Операция</Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography variant="body2">Дата</Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography variant="body2">Приход</Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography variant="body2" style={{ textAlign: "center" }}>
-                      Расход
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={1}>
-                    <Typography variant="body2" style={{ textAlign: "center" }}>
-                      Валюта
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography variant="body2" style={{ textAlign: "center" }}>
-                      Статус
-                    </Typography>
-                  </Grid>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                container
+                style={{
+                  borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+                  padding: "25px 15px",
+                }}
+              >
+                <Grid item xs={2}>
+                  <Typography variant='body2'>Операция</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography variant='body2'>Дата</Typography>
+                </Grid>
+                <Grid item xs={1}>
+                  <Typography variant='body2' style={{ textAlign: "center" }}>
+                    Сумма
+                  </Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography variant='body2' style={{ textAlign: "center" }}>
+                    Приход
+                  </Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography variant='body2' style={{ textAlign: "center" }}>
+                    Расход
+                  </Typography>
+                </Grid>
+                <Grid item xs={1}>
+                  <Typography variant='body2' style={{ textAlign: "center" }}>
+                    Валюта
+                  </Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography variant='body2' style={{ textAlign: "center" }}>
+                    Статус
+                  </Typography>
                 </Grid>
               </Grid>
               {state.historyList ? (
@@ -301,37 +324,37 @@ export function ProjectSettings({ match }) {
                       src={pending}
                       style={{ width: 24 }}
                       title={obj.status.name}
-                      alt=""
+                      alt=''
                     />,
                     <img
                       src={success}
                       style={{ width: 24 }}
                       title={obj.status.name}
-                      alt=""
+                      alt=''
                     />,
                     <img
                       src={fail}
                       style={{ width: 24 }}
                       title={obj.status.name}
-                      alt=""
+                      alt=''
                     />,
                     <img
                       src={fail}
                       style={{ width: 24 }}
                       title={obj.status.name}
-                      alt=""
+                      alt=''
                     />,
                     <img
                       src={warning}
                       style={{ width: 24 }}
                       title={obj.status.name}
-                      alt=""
+                      alt=''
                     />,
                     <img
                       src={success}
                       style={{ width: 24 }}
                       title={obj.status.name}
-                      alt=""
+                      alt=''
                     />,
                   ];
                   return (
@@ -346,19 +369,32 @@ export function ProjectSettings({ match }) {
                       key={obj.order_id + obj.date}
                     >
                       <Grid item xs={2}>
-                        <Typography variant="body2">
+                        <Typography variant='body2'>
                           {obj.operation_type.name}
                         </Typography>
                       </Grid>
-                      <Grid item xs={3}>
-                        <Typography variant="body2">{obj.date}</Typography>
-                      </Grid>
                       <Grid item xs={2}>
-                        <Typography variant="body2">{obj.debit}</Typography>
+                        <Typography variant='body2'>{obj.date}</Typography>
+                      </Grid>
+                      <Grid item xs={1}>
+                        <Typography
+                          variant='body2'
+                          style={{ textAlign: "center" }}
+                        >
+                          {obj.sum}
+                        </Typography>
                       </Grid>
                       <Grid item xs={2}>
                         <Typography
-                          variant="body2"
+                          variant='body2'
+                          style={{ textAlign: "center" }}
+                        >
+                          {obj.debit}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={2}>
+                        <Typography
+                          variant='body2'
                           style={{ textAlign: "center" }}
                         >
                           {Boolean(obj.credit) ? obj.credit : "---"}
@@ -366,7 +402,7 @@ export function ProjectSettings({ match }) {
                       </Grid>
                       <Grid item xs={1}>
                         <Typography
-                          variant="body2"
+                          variant='body2'
                           style={{ textAlign: "center" }}
                         >
                           {obj.currency}
@@ -380,54 +416,54 @@ export function ProjectSettings({ match }) {
                 })
               ) : (
                 <Grid item xs={12}>
-                  <div className="flex_box">
+                  <div className='flex_box'>
                     <div style={{ textAlign: "center", marginTop: 100 }}>
-                      <img src={goust} alt="" />
-                      <Typography variant="h3" style={{ color: "#3E414E" }}>
+                      <img src={goust} alt='' />
+                      <Typography variant='h3' style={{ color: "#3E414E" }}>
                         Ничего не найдено
                       </Typography>
                     </div>
                   </div>
                 </Grid>
               )}
-            </>
+            </Grid>
           )}
 
           {tab === "Настройки" && (
             <>
-              {currentMerchant.status.name === "Не подтвержден" && (
+              {currentMerchant.status.name === "Не подтвержден" ? (
                 <>
-                  <Typography variant="h4" style={{ color: "#C51A2C" }}>
+                  <Typography variant='h4' style={{ color: "#C51A2C" }}>
                     Домен не подтвержден:
                   </Typography>
-                  <ul className="projects">
+                  <ul className='projects'>
                     <li>
-                      <Typography variant="body1">
+                      <Typography variant='body1'>
                         1.{" "}
                         <a
                           href={`${baseURL}/account/get-confirm-file/${currentMerchant.confirm_file}`}
                           style={{ textDecoration: "none" }}
                         >
-                          <span className="project_link">Скачать</span>
+                          <span className='project_link'>Скачать</span>
                         </a>{" "}
                         {`${currentMerchant.confirm_file}.txt`}
                       </Typography>
-                      <Typography variant="body1">
+                      <Typography variant='body1'>
                         2. Разместите в корне сайта:{" "}
                         <a
-                          className="doc_link"
+                          className='doc_link'
                           href={currentMerchant.confirm_file_path}
                         >
                           {currentMerchant.confirm_file_path}
                         </a>
                       </Typography>
-                      <Typography variant="body1">
+                      <Typography variant='body1'>
                         3. Затем нажмите кнопку “Подтвердить”
                       </Typography>
                     </li>
                     <li>
                       <Button
-                        variant="outlined"
+                        variant='outlined'
                         style={{
                           width: 200,
                           color: "#FF9900",
@@ -444,65 +480,66 @@ export function ProjectSettings({ match }) {
                     </li>
                   </ul>
                 </>
+              ) : (
+                <Formik
+                  initialValues={{ ...currentMerchant.params }}
+                  validationSchema={settingsFormValidation}
+                  onSubmit={settingSubmit}
+                >
+                  <Form>
+                    <div
+                      className='flex_box'
+                      style={{
+                        justifyContent: "space-between",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <span className='subtitle'>URL успешной оплаты:</span>
+                      <ValidatedInput
+                        name='success_url'
+                        style={{ width: "100%" }}
+                        placeholder={`Например,`}
+                      />
+                    </div>
+                    <div
+                      className='flex_box'
+                      style={{
+                        justifyContent: "space-between",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <span className='subtitle'>URL неуспешной оплаты:</span>
+                      <ValidatedInput
+                        name='fail_url'
+                        style={{ width: "100%" }}
+                        placeholder={`Например,`}
+                      />
+                    </div>
+                    <div
+                      className='flex_box'
+                      style={{
+                        justifyContent: "space-between",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <span className='subtitle'>URL обработчика:</span>
+                      <ValidatedInput
+                        name='status_url'
+                        style={{ width: "100%" }}
+                        placeholder={`Например,`}
+                      />
+                    </div>
+                    <GoldButton type='submit' style={{ width: 175 }}>
+                      Сохранить
+                    </GoldButton>
+                  </Form>
+                </Formik>
               )}
-              <Formik
-                initialValues={{ ...currentMerchant.params }}
-                validationSchema={settingsFormValidation}
-                onSubmit={settingSubmit}
-              >
-                <Form>
-                  <div
-                    className="flex_box"
-                    style={{
-                      justifyContent: "space-between",
-                      flexDirection: "column",
-                      alignItems: "flex-start",
-                    }}
-                  >
-                    <span className="subtitle">URL успешной оплаты:</span>
-                    <ValidatedInput
-                      name="success_url"
-                      style={{ width: "100%" }}
-                      placeholder={`Например,`}
-                    />
-                  </div>
-                  <div
-                    className="flex_box"
-                    style={{
-                      justifyContent: "space-between",
-                      flexDirection: "column",
-                      alignItems: "flex-start",
-                    }}
-                  >
-                    <span className="subtitle">URL неуспешной оплаты:</span>
-                    <ValidatedInput
-                      name="fail_url"
-                      style={{ width: "100%" }}
-                      placeholder={`Например,`}
-                    />
-                  </div>
-                  <div
-                    className="flex_box"
-                    style={{
-                      justifyContent: "space-between",
-                      flexDirection: "column",
-                      alignItems: "flex-start",
-                    }}
-                  >
-                    <span className="subtitle">URL обработчика:</span>
-                    <ValidatedInput
-                      name="status_url"
-                      style={{ width: "100%" }}
-                      placeholder={`Например,`}
-                    />
-                  </div>
-                  <GoldButton type="submit" style={{ width: 175 }}>
-                    Сохранить
-                  </GoldButton>
-                </Form>
-              </Formik>
-              <p className="subtitle">Удалить кошелек</p>
-              <Typography variant="body2" style={{ width: "45%" }}>
+              <p className='subtitle'>Удалить кошелек</p>
+              <Typography variant='body2' style={{ width: "45%" }}>
                 Перед удалением убедитесь, что вы выбрали правильный кошелек.
                 Удаление приведет к потере данных и средств на кошельке.
               </Typography>
@@ -519,7 +556,7 @@ export function ProjectSettings({ match }) {
                     height: 50,
                     margin: "20px 0",
                   }}
-                  variant="outlined"
+                  variant='outlined'
                 >
                   Удалить
                 </Button>
@@ -529,13 +566,13 @@ export function ProjectSettings({ match }) {
 
           {tab === "API" && (
             <>
-              <p className="subtitle" style={{ fontWeight: 450 }}>
+              <p className='subtitle' style={{ fontWeight: 450 }}>
                 Идентификатор приложения
               </p>
-              <Typography variant="body2" style={{ lineHeight: "200%" }}>
+              <Typography variant='body2' style={{ lineHeight: "200%" }}>
                 Используйте этот идентификатор для создания счета
               </Typography>
-              <Typography variant="body2" style={{ lineHeight: "200%" }}>
+              <Typography variant='body2' style={{ lineHeight: "200%" }}>
                 ID этого проекта:
                 <span
                   style={{ color: "#ff9900", marginLeft: 15, fontWeight: 450 }}
@@ -545,38 +582,37 @@ export function ProjectSettings({ match }) {
               </Typography>
 
               <p
-                className="subtitle"
+                className='subtitle'
                 style={{ marginTop: 65, fontWeight: 450 }}
               >
                 API
               </p>
-              <Typography variant="body2" style={{ lineHeight: "200%" }}>
+              <Typography variant='body2' style={{ lineHeight: "200%" }}>
                 Access to payments through API
               </Typography>
-              <Typography variant="body2" style={{ lineHeight: "200%" }}>
-                Для работы с API вам необходимо получить ключ безопасности и
-                токен.
+              <Typography variant='body2' style={{ lineHeight: "200%" }}>
+                Для работы с API вам необходимо получить API Key и Secret Key.
               </Typography>
               <div
-                className="flex_box"
+                className='flex_box'
                 style={{
                   marginTop: 20,
                   alignItems: "flex-start",
                   flexDirection: "column",
                 }}
               >
-                <span className="subtitle" style={{ fontSize: 16 }}>
-                  Ключ безопасности:
+                <span className='subtitle' style={{ fontSize: 16 }}>
+                  API Key:
                 </span>
                 <ThemeInput
-                  margin="dense"
-                  name="key"
-                  type="text"
+                  margin='dense'
+                  name='key'
+                  type='text'
                   style={{ width: "100%" }}
-                  value={currentMerchant.params.secret_key}
+                  value={currentMerchant.params.api_key}
                   InputProps={{
                     endAdornment: (
-                      <InputAdornment position="end">
+                      <InputAdornment position='end'>
                         <Tooltip
                           PopperProps={{
                             disablePortal: true,
@@ -585,12 +621,12 @@ export function ProjectSettings({ match }) {
                           disableFocusListener
                           disableHoverListener
                           disableTouchListener
-                          title="Copied"
+                          title='Copied'
                           arrow
                           TransitionComponent={Zoom}
                         >
                           <CopyToClipboard
-                            text={currentMerchant.params.secret_key}
+                            text={currentMerchant.params.api_key}
                             onCopy={() => {
                               setTooltip({ ...tooltip, a: true });
                               closeTooltip();
@@ -599,37 +635,37 @@ export function ProjectSettings({ match }) {
                             <img
                               src={copyIcon}
                               style={{ cursor: "pointer" }}
-                              alt="content copy"
+                              alt='content copy'
                             />
                           </CopyToClipboard>
                         </Tooltip>
                       </InputAdornment>
                     ),
                   }}
-                  variant="outlined"
+                  variant='outlined'
                   disabled
                 />
               </div>
               <div
-                className="flex_box"
+                className='flex_box'
                 style={{
                   marginTop: 20,
                   alignItems: "flex-start",
                   flexDirection: "column",
                 }}
               >
-                <span className="subtitle" style={{ fontSize: 16 }}>
-                  Скопируйте этот токен:
+                <span className='subtitle' style={{ fontSize: 16 }}>
+                  Secret Key:
                 </span>
                 <ThemeInput
-                  margin="dense"
-                  name="token"
-                  type="text"
+                  margin='dense'
+                  name='token'
+                  type='text'
                   style={{ width: "100%" }}
-                  value={currentMerchant.params.api_key}
+                  value={currentMerchant.params.secret_key}
                   InputProps={{
                     endAdornment: (
-                      <InputAdornment position="end">
+                      <InputAdornment position='end'>
                         <Tooltip
                           PopperProps={{
                             disablePortal: true,
@@ -638,12 +674,12 @@ export function ProjectSettings({ match }) {
                           disableFocusListener
                           disableHoverListener
                           disableTouchListener
-                          title="Copied"
+                          title='Copied'
                           arrow
                           TransitionComponent={Zoom}
                         >
                           <CopyToClipboard
-                            text={currentMerchant.params.api_key}
+                            text={currentMerchant.params.secret_key}
                             onCopy={() => {
                               setTooltip({ ...tooltip, b: true });
                               closeTooltip();
@@ -652,18 +688,19 @@ export function ProjectSettings({ match }) {
                             <img
                               src={copyIcon}
                               style={{ cursor: "pointer" }}
-                              alt="content copy"
+                              alt='content copy'
                             />
                           </CopyToClipboard>
                         </Tooltip>
                       </InputAdornment>
                     ),
                   }}
-                  variant="outlined"
+                  variant='outlined'
                   disabled
                 />
               </div>
               <GoldButton
+                onClick={getTokenHandler}
                 style={{
                   fontSize: 16,
                   minHeight: 50,
@@ -671,7 +708,7 @@ export function ProjectSettings({ match }) {
                   margin: "40px 0",
                 }}
               >
-                Получить токен
+                Получить ключи
               </GoldButton>
             </>
           )}
