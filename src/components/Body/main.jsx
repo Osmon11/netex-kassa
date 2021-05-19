@@ -7,63 +7,68 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from "@material-ui/core";
-import React from "react";
-import "./style.css";
-import advantage1 from "assets/advantages1-icon.png";
-import advantage2 from "assets/advantages2-icon.png";
-import advantage3 from "assets/advantages3-icon.png";
-import advantage4 from "assets/advantages4-icon.png";
-import advantage5 from "assets/advantages5-icon.png";
-import advantage6 from "assets/advantages6-icon.png";
-import notebook from "assets/note-book.png";
-import mainBitcoin from "assets/bitcoin-main.png";
-import bitcoin1 from "assets/bitcoin-1.png";
-import bitcoin2 from "assets/bitcoin-2.png";
-import bitcoin3 from "assets/bitcoin-3.png";
-import part1 from "assets/part1.png";
-import part2 from "assets/part2.png";
-import part3 from "assets/part3.png";
-import part4 from "assets/part4.png";
-import { GoldButton } from "shared/Buttons/buttons";
-import { ParallaxMousemove } from "components";
-import { useHistory } from "react-router";
-import { useDispatch } from "react-redux";
-import { setTab } from "store/actionCreators";
+} from '@material-ui/core'
+import React from 'react'
+import './style.css'
+import advantage1 from 'assets/advantages1-icon.webp'
+import advantage2 from 'assets/advantages2-icon.webp'
+import advantage3 from 'assets/advantages3-icon.webp'
+import advantage4 from 'assets/advantages4-icon.webp'
+import advantage5 from 'assets/advantages5-icon.webp'
+import advantage6 from 'assets/advantages6-icon.webp'
+import notebook from 'assets/note-book.webp'
+import mainBitcoin from 'assets/bitcoin-main.webp'
+import bitcoin1 from 'assets/bitcoin-1.webp'
+import bitcoin2 from 'assets/bitcoin-2.webp'
+import bitcoin3 from 'assets/bitcoin-3.webp'
+import part1 from 'assets/part1.webp'
+import part2 from 'assets/part2.webp'
+import part3 from 'assets/part3.webp'
+import part4 from 'assets/part4.webp'
+import { GoldButton } from 'shared/Buttons/buttons'
+import { ParallaxMousemove } from 'components'
+import { useHistory } from 'react-router'
+import { useDispatch } from 'react-redux'
+import { setTab } from 'store/actionCreators'
 
 export function MainBody() {
-  const classes = useStyles();
-  const theme = useTheme();
-  const sm = useMediaQuery(theme.breakpoints.down("sm"));
-  const xs = useMediaQuery(theme.breakpoints.down("xs"));
-  const history = useHistory();
-  const dispatch = useDispatch();
+  const classes = useStyles()
+  const theme = useTheme()
+  const sm = useMediaQuery(theme.breakpoints.down('sm'))
+  const xs = useMediaQuery(theme.breakpoints.down('xs'))
+  const history = useHistory()
+  const dispatch = useDispatch()
 
   return (
     <div className="main_page">
-      <section style={{ position: "relative", minHeight: "90vh" }}>
+      <section style={{ position: 'relative', minHeight: '90vh' }}>
         <Container>
           <div
             className="flex_vertical"
-            style={{ width: "100%", color: "#fff", padding: "180px 5%" }}
+            style={{ width: '100%', color: '#fff', padding: '180px 5%' }}
           >
             <Typography variant="h3" className={classes.sectionTitle}>
-              Скажи «ДА» КРИПТОПЛАТЕЖАМ! 
+              Скажи «ДА» КРИПТОПЛАТЕЖАМ!
             </Typography>
             <Typography
               variant="body1"
               style={{
-                textAlign: "center",
-                margin: "30px 0",
+                textAlign: 'center',
+                margin: '30px 0',
                 fontSize: xs ? 14 : 20,
               }}
             >
-              Принимать оплату криптовалютами на веб-сайтах или мобильных приложениях стало доступно.
+              Принимать оплату криптовалютами на веб-сайтах или мобильных
+              приложениях стало доступно.
             </Typography>
             <div className="flex_box section-1">
               <GoldButton
-                style={{ minWidth: sm ? 164 : 270, minHeight: 60, marginRight: '10px' }}
-                onClick={() => history.push("/documentation")}
+                style={{
+                  minWidth: sm ? 164 : 270,
+                  minHeight: 60,
+                  marginRight: '10px',
+                }}
+                onClick={() => history.push('/documentation')}
               >
                 Начать работу
               </GoldButton>
@@ -71,8 +76,8 @@ export function MainBody() {
                 className={classes.customButton}
                 variant="outlined"
                 onClick={() => {
-                  dispatch(setTab({ value: "API клиенты", index: 2 }));
-                  history.push("/documentation");
+                  dispatch(setTab({ value: 'API клиенты', index: 2 }))
+                  history.push('/documentation')
                 }}
               >
                 API
@@ -93,17 +98,17 @@ export function MainBody() {
               >
                 <Typography
                   variant="h3"
-                  style={{ color: "#FF9900", fontSize: xs ? 35 : 50 }}
+                  style={{ color: '#FF9900', fontSize: xs ? 35 : 50 }}
                   component="span"
                 >
                   Правильное
-                </Typography>{" "}
+                </Typography>{' '}
                 решение для бизнеса
               </Typography>
               <Typography
                 variant="body1"
                 style={{
-                  margin: "44px 0 30px",
+                  margin: '44px 0 30px',
                   marginLeft: sm ? 0 : 50,
                   fontSize: xs ? 14 : 20,
                 }}
@@ -117,17 +122,18 @@ export function MainBody() {
               <Typography
                 variant="body1"
                 style={{
-                  margin: "0 0 44px",
+                  margin: '0 0 44px',
                   marginLeft: sm ? 0 : 50,
                   fontSize: xs ? 14 : 20,
                 }}
               >
-                Увеличь продажи, расширь свое дело и будь в тренде! Выведи свою компанию на новый уровень вместе с Netex-kassa.
+                Увеличь продажи, расширь свое дело и будь в тренде! Выведи свою
+                компанию на новый уровень вместе с Netex-kassa.
               </Typography>
               <GoldButton
-                className='section-2__btn'
+                className="section-2__btn"
                 style={{ minWidth: 270, minHeight: 60 }}
-                onClick={() => history.push("/documentation")}
+                onClick={() => history.push('/documentation')}
               >
                 Начать работу
               </GoldButton>
@@ -146,9 +152,9 @@ export function MainBody() {
                 <div
                   className="flex_vertical"
                   style={{
-                    alignItems: "flex-end",
-                    justifyContent: "flex-end",
-                    height: "100%",
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                    height: '100%',
                   }}
                 >
                   <Paper
@@ -162,7 +168,7 @@ export function MainBody() {
                     <img
                       src={part1}
                       alt=""
-                      style={{ width: "100%", height: "100%" }}
+                      style={{ width: '100%', height: '100%' }}
                     />
                   </Paper>
                   <Paper
@@ -175,7 +181,7 @@ export function MainBody() {
                     <img
                       src={part2}
                       alt=""
-                      style={{ width: "100%", height: "100%" }}
+                      style={{ width: '100%', height: '100%' }}
                     />
                   </Paper>
                 </div>
@@ -184,9 +190,9 @@ export function MainBody() {
                 <div
                   className="flex_vertical"
                   style={{
-                    alignItems: "start",
-                    justifyContent: "flex-end",
-                    height: "100%",
+                    alignItems: 'start',
+                    justifyContent: 'flex-end',
+                    height: '100%',
                   }}
                 >
                   <Paper
@@ -200,7 +206,7 @@ export function MainBody() {
                     <img
                       src={part3}
                       alt=""
-                      style={{ width: "100%", height: "100%" }}
+                      style={{ width: '100%', height: '100%' }}
                     />
                   </Paper>
                   <Paper
@@ -213,7 +219,7 @@ export function MainBody() {
                     <img
                       src={part4}
                       alt=""
-                      style={{ width: "100%", height: "100%" }}
+                      style={{ width: '100%', height: '100%' }}
                     />
                   </Paper>
                 </div>
@@ -223,44 +229,44 @@ export function MainBody() {
         </Container>
       </section>
 
-      <section style={{ position: "relative" }}>
+      <section style={{ position: 'relative' }}>
         <Container>
           <Typography
             variant="h3"
             className={classes.sectionTitle}
             style={{ paddingTop: 200, fontSize: xs ? 35 : 50 }}
           >
-            Наши{" "}
+            Наши{' '}
             <Typography
               variant="h3"
-              style={{ color: "#FF9900", fontSize: xs ? 35 : 50 }}
+              style={{ color: '#FF9900', fontSize: xs ? 35 : 50 }}
               component="span"
             >
               преимущества
             </Typography>
           </Typography>
-          <Grid container spacing={xs ? 4 : 6} style={{ padding: "64px 0" }}>
+          <Grid container spacing={xs ? 4 : 6} style={{ padding: '64px 0' }}>
             {advantages.map((obj) => (
               <Grid item md={4} key={obj.subtitle}>
                 <div
                   className="flex_box"
                   style={{
-                    alignItems: "flex-start",
-                    flexDirection: sm || xs ? "row" : "column",
+                    alignItems: 'flex-start',
+                    flexDirection: sm || xs ? 'row' : 'column',
                   }}
                 >
                   <img
                     src={obj.img}
-                    style={{ height: xs ? 90 : "auto" }}
+                    style={{ height: xs ? 90 : 'auto' }}
                     alt=""
                   />
                   <div style={{ marginLeft: sm || xs ? 20 : 0 }}>
                     <Typography
-                      variant={sm || xs ? "body2" : "subtitle2"}
+                      variant={sm || xs ? 'body2' : 'subtitle2'}
                       style={{
                         marginTop: sm || xs ? 0 : 20,
                         marginBottom: 15,
-                        textTransform: "uppercase",
+                        textTransform: 'uppercase',
                       }}
                     >
                       {obj.subtitle}
@@ -280,17 +286,17 @@ export function MainBody() {
         <div className="bg2_image" />
       </section>
 
-      <section style={{ overflow: "hidden", paddingBottom: 100 }}>
+      <section style={{ overflow: 'hidden', paddingBottom: 100 }}>
         <Container>
           <Grid container spacing={2}>
             <Grid item md={6}>
               <Typography
                 variant="h3"
-                style={{ margin: "96px 0 64px 0", fontSize: xs ? 35 : 50 }}
+                style={{ margin: '96px 0 64px 0', fontSize: xs ? 35 : 50 }}
               >
                 <Typography
                   variant="h3"
-                  style={{ color: "#FF9900", fontSize: xs ? 35 : 50 }}
+                  style={{ color: '#FF9900', fontSize: xs ? 35 : 50 }}
                   component="span"
                 >
                   Недостающий фрагмент
@@ -302,16 +308,20 @@ export function MainBody() {
                 style={{ marginBottom: 40 }}
               >
                 <Typography variant="body1" style={{ fontSize: xs ? 14 : 20 }}>
-                Netex-kassa – лучшее решение для вашего бизнеса! Это сервис предоставляющий криптовалютный кошелек, с помощью которого вы с легкостью сможете принимать платежи топовыми криптовалютами. 
+                  Netex-kassa – лучшее решение для вашего бизнеса! Это сервис
+                  предоставляющий криптовалютный кошелек, с помощью которого вы
+                  с легкостью сможете принимать платежи топовыми криптовалютами.
                 </Typography>
               </Paper>
               <Paper className={classes.bitcoinPaper}>
                 <Typography variant="body1" style={{ fontSize: xs ? 14 : 20 }}>
-                Принимайте платежи быстро и безопасно через стильный, удобный интерфейс и мощный API. Интегрируйте систему оплаты вместе с Netex-kassa!
+                  Принимайте платежи быстро и безопасно через стильный, удобный
+                  интерфейс и мощный API. Интегрируйте систему оплаты вместе с
+                  Netex-kassa!
                 </Typography>
               </Paper>
             </Grid>
-            <Grid item md={6} style={{ position: "relative" }}>
+            <Grid item md={6} style={{ position: 'relative' }}>
               {sm ? (
                 <>
                   <img className="notebook" src={notebook} alt="" />
@@ -323,17 +333,17 @@ export function MainBody() {
               ) : (
                 <ParallaxMousemove
                   containerStyle={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100%",
+                    position: 'relative',
+                    width: '100%',
+                    height: '100%',
                   }}
                 >
                   {/* Notebook image */}
                   <ParallaxMousemove.Layer
                     layerStyle={{
-                      position: "absolute",
+                      position: 'absolute',
                       bottom: -40,
-                      left: "-20%",
+                      left: '-20%',
                     }}
                     config={{
                       xFactor: 0.1,
@@ -349,9 +359,9 @@ export function MainBody() {
                   {/* Bitcoin large */}
                   <ParallaxMousemove.Layer
                     layerStyle={{
-                      position: "absolute",
+                      position: 'absolute',
                       top: 20,
-                      left: "-25%",
+                      left: '-25%',
                       zIndex: -1,
                     }}
                     config={{
@@ -368,9 +378,9 @@ export function MainBody() {
                   {/* Bitcoin1 image */}
                   <ParallaxMousemove.Layer
                     layerStyle={{
-                      position: "absolute",
+                      position: 'absolute',
                       bottom: 60,
-                      left: "-11%",
+                      left: '-11%',
                     }}
                     config={{
                       xFactor: 0.3,
@@ -386,9 +396,9 @@ export function MainBody() {
                   {/* Bitcoin2 image */}
                   <ParallaxMousemove.Layer
                     layerStyle={{
-                      position: "absolute",
+                      position: 'absolute',
                       bottom: 160,
-                      left: "20%",
+                      left: '20%',
                     }}
                     config={{
                       xFactor: 0.2,
@@ -404,9 +414,9 @@ export function MainBody() {
                   {/* Bitcoin3 image */}
                   <ParallaxMousemove.Layer
                     layerStyle={{
-                      position: "absolute",
-                      right: "10%",
-                      top: "42%",
+                      position: 'absolute',
+                      right: '10%',
+                      top: '42%',
                     }}
                     config={{
                       xFactor: -0.1,
@@ -426,73 +436,69 @@ export function MainBody() {
         </Container>
       </section>
     </div>
-  );
+  )
 }
 
 const useStyles = makeStyles((theme) => ({
   customButton: {
-    border: "3px solid #FFFFFF",
+    border: '3px solid #FFFFFF',
     fontSize: 20,
-    fontWeight: "normal",
+    fontWeight: 'normal',
     minHeight: 60,
     minWidth: 170,
     marginLeft: 10,
-    color: "#fff",
-    [theme.breakpoints.down("xs")]: {
+    color: '#fff',
+    [theme.breakpoints.down('xs')]: {
       minWidth: 164,
     },
   },
   sectionTitle: {
-    textAlign: "center",
-    [theme.breakpoints.down("xs")]: {
+    textAlign: 'center',
+    [theme.breakpoints.down('xs')]: {
       fontSize: 30,
     },
   },
   customPaper: {
     borderRadius: 17,
-    filter: "drop-shadow(0px 0px 32px rgba(255, 255, 255, 0.15))",
+    filter: 'drop-shadow(0px 0px 32px rgba(255, 255, 255, 0.15))',
   },
   bitcoinPaper: {
-    padding: "60px 80px",
-    background: " linear-gradient(270deg, #2A2B31 0%, #18191D 82.47%)",
+    padding: '60px 80px',
+    background: ' linear-gradient(270deg, #2A2B31 0%, #18191D 82.47%)',
   },
-}));
+}))
 
 const advantages = [
   {
     img: advantage1,
-    subtitle: "Простое подключение",
-    text:
-      "API документация написана довольно просто и понятно.",
+    subtitle: 'Простое подключение',
+    text: 'API документация написана довольно просто и понятно.',
   },
   {
     img: advantage2,
-    subtitle: "Оплата ТОП-20 криптовалютами",
-    text:
-      "Ведите работу только с проверенными временем криптовалютами.",
+    subtitle: 'Оплата ТОП-20 криптовалютами',
+    text: 'Ведите работу только с проверенными временем криптовалютами.',
   },
   {
     img: advantage3,
-    subtitle: "Служба поддержки 24/7 ",
+    subtitle: 'Служба поддержки 24/7 ',
     text:
-      "При возникновении вопросов мы не оставляем вас один на один с нерешаемой задачей.",
+      'При возникновении вопросов мы не оставляем вас один на один с нерешаемой задачей.',
   },
   {
     img: advantage4,
-    subtitle: "Выгодная тарификация",
-    text:
-      "Выбор подходящего тарифного плана для вашего бизнеса.",
+    subtitle: 'Выгодная тарификация',
+    text: 'Выбор подходящего тарифного плана для вашего бизнеса.',
   },
   {
     img: advantage5,
-    subtitle: "Выгодные условия ",
-    text:
-      "Скидки для владельцев крупного и среднего бизнеса.",
+    subtitle: 'Выгодные условия ',
+    text: 'Скидки для владельцев крупного и среднего бизнеса.',
   },
   {
     img: advantage6,
-    subtitle: "Безопасность",
+    subtitle: 'Безопасность',
     text:
-      "Криптошифрование и высокий уровень безопасности, которые надежно хранят ваши данные.",
+      'Криптошифрование и высокий уровень безопасности, которые надежно хранят ваши данные.',
   },
-];
+]

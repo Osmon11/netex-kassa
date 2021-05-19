@@ -4,42 +4,42 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from "@material-ui/core";
-import React from "react";
-import "./style.css";
-import flag from "assets/flag.png";
-import planet from "assets/planet.png";
-import bitcoin1 from "assets/bitcoin-1.png";
-import bitcoin2 from "assets/bitcoin-2.png";
-import bitcoin3 from "assets/bitcoin-3.png";
-import cripto1 from "assets/cripto-coin1.png";
-import cripto2 from "assets/cripto-coin2.png";
-import cripto3 from "assets/cripto-coin3.png";
-import cripto4 from "assets/cripto-coin4.png";
-import cripto5 from "assets/cripto-coin5.png";
-import { ParallaxMousemove } from "components";
-import { GoldButton } from "shared/Buttons/buttons";
-import { useDispatch } from "react-redux";
-import { setAuthDialog } from "store/actionCreators";
+} from '@material-ui/core'
+import React from 'react'
+import './style.css'
+import flag from 'assets/flag.png'
+import planet from 'assets/planet.webp'
+import bitcoin1 from 'assets/bitcoin-1.webp'
+import bitcoin2 from 'assets/bitcoin-2.webp'
+import bitcoin3 from 'assets/bitcoin-3.webp'
+import cripto1 from 'assets/cripto-coin1.webp'
+import cripto2 from 'assets/cripto-coin2.webp'
+import cripto3 from 'assets/cripto-coin3.webp'
+import cripto4 from 'assets/cripto-coin4.webp'
+import cripto5 from 'assets/cripto-coin5.webp'
+import { ParallaxMousemove } from 'components'
+import { GoldButton } from 'shared/Buttons/buttons'
+import { useDispatch } from 'react-redux'
+import { setAuthDialog } from 'store/actionCreators'
 
 export function AboutUsBody() {
-  const theme = useTheme();
-  const sm = useMediaQuery(theme.breakpoints.down("sm"));
-  const xs = useMediaQuery(theme.breakpoints.down("xs"));
-  const dispatch = useDispatch();
+  const theme = useTheme()
+  const sm = useMediaQuery(theme.breakpoints.down('sm'))
+  const xs = useMediaQuery(theme.breakpoints.down('xs'))
+  const dispatch = useDispatch()
 
   return (
     <section
       style={{
         paddingTop: sm ? 50 : 100,
-        overflow: "hidden",
+        overflow: 'hidden',
         paddingBottom: 100,
       }}
     >
       <Container>
         <Grid container spacing={2}>
           <Grid item md={5}>
-            <p className="main_title" style={{ textAlign: "start" }}>
+            <p className="main_title" style={{ textAlign: 'start' }}>
               О нас
             </p>
             <Typography variant="body1" style={{ fontSize: xs ? 14 : 20 }}>
@@ -58,11 +58,11 @@ export function AboutUsBody() {
               <>
                 <p
                   className="main_title"
-                  style={{ textAlign: "start", marginTop: 150 }}
+                  style={{ textAlign: 'start', marginTop: 150 }}
                 >
                   Технологии
                 </p>
-                <div className="flex_box" style={{ alignItems: "flex-start" }}>
+                <div className="flex_box" style={{ alignItems: 'flex-start' }}>
                   <img
                     src={flag}
                     alt=""
@@ -93,7 +93,7 @@ export function AboutUsBody() {
             ) : null}
           </Grid>
 
-          <Grid item md={7} style={{ position: "relative" }}>
+          <Grid item md={7} style={{ position: 'relative' }}>
             {sm ? (
               <>
                 <img className="planet" src={planet} alt="" />
@@ -116,15 +116,15 @@ export function AboutUsBody() {
             ) : (
               <ParallaxMousemove
                 containerStyle={{
-                  position: "relative",
-                  width: "100%",
-                  height: "100%",
+                  position: 'relative',
+                  width: '100%',
+                  height: '100%',
                 }}
               >
                 {/* Planet image */}
                 <ParallaxMousemove.Layer
                   layerStyle={{
-                    position: "absolute",
+                    position: 'absolute',
                     top: -100,
                     left: 0,
                   }}
@@ -142,9 +142,9 @@ export function AboutUsBody() {
                 {/* Bitcoin1 image */}
                 <ParallaxMousemove.Layer
                   layerStyle={{
-                    position: "absolute",
+                    position: 'absolute',
                     top: 100,
-                    left: "15%",
+                    left: '15%',
                   }}
                   config={{
                     xFactor: 0.15,
@@ -160,9 +160,9 @@ export function AboutUsBody() {
                 {/* Bitcoin2 image */}
                 <ParallaxMousemove.Layer
                   layerStyle={{
-                    position: "absolute",
-                    right: "-10%",
-                    top: "30%",
+                    position: 'absolute',
+                    right: '-10%',
+                    top: '30%',
                   }}
                   config={{
                     xFactor: -0.1,
@@ -178,9 +178,9 @@ export function AboutUsBody() {
                 {/* Bitcoin3 image */}
                 <ParallaxMousemove.Layer
                   layerStyle={{
-                    position: "absolute",
-                    left: "35%",
-                    top: "60%",
+                    position: 'absolute',
+                    left: '35%',
+                    top: '60%',
                     zIndex: -1,
                   }}
                   config={{
@@ -200,10 +200,10 @@ export function AboutUsBody() {
 
           {sm ? (
             <Grid item xs={12}>
-              <p className="main_title" style={{ textAlign: "start" }}>
+              <p className="main_title" style={{ textAlign: 'start' }}>
                 Технологии
               </p>
-              <div className="flex_box" style={{ alignItems: "flex-start" }}>
+              <div className="flex_box" style={{ alignItems: 'flex-start' }}>
                 <img
                   src={flag}
                   alt=""
@@ -248,9 +248,9 @@ export function AboutUsBody() {
             <Typography
               variant="h3"
               style={{
-                padding: "0 20%",
+                padding: '0 20%',
                 marginTop: 100,
-                textAlign: "center",
+                textAlign: 'center',
                 fontSize: xs ? 30 : 50,
               }}
             >
@@ -258,13 +258,13 @@ export function AboutUsBody() {
             </Typography>
             <p
               className="title"
-              style={{ fontSize: xs ? 20 : 25, textAlign: "center" }}
+              style={{ fontSize: xs ? 20 : 25, textAlign: 'center' }}
             >
               Мы поддерживаем самые популярные криптовалюты
             </p>
             <div
               className="flex_box"
-              style={{ width: "100%", margin: "60px 0" }}
+              style={{ width: '100%', margin: '60px 0' }}
             >
               <img
                 className="cripto_brend"
@@ -298,8 +298,8 @@ export function AboutUsBody() {
               }
               style={{
                 minWidth: 300,
-                marginLeft: "50%",
-                transform: "translateX(-50%)",
+                marginLeft: '50%',
+                transform: 'translateX(-50%)',
               }}
             >
               Присоединиться к нам
@@ -308,5 +308,5 @@ export function AboutUsBody() {
         </Grid>
       </Container>
     </section>
-  );
+  )
 }

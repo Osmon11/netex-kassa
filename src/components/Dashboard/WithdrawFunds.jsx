@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { GoldButton } from 'shared/Buttons/buttons'
 import { Success } from './CreateProject'
-import goust from 'assets/goust-icon.svg'
+import goust from 'assets/goust-icon.webp'
 import { cashOut } from 'store/reducer'
 import { setAlert } from 'store/actionCreators'
 

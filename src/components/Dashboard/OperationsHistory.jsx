@@ -4,8 +4,6 @@ import {
   makeStyles,
   MenuItem,
   Typography,
-  useMediaQuery,
-  useTheme,
 } from '@material-ui/core'
 import { ThemeInput } from 'components/Auth/auth'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -14,7 +12,7 @@ import success from '../../assets/success.svg'
 import fail from '../../assets/fail.svg'
 import warning from '../../assets/warning.svg'
 import pending from '../../assets/pending.svg'
-import goust from 'assets/goust-icon.svg'
+import goust from 'assets/goust-icon.webp'
 // import visa from "../../assets/visa.png";
 // import master from "../../assets/master.png";
 // import paypal from "../../assets/paypal.png";
@@ -38,8 +36,6 @@ import { setAlert } from 'store/actionCreators'
 export function OperationsHistory() {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const theme = useTheme()
-  const md = useMediaQuery(theme.breakpoints.down('md'))
   const state = useSelector((store) => store.reducer)
   const merchants = useSelector((store) => store.reducer.merchants)
   let t = new Date()
