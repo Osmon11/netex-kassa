@@ -1,10 +1,10 @@
-import { setData } from "../actionCreators";
-import { AppAxios } from "../../axios/axios";
+import { setData } from '../actionCreators'
+import { AppAxios } from './sign'
 
 export const getProfile = () => (dispatch) => {
-  AppAxios.get("/profile/personal")
+  AppAxios.get('/profile/personal')
     .then((res) => {
-      dispatch(setData({ profileInfo: res.data.profile }));
+      dispatch(setData({ profileInfo: res.data.profile }))
     })
-    .catch((e) => console.log(e));
-};
+    .catch((e) => console.log(e))
+}

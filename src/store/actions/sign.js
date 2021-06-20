@@ -1,21 +1,22 @@
+import axios from "axios";
 import { setUser, setData, setAlert, setAuthDialog } from "../actionCreators";
-import { AppAxios, AppAxios2 } from "../../axios/axios";
+
+const baseURL = "https://api.netex-kassa.com/";
+
+const headers = { "Content-Type": "application/x-www-form-urlencoded" };
+export const AppAxios = axios.create({
+  baseURL,
+  headers,
+  withCredentials: true,
+});
 
 export const login = (data, callback) => (dispatch) => {
   AppAxios.post("/auth/login", data)
     .then((res) => {
       if (Boolean(res)) {
-        AppAxios.interceptors.request.use(
-          (config) => {
-            config.headers.Authorization = `Bearer ${res.data.token}`;
-            dispatch(setData({ token: `Bearer ${res.data.token}` }));
-            localStorage.setItem("token", `Bearer ${res.data.token}`);
-            return config;
-          },
-          (error) => {
-            return Promise.reject(error);
-          }
-        );
+        AppAxios.defaults.headers.Authorization = `Bearer ${res.data.token}`;
+        dispatch(setData({ token: `Bearer ${res.data.token}` }));
+        localStorage.setItem("token", `Bearer ${res.data.token}`);
         dispatch(setUser(Boolean(res.data?.response)));
         callback({ message: "Logged in", severity: "success", open: true });
       } else
@@ -33,7 +34,6 @@ export const login = (data, callback) => (dispatch) => {
       });
     });
 };
-const r = (1, 2, 3);
 
 export const logout = (callback) => (dispatch) => {
   AppAxios.post("/auth/logout").then((res) => {

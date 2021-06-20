@@ -48,7 +48,7 @@ export function DocumentationBody() {
             </Typography>
             <Grid container spacing={2}>
               {tabs.map((tab) => (
-                <Grid item xs={d400 ? 12 : 6} sm={4} md={12}>
+                <Grid item xs={d400 ? 12 : 6} sm={4} md={12} key={tab.value}>
                   <span
                     className={clsx("nav_link", {
                       active: currentTab.value === tab.value,
@@ -59,7 +59,6 @@ export function DocumentationBody() {
                       width: sm || xs ? "50%" : "",
                     }}
                     onClick={() => dispatch(setTab(tab))}
-                    key={tab.value}
                   >
                     {tab.value}
                   </span>
@@ -236,10 +235,11 @@ const CodeExample = () => {
         borderRadius: 4,
         padding: d400 ? 10 : 32,
         overflowX: "auto",
+        height: "276px",
       }}
       elevation={0}
     >
-      <p className='blue_text'>
+      {/* <p className='blue_text'>
         curl -X POST \<br />
         -H <span className='red_text'>"Content-Type: application/json" </span>
         <span style={{ color: "#fff" }}>\</span>
@@ -257,7 +257,7 @@ const CodeExample = () => {
         {
           '{"status":true,"id":"invoice_id...","url":"https://biwse.com/invoice?id=invoice_id..."}'
         }
-      </p>
+      </p> */}
     </Paper>
   );
 };

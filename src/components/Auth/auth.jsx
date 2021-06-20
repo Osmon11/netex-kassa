@@ -82,8 +82,8 @@ function SingIn({ sm, setAlert, handleClose, setLogin }) {
   const [fogetPassword, setPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [values, setValues] = useState({
-    phone: "0504543444",
-    password: "tilekkg-1",
+    phone: "",
+    password: "",
   });
   const validate = Yup.object({
     phone: Yup.string()
@@ -116,6 +116,12 @@ function SingIn({ sm, setAlert, handleClose, setLogin }) {
           setLogin(true);
         })
       );
+    }
+    if (remember) {
+      setValues({
+        ...fields,
+        phone,
+      });
     }
     dispatch(
       login(
