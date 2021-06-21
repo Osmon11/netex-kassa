@@ -82,8 +82,8 @@ function SingIn({ sm, setAlert, handleClose, setLogin }) {
   const [fogetPassword, setPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [values, setValues] = useState({
-    email: "",
-    password: "",
+    email: "example@gmail.com",
+    password: "tilekkg-1",
   });
   const validate = Yup.object({
     email: Yup.string().email().required("Поля должно быть заполнена"),

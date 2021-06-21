@@ -99,7 +99,7 @@ export function Settings() {
           <div style={{ width: "50%" }}>
             <Formik>
               <Form>
-                <Typography variant='body2' style={{ marginTop: 15 }}>
+                <Typography variant='body2' style={{ marginTop: 10 }}>
                   Имя
                 </Typography>
                 <ValidatedInput
@@ -110,7 +110,7 @@ export function Settings() {
                   type='text'
                   style={{ width: "100%", marginBottom: 20 }}
                 />
-                <Typography variant='body2' style={{ marginTop: 15 }}>
+                <Typography variant='body2' style={{ marginTop: 10 }}>
                   Почта
                 </Typography>
                 <ValidatedInput
@@ -121,7 +121,7 @@ export function Settings() {
                   type='email'
                   style={{ width: "100%", marginBottom: 20 }}
                 />
-                <Typography variant='body2' style={{ marginTop: 15 }}>
+                <Typography variant='body2' style={{ marginTop: 10 }}>
                   Аватар
                 </Typography>
                 <ValidatedInput
@@ -219,7 +219,7 @@ export function Settings() {
                   placeholder='Введите текущий пароль'
                   name='old-password'
                   margin='normal'
-                  style={{ width: "100%", merginTop: "8px" }}
+                  style={{ width: "100%", merginTop: "5px" }}
                 />
                 <Typography variant='body2' style={{ marginTop: 15 }}>
                   Новый пароль
@@ -228,7 +228,7 @@ export function Settings() {
                   placeholder='Введите новый пароль'
                   name='new-password'
                   margin='normal'
-                  style={{ width: "100%", merginTop: "8px" }}
+                  style={{ width: "100%", merginTop: "5px" }}
                 />
                 <Typography variant='body2' style={{ marginTop: 15 }}>
                   Повторите пароль
@@ -237,7 +237,7 @@ export function Settings() {
                   placeholder='Повторите новый пароль'
                   name='confirm-password'
                   margin='normal'
-                  style={{ width: "100%", merginTop: "8px" }}
+                  style={{ width: "100%", merginTop: "5px" }}
                 />
                 <br />
                 <div className='flex_box'>
@@ -246,8 +246,10 @@ export function Settings() {
                     size='large'
                     style={{
                       marginBottom: 64,
+                      marginTop: "20px",
                       fontSize: 16,
                       width: "50%",
+                      minHeight: "56px",
                     }}
                   >
                     Сменить пароль

@@ -132,33 +132,15 @@ export function WithdrawFunds() {
             ) : (
               <div className='flex_box'>
                 <form>
-                  <Typography variant='body2' style={{ marginTop: 15 }}>
-                    Проект
-                  </Typography>
                   <div
                     className='flex_box'
-                    style={{ justifyContent: "flex-start", marginBottom: 20 }}
+                    style={{
+                      justifyContent: "space-between",
+                      marginBottom: 20,
+                      marginTop: 15,
+                    }}
                   >
-                    <ThemeInput
-                      name='username'
-                      select
-                      disabled={activeStep > 0}
-                      variant='outlined'
-                      value={currentMerchant}
-                      onChange={(e) => setCurrentMerchant(e.target.value)}
-                      style={{ width: 334 }}
-                    >
-                      {merchants.map((merchant) => (
-                        <MenuItem
-                          key={merchant.name}
-                          value={merchant}
-                          className={classes.menuItem}
-                          classes={{ selected: classes.selected }}
-                        >
-                          {merchant.name}
-                        </MenuItem>
-                      ))}
-                    </ThemeInput>
+                    <Typography variant='body2'>Проект</Typography>
                     <Typography
                       variant='body2'
                       style={{ color: "#FF9900", marginLeft: 15 }}
@@ -166,6 +148,27 @@ export function WithdrawFunds() {
                       {`${currency.balance} ${currency.name}`}
                     </Typography>
                   </div>
+                  <ThemeInput
+                    name='username'
+                    select
+                    disabled={activeStep > 0}
+                    variant='outlined'
+                    value={currentMerchant}
+                    onChange={(e) => setCurrentMerchant(e.target.value)}
+                    style={{ width: 334 }}
+                  >
+                    {merchants.map((merchant) => (
+                      <MenuItem
+                        key={merchant.name}
+                        value={merchant}
+                        className={classes.menuItem}
+                        classes={{ selected: classes.selected }}
+                      >
+                        {merchant.name}
+                      </MenuItem>
+                    ))}
+                  </ThemeInput>
+
                   <Typography variant='body2' style={{ marginTop: 15 }}>
                     Валюта
                   </Typography>
@@ -241,7 +244,6 @@ export function WithdrawFunds() {
                       style={{
                         width: "40%",
                         minHeight: 50,
-                        marginRight: 50,
                       }}
                       onClick={activeStep > 0 ? sendRequest : handleNext}
                     >
