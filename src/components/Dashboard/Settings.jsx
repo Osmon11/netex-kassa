@@ -219,7 +219,7 @@ export function Settings() {
                   placeholder='Введите текущий пароль'
                   name='old-password'
                   margin='normal'
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", merginTop: "8px" }}
                 />
                 <Typography variant='body2' style={{ marginTop: 15 }}>
                   Новый пароль
@@ -228,7 +228,7 @@ export function Settings() {
                   placeholder='Введите новый пароль'
                   name='new-password'
                   margin='normal'
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", merginTop: "8px" }}
                 />
                 <Typography variant='body2' style={{ marginTop: 15 }}>
                   Повторите пароль
@@ -237,7 +237,7 @@ export function Settings() {
                   placeholder='Повторите новый пароль'
                   name='confirm-password'
                   margin='normal'
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", merginTop: "8px" }}
                 />
                 <br />
                 <div className='flex_box'>

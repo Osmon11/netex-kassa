@@ -72,22 +72,22 @@ export function ProjectSettings({ match }) {
         dispatch(setAlert({ open: true, severity: "error", message: error }));
       }
     },
-    [dispatch, currentMerchant]
+    [dispatch]
   );
 
-  const getCurrentMerchant = () => {
+  const getCurrentMerchant = useCallback(() => {
     dispatch(
       viewMerchant(match.params.id, (data) => {
         setCurrentMerchant(data.view);
       })
     );
-  };
+  }, [dispatch, match.params.id]);
 
   useEffect(() => {
     if (!currentMerchant || currentMerchant.merchant_id !== match.params.id) {
       getCurrentMerchant();
     }
-  }, [currentMerchant, match.params.id, dispatch]);
+  }, [currentMerchant, match.params.id, getCurrentMerchant, dispatch]);
   useEffect(() => {
     if (!state.statusList) {
       dispatch(getHistoryList(errorHandler, options));
@@ -126,6 +126,55 @@ export function ProjectSettings({ match }) {
       })
     );
   }
+  function DomenNotConfirmed() {
+    return (
+      <>
+        <Typography variant='h4' style={{ color: "#C51A2C" }}>
+          Домен не подтвержден:
+        </Typography>
+        <ul className='projects'>
+          <li>
+            <Typography variant='body1'>
+              1.{" "}
+              <a
+                href={`${baseURL}/account/get-confirm-file/${currentMerchant.confirm_file}`}
+                style={{ textDecoration: "none" }}
+              >
+                <span className='project_link'>Скачать</span>
+              </a>{" "}
+              {`${currentMerchant.confirm_file}.txt`}
+            </Typography>
+            <Typography variant='body1'>
+              2. Разместите в корне сайта:{" "}
+              <a className='doc_link' href={currentMerchant.confirm_file_path}>
+                {currentMerchant.confirm_file_path}
+              </a>
+            </Typography>
+            <Typography variant='body1'>
+              3. Затем нажмите кнопку “Подтвердить”
+            </Typography>
+          </li>
+          <li>
+            <Button
+              variant='outlined'
+              style={{
+                width: 200,
+                color: "#FF9900",
+                fontSize: 18,
+                fontWeight: 300,
+                border: "1px solid #FF9900",
+                borderRadius: 8,
+                marginTop: 20,
+              }}
+              onClick={confirmMerchantHandler}
+            >
+              Подтвердить
+            </Button>
+          </li>
+        </ul>
+      </>
+    );
+  }
   return (
     <>
       {!currentMerchant || currentMerchant.merchant_id !== match.params.id ? (
@@ -157,279 +206,304 @@ export function ProjectSettings({ match }) {
 
           {tab === "Инфо" && (
             <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <div
-                  className='flex_box'
-                  style={{ justifyContent: "space-between" }}
-                >
-                  <span className='subtitle'>История транзакций</span>
-                </div>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                container
-                style={{
-                  marginTop: 20,
-                }}
-              >
-                <Grid item xs={12} container spacing={6}>
-                  <Grid item xs={3} lg={3}>
-                    {state.typeList && (
-                      <ThemeInput
-                        margin='dense'
-                        name='operationType'
-                        select
-                        variant='outlined'
-                        value={options.operation_type}
-                        onChange={(e) => {
-                          filterChangeHandler({
-                            ...options,
-                            operation_type: e.target.value,
-                          });
-                        }}
-                        fullWidth
-                      >
-                        {state.typeList.map((type) => (
-                          <MenuItem
-                            key={type.name}
-                            value={type.value}
-                            className={classes.menuItem}
-                            classes={{ selected: classes.selected }}
-                          >
-                            {type.name}
-                          </MenuItem>
-                        ))}
-                      </ThemeInput>
-                    )}
-                  </Grid>
-                  <Grid item xs={6} lg={4}>
+              {currentMerchant.status.name === "Не подтвержден" ? (
+                <Grid item xs={12}>
+                  <DomenNotConfirmed />
+                </Grid>
+              ) : (
+                <>
+                  <Grid item xs={12}>
                     <div
                       className='flex_box'
-                      style={{ justifyContent: "space-between" }}
-                    >
-                      <ThemeInput
-                        name='date_from'
-                        type='date'
-                        variant='outlined'
-                        margin='dense'
-                        value={options.date_from}
-                        onChange={(e) => {
-                          filterChangeHandler({
-                            ...options,
-                            date_from: e.target.value,
-                          });
-                        }}
-                        inputProps={{
-                          max: new Date().toISOString().split("T")[0],
-                        }}
-                      />
-                      <div style={{ margin: "0 10px" }}>-</div>
-                      <ThemeInput
-                        name='date_to'
-                        type='date'
-                        variant='outlined'
-                        margin='dense'
-                        value={options.date_to}
-                        onChange={(e) => {
-                          filterChangeHandler({
-                            ...options,
-                            date_to: e.target.value,
-                          });
-                        }}
-                        inputProps={{
-                          max: new Date().toISOString().split("T")[0],
-                        }}
-                      />
-                    </div>
-                  </Grid>
-                  <Grid item xs={2}></Grid>
-                  <Grid item xs={3}>
-                    <div
-                      className='flex_box'
-                      style={{ justifyContent: "flex-end" }}
-                    >
-                      {state.statusList && (
-                        <ThemeInput
-                          margin='dense'
-                          name='status'
-                          select
-                          variant='outlined'
-                          value={options.status}
-                          onChange={(e) => {
-                            filterChangeHandler({
-                              ...options,
-                              status: e.target.value,
-                            });
-                          }}
-                          fullWidth
-                        >
-                          {state.statusList.map((type) => (
-                            <MenuItem
-                              key={type.name}
-                              value={type.value}
-                              className={classes.menuItem}
-                              classes={{ selected: classes.selected }}
-                            >
-                              {type.name}
-                            </MenuItem>
-                          ))}
-                        </ThemeInput>
-                      )}
-                    </div>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                container
-                style={{
-                  borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-                  padding: "25px 15px",
-                }}
-              >
-                <Grid item xs={2}>
-                  <Typography variant='body2'>Операция</Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography variant='body2'>Дата</Typography>
-                </Grid>
-                <Grid item xs={1}>
-                  <Typography variant='body2' style={{ textAlign: "center" }}>
-                    Сумма
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography variant='body2' style={{ textAlign: "center" }}>
-                    Приход
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography variant='body2' style={{ textAlign: "center" }}>
-                    Расход
-                  </Typography>
-                </Grid>
-                <Grid item xs={1}>
-                  <Typography variant='body2' style={{ textAlign: "center" }}>
-                    Валюта
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography variant='body2' style={{ textAlign: "center" }}>
-                    Статус
-                  </Typography>
-                </Grid>
-              </Grid>
-              {state.historyList ? (
-                state.historyList.map((obj) => {
-                  const statusImg = [
-                    null,
-                    <img
-                      src={pending}
-                      style={{ width: 24 }}
-                      title={obj.status.name}
-                      alt=''
-                    />,
-                    <img
-                      src={success}
-                      style={{ width: 24 }}
-                      title={obj.status.name}
-                      alt=''
-                    />,
-                    <img
-                      src={fail}
-                      style={{ width: 24 }}
-                      title={obj.status.name}
-                      alt=''
-                    />,
-                    <img
-                      src={fail}
-                      style={{ width: 24 }}
-                      title={obj.status.name}
-                      alt=''
-                    />,
-                    <img
-                      src={warning}
-                      style={{ width: 24 }}
-                      title={obj.status.name}
-                      alt=''
-                    />,
-                    <img
-                      src={success}
-                      style={{ width: 24 }}
-                      title={obj.status.name}
-                      alt=''
-                    />,
-                  ];
-                  return (
-                    <Grid
-                      item
-                      xs={12}
-                      container
                       style={{
-                        borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-                        padding: "25px 15px",
+                        justifyContent: "space-between",
                       }}
-                      key={obj.order_id + obj.date}
                     >
-                      <Grid item xs={2}>
-                        <Typography variant='body2'>
-                          {obj.operation_type.name}
-                        </Typography>
+                      <span className='subtitle'>История транзакций</span>
+                    </div>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    container
+                    style={{
+                      marginTop: 10,
+                    }}
+                  >
+                    <Grid item xs={12} container spacing={6}>
+                      <Grid item xs={3} lg={3}>
+                        {state.typeList && (
+                          <ThemeInput
+                            margin='dense'
+                            name='operationType'
+                            select
+                            variant='outlined'
+                            value={options.operation_type}
+                            onChange={(e) => {
+                              filterChangeHandler({
+                                ...options,
+                                operation_type: e.target.value,
+                              });
+                            }}
+                            fullWidth
+                          >
+                            {state.typeList.map((type) => (
+                              <MenuItem
+                                key={type.name}
+                                value={type.value}
+                                className={classes.menuItem}
+                                classes={{ selected: classes.selected }}
+                              >
+                                {type.name}
+                              </MenuItem>
+                            ))}
+                          </ThemeInput>
+                        )}
                       </Grid>
-                      <Grid item xs={2}>
-                        <Typography variant='body2'>{obj.date}</Typography>
-                      </Grid>
-                      <Grid item xs={1}>
-                        <Typography
-                          variant='body2'
-                          style={{ textAlign: "center" }}
+                      <Grid item xs={6} lg={4}>
+                        <div
+                          className='flex_box'
+                          style={{ justifyContent: "space-between" }}
                         >
-                          {obj.sum}
-                        </Typography>
+                          <ThemeInput
+                            name='date_from'
+                            type='date'
+                            variant='outlined'
+                            margin='dense'
+                            value={options.date_from}
+                            onChange={(e) => {
+                              filterChangeHandler({
+                                ...options,
+                                date_from: e.target.value,
+                              });
+                            }}
+                            inputProps={{
+                              max: new Date().toISOString().split("T")[0],
+                            }}
+                          />
+                          <div style={{ margin: "0 10px" }}>-</div>
+                          <ThemeInput
+                            name='date_to'
+                            type='date'
+                            variant='outlined'
+                            margin='dense'
+                            value={options.date_to}
+                            onChange={(e) => {
+                              filterChangeHandler({
+                                ...options,
+                                date_to: e.target.value,
+                              });
+                            }}
+                            inputProps={{
+                              max: new Date().toISOString().split("T")[0],
+                            }}
+                          />
+                        </div>
                       </Grid>
-                      <Grid item xs={2}>
-                        <Typography
-                          variant='body2'
-                          style={{ textAlign: "center" }}
+                      <Grid item xs={2}></Grid>
+                      <Grid item xs={3}>
+                        <div
+                          className='flex_box'
+                          style={{ justifyContent: "flex-end" }}
                         >
-                          {obj.debit}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={2}>
-                        <Typography
-                          variant='body2'
-                          style={{ textAlign: "center" }}
-                        >
-                          {Boolean(obj.credit) ? obj.credit : "---"}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={1}>
-                        <Typography
-                          variant='body2'
-                          style={{ textAlign: "center" }}
-                        >
-                          {obj.currency}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={2} style={{ textAlign: "center" }}>
-                        {statusImg[obj.status.value]}
+                          {state.statusList && (
+                            <ThemeInput
+                              margin='dense'
+                              name='status'
+                              select
+                              variant='outlined'
+                              value={options.status}
+                              onChange={(e) => {
+                                filterChangeHandler({
+                                  ...options,
+                                  status: e.target.value,
+                                });
+                              }}
+                              fullWidth
+                            >
+                              {state.statusList.map((type) => (
+                                <MenuItem
+                                  key={type.name}
+                                  value={type.value}
+                                  className={classes.menuItem}
+                                  classes={{ selected: classes.selected }}
+                                >
+                                  {type.name}
+                                </MenuItem>
+                              ))}
+                            </ThemeInput>
+                          )}
+                        </div>
                       </Grid>
                     </Grid>
-                  );
-                })
-              ) : (
-                <Grid item xs={12}>
-                  <div className='flex_box'>
-                    <div style={{ textAlign: "center", marginTop: 100 }}>
-                      <img src={goust} alt='' />
-                      <Typography variant='h3' style={{ color: "#3E414E" }}>
-                        Ничего не найдено
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    container
+                    style={{
+                      borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+                      padding: "25px 15px",
+                    }}
+                  >
+                    <Grid item xs={2}>
+                      <Typography variant='body2'>Операция</Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Typography variant='body2'>Дата</Typography>
+                    </Grid>
+                    <Grid item xs={1}>
+                      <Typography
+                        variant='body2'
+                        style={{ textAlign: "center" }}
+                      >
+                        Сумма
                       </Typography>
-                    </div>
-                  </div>
-                </Grid>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Typography
+                        variant='body2'
+                        style={{ textAlign: "center" }}
+                      >
+                        Приход
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Typography
+                        variant='body2'
+                        style={{ textAlign: "center" }}
+                      >
+                        Расход
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={1}>
+                      <Typography
+                        variant='body2'
+                        style={{ textAlign: "center" }}
+                      >
+                        Валюта
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Typography
+                        variant='body2'
+                        style={{ textAlign: "center" }}
+                      >
+                        Статус
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  {state.historyList ? (
+                    state.historyList.map((obj) => {
+                      const statusImg = [
+                        null,
+                        <img
+                          src={pending}
+                          style={{ width: 24 }}
+                          title={obj.status.name}
+                          alt=''
+                        />,
+                        <img
+                          src={success}
+                          style={{ width: 24 }}
+                          title={obj.status.name}
+                          alt=''
+                        />,
+                        <img
+                          src={fail}
+                          style={{ width: 24 }}
+                          title={obj.status.name}
+                          alt=''
+                        />,
+                        <img
+                          src={fail}
+                          style={{ width: 24 }}
+                          title={obj.status.name}
+                          alt=''
+                        />,
+                        <img
+                          src={warning}
+                          style={{ width: 24 }}
+                          title={obj.status.name}
+                          alt=''
+                        />,
+                        <img
+                          src={success}
+                          style={{ width: 24 }}
+                          title={obj.status.name}
+                          alt=''
+                        />,
+                      ];
+                      return (
+                        <Grid
+                          item
+                          xs={12}
+                          container
+                          style={{
+                            borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+                            padding: "25px 15px",
+                          }}
+                          key={obj.order_id + obj.date}
+                        >
+                          <Grid item xs={2}>
+                            <Typography variant='body2'>
+                              {obj.operation_type.name}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Typography variant='body2'>{obj.date}</Typography>
+                          </Grid>
+                          <Grid item xs={1}>
+                            <Typography
+                              variant='body2'
+                              style={{ textAlign: "center" }}
+                            >
+                              {obj.sum}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Typography
+                              variant='body2'
+                              style={{ textAlign: "center" }}
+                            >
+                              {obj.debit}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Typography
+                              variant='body2'
+                              style={{ textAlign: "center" }}
+                            >
+                              {Boolean(obj.credit) ? obj.credit : "---"}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={1}>
+                            <Typography
+                              variant='body2'
+                              style={{ textAlign: "center" }}
+                            >
+                              {obj.currency}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={2} style={{ textAlign: "center" }}>
+                            {statusImg[obj.status.value]}
+                          </Grid>
+                        </Grid>
+                      );
+                    })
+                  ) : (
+                    <Grid item xs={12}>
+                      <div className='flex_box'>
+                        <div style={{ textAlign: "center", marginTop: 100 }}>
+                          <img src={goust} alt='' />
+                          <Typography variant='h3' style={{ color: "#3E414E" }}>
+                            Ничего не найдено
+                          </Typography>
+                        </div>
+                      </div>
+                    </Grid>
+                  )}
+                </>
               )}
             </Grid>
           )}
@@ -437,54 +511,7 @@ export function ProjectSettings({ match }) {
           {tab === "Настройки" && (
             <>
               {currentMerchant.status.name === "Не подтвержден" ? (
-                <>
-                  <Typography variant='h4' style={{ color: "#C51A2C" }}>
-                    Домен не подтвержден:
-                  </Typography>
-                  <ul className='projects'>
-                    <li>
-                      <Typography variant='body1'>
-                        1.{" "}
-                        <a
-                          href={`${baseURL}/account/get-confirm-file/${currentMerchant.confirm_file}`}
-                          style={{ textDecoration: "none" }}
-                        >
-                          <span className='project_link'>Скачать</span>
-                        </a>{" "}
-                        {`${currentMerchant.confirm_file}.txt`}
-                      </Typography>
-                      <Typography variant='body1'>
-                        2. Разместите в корне сайта:{" "}
-                        <a
-                          className='doc_link'
-                          href={currentMerchant.confirm_file_path}
-                        >
-                          {currentMerchant.confirm_file_path}
-                        </a>
-                      </Typography>
-                      <Typography variant='body1'>
-                        3. Затем нажмите кнопку “Подтвердить”
-                      </Typography>
-                    </li>
-                    <li>
-                      <Button
-                        variant='outlined'
-                        style={{
-                          width: 200,
-                          color: "#FF9900",
-                          fontSize: 18,
-                          fontWeight: 300,
-                          border: "1px solid #FF9900",
-                          borderRadius: 8,
-                          marginTop: 20,
-                        }}
-                        onClick={confirmMerchantHandler}
-                      >
-                        Подтвердить
-                      </Button>
-                    </li>
-                  </ul>
-                </>
+                <DomenNotConfirmed />
               ) : (
                 <Formik
                   initialValues={{ ...currentMerchant.params }}
@@ -500,7 +527,12 @@ export function ProjectSettings({ match }) {
                         alignItems: "flex-start",
                       }}
                     >
-                      <span className='subtitle'>URL успешной оплаты:</span>
+                      <span
+                        className='subtitle'
+                        style={{ marginBottom: "8px" }}
+                      >
+                        URL успешной оплаты:
+                      </span>
                       <ValidatedInput
                         name='success_url'
                         style={{ width: "100%" }}
@@ -515,7 +547,12 @@ export function ProjectSettings({ match }) {
                         alignItems: "flex-start",
                       }}
                     >
-                      <span className='subtitle'>URL неуспешной оплаты:</span>
+                      <span
+                        className='subtitle'
+                        style={{ marginBottom: "8px" }}
+                      >
+                        URL неуспешной оплаты:
+                      </span>
                       <ValidatedInput
                         name='fail_url'
                         style={{ width: "100%" }}
@@ -530,7 +567,12 @@ export function ProjectSettings({ match }) {
                         alignItems: "flex-start",
                       }}
                     >
-                      <span className='subtitle'>URL обработчика:</span>
+                      <span
+                        className='subtitle'
+                        style={{ marginBottom: "8px" }}
+                      >
+                        URL обработчика:
+                      </span>
                       <ValidatedInput
                         name='status_url'
                         style={{ width: "100%" }}
@@ -543,178 +585,199 @@ export function ProjectSettings({ match }) {
                   </Form>
                 </Formik>
               )}
-              <p className='subtitle'>Удалить кошелек</p>
-              <Typography variant='body2' style={{ width: "45%" }}>
-                Перед удалением убедитесь, что вы выбрали правильный кошелек.
-                Удаление приведет к потере данных и средств на кошельке.
-              </Typography>
-              <NavLink
-                to={`${match.url}/delete`}
-                style={{ textDecoration: "none" }}
-              >
-                <Button
-                  style={{
-                    borderColor: "#ff6f6f",
-                    color: "#ff6f6f",
-                    fontSize: 16,
-                    width: 175,
-                    height: 50,
-                    margin: "20px 0",
-                  }}
-                  variant='outlined'
+
+              <div style={{ marginTop: "60px" }}>
+                <p className='subtitle'>Удалить кошелек</p>
+                <Typography variant='body2' style={{ width: "45%" }}>
+                  Перед удалением убедитесь, что вы выбрали правильный кошелек.
+                  Удаление приведет к потере данных и средств на кошельке.
+                </Typography>
+                <NavLink
+                  to={`${match.url}/delete`}
+                  style={{ textDecoration: "none" }}
                 >
-                  Удалить
-                </Button>
-              </NavLink>
+                  <Button
+                    style={{
+                      borderColor: "#ff6f6f",
+                      color: "#ff6f6f",
+                      fontSize: 16,
+                      width: 175,
+                      height: 50,
+                      margin: "20px 0",
+                    }}
+                    variant='outlined'
+                  >
+                    Удалить
+                  </Button>
+                </NavLink>
+              </div>
             </>
           )}
 
           {tab === "API" && (
             <>
-              <p className='subtitle' style={{ fontWeight: 450 }}>
-                Идентификатор приложения
-              </p>
-              <Typography variant='body2' style={{ lineHeight: "200%" }}>
-                Используйте этот идентификатор для создания счета
-              </Typography>
-              <Typography variant='body2' style={{ lineHeight: "200%" }}>
-                ID этого проекта:
-                <span
-                  style={{ color: "#ff9900", marginLeft: 15, fontWeight: 450 }}
-                >
-                  {match.params.id}
-                </span>
-              </Typography>
+              {currentMerchant.status.name === "Не подтвержден" ? (
+                <DomenNotConfirmed />
+              ) : (
+                <>
+                  <p
+                    className='subtitle'
+                    style={{ fontWeight: 450, fontSize: "24px" }}
+                  >
+                    Идентификатор приложения
+                  </p>
+                  <Typography variant='body2' style={{ lineHeight: "200%" }}>
+                    Используйте этот идентификатор для создания счета
+                  </Typography>
+                  <Typography variant='body2' style={{ lineHeight: "200%" }}>
+                    ID этого проекта:
+                    <span
+                      style={{
+                        color: "#ff9900",
+                        marginLeft: 15,
+                        fontWeight: 450,
+                      }}
+                    >
+                      {match.params.id}
+                    </span>
+                  </Typography>
 
-              <p
-                className='subtitle'
-                style={{ marginTop: 65, fontWeight: 450 }}
-              >
-                API
-              </p>
-              <Typography variant='body2' style={{ lineHeight: "200%" }}>
-                Access to payments through API
-              </Typography>
-              <Typography variant='body2' style={{ lineHeight: "200%" }}>
-                Для работы с API вам необходимо получить API Key и Secret Key.
-              </Typography>
-              <div
-                className='flex_box'
-                style={{
-                  marginTop: 20,
-                  alignItems: "flex-start",
-                  flexDirection: "column",
-                }}
-              >
-                <span className='subtitle' style={{ fontSize: 16 }}>
-                  API Key:
-                </span>
-                <ThemeInput
-                  margin='dense'
-                  name='key'
-                  type='text'
-                  style={{ width: "100%" }}
-                  value={currentMerchant.params.api_key}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position='end'>
-                        <Tooltip
-                          PopperProps={{
-                            disablePortal: true,
-                          }}
-                          open={tooltip.a}
-                          disableFocusListener
-                          disableHoverListener
-                          disableTouchListener
-                          title='Copied'
-                          arrow
-                          TransitionComponent={Zoom}
-                        >
-                          <CopyToClipboard
-                            text={currentMerchant.params.api_key}
-                            onCopy={() => {
-                              setTooltip({ ...tooltip, a: true });
-                              closeTooltip();
-                            }}
-                          >
-                            <img
-                              src={copyIcon}
-                              style={{ cursor: "pointer" }}
-                              alt='content copy'
-                            />
-                          </CopyToClipboard>
-                        </Tooltip>
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant='outlined'
-                  disabled
-                />
-              </div>
-              <div
-                className='flex_box'
-                style={{
-                  marginTop: 20,
-                  alignItems: "flex-start",
-                  flexDirection: "column",
-                }}
-              >
-                <span className='subtitle' style={{ fontSize: 16 }}>
-                  Secret Key:
-                </span>
-                <ThemeInput
-                  margin='dense'
-                  name='token'
-                  type='text'
-                  style={{ width: "100%" }}
-                  value={currentMerchant.params.secret_key}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position='end'>
-                        <Tooltip
-                          PopperProps={{
-                            disablePortal: true,
-                          }}
-                          open={tooltip.b}
-                          disableFocusListener
-                          disableHoverListener
-                          disableTouchListener
-                          title='Copied'
-                          arrow
-                          TransitionComponent={Zoom}
-                        >
-                          <CopyToClipboard
-                            text={currentMerchant.params.secret_key}
-                            onCopy={() => {
-                              setTooltip({ ...tooltip, b: true });
-                              closeTooltip();
-                            }}
-                          >
-                            <img
-                              src={copyIcon}
-                              style={{ cursor: "pointer" }}
-                              alt='content copy'
-                            />
-                          </CopyToClipboard>
-                        </Tooltip>
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant='outlined'
-                  disabled
-                />
-              </div>
-              <GoldButton
-                onClick={getTokenHandler}
-                style={{
-                  fontSize: 16,
-                  minHeight: 50,
-                  width: 200,
-                  margin: "40px 0",
-                }}
-              >
-                Получить ключи
-              </GoldButton>
+                  <p
+                    className='subtitle'
+                    style={{ marginTop: 65, fontWeight: 450, fontSize: "24px" }}
+                  >
+                    API
+                  </p>
+                  <Typography variant='body2' style={{ lineHeight: "200%" }}>
+                    Access to payments through API
+                  </Typography>
+                  <Typography variant='body2' style={{ lineHeight: "200%" }}>
+                    Для работы с API вам необходимо получить API Key и Secret
+                    Key.
+                  </Typography>
+                  <div
+                    className='flex_box'
+                    style={{
+                      marginTop: 20,
+                      alignItems: "flex-start",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <span
+                      className='subtitle'
+                      style={{ fontSize: 16, marginBottom: "8px" }}
+                    >
+                      API Key:
+                    </span>
+                    <ThemeInput
+                      name='key'
+                      type='text'
+                      style={{ width: "100%" }}
+                      value={currentMerchant.params.api_key}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <Tooltip
+                              PopperProps={{
+                                disablePortal: true,
+                              }}
+                              open={tooltip.a}
+                              disableFocusListener
+                              disableHoverListener
+                              disableTouchListener
+                              title='Copied'
+                              arrow
+                              TransitionComponent={Zoom}
+                            >
+                              <CopyToClipboard
+                                text={currentMerchant.params.api_key}
+                                onCopy={() => {
+                                  setTooltip({ ...tooltip, a: true });
+                                  closeTooltip();
+                                }}
+                              >
+                                <img
+                                  src={copyIcon}
+                                  style={{ cursor: "pointer" }}
+                                  alt='content copy'
+                                />
+                              </CopyToClipboard>
+                            </Tooltip>
+                          </InputAdornment>
+                        ),
+                      }}
+                      variant='outlined'
+                      disabled
+                    />
+                  </div>
+                  <div
+                    className='flex_box'
+                    style={{
+                      marginTop: 20,
+                      alignItems: "flex-start",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <span
+                      className='subtitle'
+                      style={{ fontSize: 16, marginBottom: "8px" }}
+                    >
+                      Secret Key:
+                    </span>
+                    <ThemeInput
+                      name='token'
+                      type='text'
+                      style={{ width: "100%" }}
+                      value={currentMerchant.params.secret_key}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <Tooltip
+                              PopperProps={{
+                                disablePortal: true,
+                              }}
+                              open={tooltip.b}
+                              disableFocusListener
+                              disableHoverListener
+                              disableTouchListener
+                              title='Copied'
+                              arrow
+                              TransitionComponent={Zoom}
+                            >
+                              <CopyToClipboard
+                                text={currentMerchant.params.secret_key}
+                                onCopy={() => {
+                                  setTooltip({ ...tooltip, b: true });
+                                  closeTooltip();
+                                }}
+                              >
+                                <img
+                                  src={copyIcon}
+                                  style={{ cursor: "pointer" }}
+                                  alt='content copy'
+                                />
+                              </CopyToClipboard>
+                            </Tooltip>
+                          </InputAdornment>
+                        ),
+                      }}
+                      variant='outlined'
+                      disabled
+                    />
+                  </div>
+                  <GoldButton
+                    onClick={getTokenHandler}
+                    style={{
+                      fontSize: 16,
+                      minHeight: 50,
+                      width: 200,
+                      margin: "40px 0",
+                    }}
+                  >
+                    Получить ключи
+                  </GoldButton>
+                </>
+              )}
             </>
           )}
         </section>

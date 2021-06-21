@@ -18,7 +18,7 @@ import { NavLink } from "react-router-dom";
 import { GoldButton } from "shared/Buttons/buttons";
 import { Success } from "./CreateProject";
 import goust from "assets/goust-icon.webp";
-import { cashOut } from "store/reducer";
+import { cashOut, getBalance } from "store/reducer";
 import { setAlert } from "store/actionCreators";
 
 export function WithdrawFunds() {
@@ -27,27 +27,45 @@ export function WithdrawFunds() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const { merchants, balance } = useSelector((store) => store.reducer);
-  const [currentMerchant, setCurrentMerchant] = React.useState(merchants[0]);
-  const [currentBalance, setCurrentBalance] = React.useState(
-    balance.filter(
-      (item) =>
-        parseInt(item.merchant_id) === parseInt(currentMerchant.merchant_id)
-    )[0]
-  );
-  const [currency, setCurrency] = React.useState(currentBalance.currencies[0]);
+  const [currentMerchant, setCurrentMerchant] = React.useState("");
+  const [currentBalance, setCurrentBalance] = React.useState("");
+  const [currency, setCurrency] = React.useState("");
   const [sum, setSum] = React.useState(0);
   const [err, setErr] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const steps = ["Создать", "Потвердить", "Успешно"];
 
   React.useEffect(() => {
+    if (!Boolean(balance)) {
+      dispatch(getBalance());
+    }
     if (!Boolean(currentMerchant)) {
       setCurrentMerchant(merchants[0]);
     }
-    if (!Boolean(currentBalance)) {
-      setCurrentBalance(balance[0]);
+    if (
+      !Boolean(currentBalance) &&
+      Boolean(balance) &&
+      Boolean(currentMerchant)
+    ) {
+      setCurrentBalance(
+        balance.filter(
+          (item) =>
+            parseInt(item.merchant_id) === parseInt(currentMerchant.merchant_id)
+        )[0]
+      );
     }
-  }, [merchants, sum]);
+    if (!Boolean(currency) && Boolean(currentBalance)) {
+      setCurrency(currentBalance.currencies[0]);
+    }
+  }, [
+    merchants,
+    sum,
+    balance,
+    currentBalance,
+    currentMerchant,
+    currency,
+    dispatch,
+  ]);
 
   const handleNext = () => {
     if (!err && sum > 0) {
@@ -173,7 +191,7 @@ export function WithdrawFunds() {
                       ))}
                   </ThemeInput>
                   <Typography variant='body2' style={{ marginTop: 15 }}>
-                    Введите сумму (USD)
+                    {`Введите сумму (${currency.name})`}
                   </Typography>
                   <ThemeInput
                     placeholder='Cумма'

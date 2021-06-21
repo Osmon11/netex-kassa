@@ -206,12 +206,13 @@ export const cashOut = (data, callback) => (dispatch) => {
 export const getBalance = () => (dispatch) => {
   creatRequest("/balance/get", undefined).then((res) => {
     if (Boolean(res)) {
+      let balance = res.data.balance;
       let newData = [];
-      for (let m in res.data) {
+      for (let m in balance) {
         let obj = {};
         let currencies = [];
-        for (let c in res.data[m]) {
-          let currency = res.data[m][c];
+        for (let c in balance[m]) {
+          let currency = balance[m][c];
           currency.name = c;
           currencies.push(currency);
         }
@@ -219,7 +220,7 @@ export const getBalance = () => (dispatch) => {
         obj.currencies = currencies;
         newData.push(obj);
       }
-      dispatch(setBalance({ balance: newData }));
+      dispatch(setBalance(newData));
     }
   });
 };

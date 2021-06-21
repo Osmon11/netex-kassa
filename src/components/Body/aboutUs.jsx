@@ -4,52 +4,52 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from '@material-ui/core'
-import React from 'react'
-import './style.css'
-import flag from 'assets/flag.png'
-import planet from 'assets/planet.webp'
-import bitcoin1 from 'assets/bitcoin-1.webp'
-import bitcoin2 from 'assets/bitcoin-2.webp'
-import bitcoin3 from 'assets/bitcoin-3.webp'
-import cripto1 from 'assets/cripto-coin1.webp'
-import cripto2 from 'assets/cripto-coin2.webp'
-import cripto3 from 'assets/cripto-coin3.webp'
-import cripto4 from 'assets/cripto-coin4.webp'
-import cripto5 from 'assets/cripto-coin5.webp'
-import { ParallaxMousemove } from 'components'
-import { GoldButton } from 'shared/Buttons/buttons'
-import { useDispatch } from 'react-redux'
-import { setAuthDialog } from 'store/actionCreators'
+} from "@material-ui/core";
+import React from "react";
+import "./style.css";
+import flag from "assets/flag.png";
+import planet from "assets/planet.webp";
+import bitcoin1 from "assets/bitcoin-1.webp";
+import bitcoin2 from "assets/bitcoin-2.webp";
+import bitcoin3 from "assets/bitcoin-3.webp";
+import cripto1 from "assets/cripto-coin1.webp";
+import cripto2 from "assets/cripto-coin2.webp";
+import cripto3 from "assets/cripto-coin3.webp";
+import cripto4 from "assets/cripto-coin4.webp";
+import cripto5 from "assets/cripto-coin5.webp";
+import { ParallaxMousemove } from "components";
+import { GoldButton } from "shared/Buttons/buttons";
+import { useDispatch } from "react-redux";
+import { setAuthDialog } from "store/actionCreators";
 
 export function AboutUsBody() {
-  const theme = useTheme()
-  const sm = useMediaQuery(theme.breakpoints.down('sm'))
-  const xs = useMediaQuery(theme.breakpoints.down('xs'))
-  const dispatch = useDispatch()
+  const theme = useTheme();
+  const sm = useMediaQuery(theme.breakpoints.down("sm"));
+  const xs = useMediaQuery(theme.breakpoints.down("xs"));
+  const dispatch = useDispatch();
 
   return (
     <section
       style={{
         paddingTop: sm ? 50 : 100,
-        overflow: 'hidden',
+        overflow: "hidden",
         paddingBottom: 100,
       }}
     >
       <Container>
         <Grid container spacing={2}>
           <Grid item md={5}>
-            <p className="main_title" style={{ textAlign: 'start' }}>
+            <p className='main_title' style={{ textAlign: "start" }}>
               О нас
             </p>
-            <Typography variant="body1" style={{ fontSize: xs ? 14 : 20 }}>
-              Netex-kassa компания которая имеет многолетний опыт работы с
+            <Typography variant='body1' style={{ fontSize: xs ? 14 : 20 }}>
+              Netex Kassa компания которая имеет многолетний опыт работы с
               криптовалютами. Наша цель заключается в предоставлении
               качественной услуги за адекватную цену. Мы гарантируем своим
               клиентам анонимность и шифрование данных.
             </Typography>
             <Typography
-              variant="body1"
+              variant='body1'
               style={{ marginTop: 20, fontSize: xs ? 14 : 20 }}
             >
               Работая с нами вы останетесь довольными.
@@ -57,20 +57,20 @@ export function AboutUsBody() {
             {!sm ? (
               <>
                 <p
-                  className="main_title"
-                  style={{ textAlign: 'start', marginTop: 150 }}
+                  className='main_title'
+                  style={{ textAlign: "start", marginTop: 150 }}
                 >
                   Технологии
                 </p>
-                <div className="flex_box" style={{ alignItems: 'flex-start' }}>
+                <div className='flex_box' style={{ alignItems: "flex-start" }}>
                   <img
                     src={flag}
-                    alt=""
+                    alt=''
                     style={{ marginTop: 10, marginRight: 15 }}
                   />
-                  <Typography variant="body1">
+                  <Typography variant='body1'>
                     Наш сервис развиваться и мы всегда держимся новых трендов.
-                    Мы готовим проект Biwse Card, и если Вы хотите получить
+                    Мы готовим проект Netex Card, и если Вы хотите получить
                     карту свяжитесь со службой поддержки и вашу заявку внесут в
                     список ожидания.
                   </Typography>
@@ -93,38 +93,38 @@ export function AboutUsBody() {
             ) : null}
           </Grid>
 
-          <Grid item md={7} style={{ position: 'relative' }}>
+          <Grid item md={7} style={{ position: "relative" }}>
             {sm ? (
               <>
-                <img className="planet" src={planet} alt="" />
+                <img className='planet' src={planet} alt='' />
                 <img
-                  className="bitcoin about_us_bitcoin1"
+                  className='bitcoin about_us_bitcoin1'
                   src={bitcoin1}
-                  alt=""
+                  alt=''
                 />
                 <img
-                  className="bitcoin about_us_bitcoin2"
+                  className='bitcoin about_us_bitcoin2'
                   src={bitcoin2}
-                  alt=""
+                  alt=''
                 />
                 <img
-                  className="bitcoin about_us_bitcoin3"
+                  className='bitcoin about_us_bitcoin3'
                   src={bitcoin3}
-                  alt=""
+                  alt=''
                 />
               </>
             ) : (
               <ParallaxMousemove
                 containerStyle={{
-                  position: 'relative',
-                  width: '100%',
-                  height: '100%',
+                  position: "relative",
+                  width: "100%",
+                  height: "100%",
                 }}
               >
                 {/* Planet image */}
                 <ParallaxMousemove.Layer
                   layerStyle={{
-                    position: 'absolute',
+                    position: "absolute",
                     top: -100,
                     left: 0,
                   }}
@@ -137,14 +137,14 @@ export function AboutUsBody() {
                     },
                   }}
                 >
-                  <img src={planet} alt="" />
+                  <img src={planet} alt='' />
                 </ParallaxMousemove.Layer>
                 {/* Bitcoin1 image */}
                 <ParallaxMousemove.Layer
                   layerStyle={{
-                    position: 'absolute',
+                    position: "absolute",
                     top: 100,
-                    left: '15%',
+                    left: "15%",
                   }}
                   config={{
                     xFactor: 0.15,
@@ -155,14 +155,14 @@ export function AboutUsBody() {
                     },
                   }}
                 >
-                  <img src={bitcoin1} alt="" />
+                  <img src={bitcoin1} alt='' />
                 </ParallaxMousemove.Layer>
                 {/* Bitcoin2 image */}
                 <ParallaxMousemove.Layer
                   layerStyle={{
-                    position: 'absolute',
-                    right: '-10%',
-                    top: '30%',
+                    position: "absolute",
+                    right: "-10%",
+                    top: "30%",
                   }}
                   config={{
                     xFactor: -0.1,
@@ -173,14 +173,14 @@ export function AboutUsBody() {
                     },
                   }}
                 >
-                  <img src={bitcoin2} alt="" />
+                  <img src={bitcoin2} alt='' />
                 </ParallaxMousemove.Layer>
                 {/* Bitcoin3 image */}
                 <ParallaxMousemove.Layer
                   layerStyle={{
-                    position: 'absolute',
-                    left: '35%',
-                    top: '60%',
+                    position: "absolute",
+                    left: "35%",
+                    top: "60%",
                     zIndex: -1,
                   }}
                   config={{
@@ -192,7 +192,7 @@ export function AboutUsBody() {
                     },
                   }}
                 >
-                  <img src={bitcoin3} alt="" />
+                  <img src={bitcoin3} alt='' />
                 </ParallaxMousemove.Layer>
               </ParallaxMousemove>
             )}
@@ -200,20 +200,20 @@ export function AboutUsBody() {
 
           {sm ? (
             <Grid item xs={12}>
-              <p className="main_title" style={{ textAlign: 'start' }}>
+              <p className='main_title' style={{ textAlign: "start" }}>
                 Технологии
               </p>
-              <div className="flex_box" style={{ alignItems: 'flex-start' }}>
+              <div className='flex_box' style={{ alignItems: "flex-start" }}>
                 <img
                   src={flag}
-                  alt=""
+                  alt=''
                   style={{
                     marginTop: 10,
                     marginRight: 15,
                     width: xs ? 25 : 46,
                   }}
                 />
-                <Typography variant="body1" style={{ fontSize: xs ? 14 : 20 }}>
+                <Typography variant='body1' style={{ fontSize: xs ? 14 : 20 }}>
                   Наш сервис развиваться и мы всегда держимся новых трендов. Мы
                   готовим проект Biwse Card, и если Вы хотите получить карту
                   свяжитесь со службой поддержки и вашу заявку внесут в список
@@ -246,51 +246,51 @@ export function AboutUsBody() {
 
           <Grid item md={12}>
             <Typography
-              variant="h3"
+              variant='h3'
               style={{
-                padding: '0 20%',
+                padding: "0 20%",
                 marginTop: 100,
-                textAlign: 'center',
+                textAlign: "center",
                 fontSize: xs ? 30 : 50,
               }}
             >
               Больше чем 200 компаний уже работают с нами
             </Typography>
             <p
-              className="title"
-              style={{ fontSize: xs ? 20 : 25, textAlign: 'center' }}
+              className='title'
+              style={{ fontSize: xs ? 20 : 25, textAlign: "center" }}
             >
               Мы поддерживаем самые популярные криптовалюты
             </p>
             <div
-              className="flex_box"
-              style={{ width: '100%', margin: '60px 0' }}
+              className='flex_box'
+              style={{ width: "100%", margin: "60px 0" }}
             >
               <img
-                className="cripto_brend"
+                className='cripto_brend'
                 src={cripto1}
                 style={{ marginRight: xs ? 15 : 30 }}
-                alt=""
+                alt=''
               />
               <img
-                className="cripto_brend"
+                className='cripto_brend'
                 src={cripto2}
                 style={{ marginRight: xs ? 15 : 30 }}
-                alt=""
+                alt=''
               />
               <img
-                className="cripto_brend"
+                className='cripto_brend'
                 src={cripto3}
                 style={{ marginRight: xs ? 15 : 30 }}
-                alt=""
+                alt=''
               />
               <img
-                className="cripto_brend"
+                className='cripto_brend'
                 src={cripto4}
                 style={{ marginRight: xs ? 15 : 30 }}
-                alt=""
+                alt=''
               />
-              <img className="cripto_brend" src={cripto5} alt="" />
+              <img className='cripto_brend' src={cripto5} alt='' />
             </div>
             <GoldButton
               onClick={() =>
@@ -298,8 +298,8 @@ export function AboutUsBody() {
               }
               style={{
                 minWidth: 300,
-                marginLeft: '50%',
-                transform: 'translateX(-50%)',
+                marginLeft: "50%",
+                transform: "translateX(-50%)",
               }}
             >
               Присоединиться к нам
@@ -308,5 +308,5 @@ export function AboutUsBody() {
         </Grid>
       </Container>
     </section>
-  )
+  );
 }
