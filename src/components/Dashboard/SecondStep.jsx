@@ -5,55 +5,50 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from "@material-ui/core";
-import { ToggleButtonGroup } from "@material-ui/lab";
-import { Form, Formik } from "formik";
-import * as Yup from "yup";
-import React, { useEffect, useRef } from "react";
-import { GoldToggleButton } from "shared/Buttons/buttons";
-import { CustomSwitch } from "shared/Buttons/buttons";
-import { GoldButton } from "shared/Buttons/buttons";
-import { Inputs } from "./Inputs";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getActivityTypes,
-  getCountries,
-  getOrganizations,
-} from "store/reducer";
-import { setAlert, setData } from "store/actionCreators";
-import { NavLink } from "react-router-dom";
+} from '@material-ui/core'
+import { ToggleButtonGroup } from '@material-ui/lab'
+import { Form, Formik } from 'formik'
+import * as Yup from 'yup'
+import React, { useEffect, useRef } from 'react'
+import { GoldToggleButton } from 'shared/Buttons/buttons'
+import { CustomSwitch } from 'shared/Buttons/buttons'
+import { GoldButton } from 'shared/Buttons/buttons'
+import { Inputs } from './Inputs'
+import { useDispatch, useSelector } from 'react-redux'
+import { getActivityTypes, getCountries, getOrganizations } from 'store/reducer'
+import { setAlert, setData } from 'store/actionCreators'
 
 const validateFirstTab = Yup.object({
-  city: Yup.string().required("Поле должно быть заполнена"),
-});
+  city: Yup.string().required('Поле должно быть заполнена'),
+})
 
 const validateSecondTab = Yup.object({
-  organization_type: Yup.string().required("Поле должно быть заполнена"),
-  legal_name: Yup.string().required("Поле должно быть заполнена"),
-  activity_type: Yup.string().required("Поле должно быть заполнена"),
-  company_reg_date: Yup.string().required("Поле должно быть заполнена"),
-  inn: Yup.string().required("Поле должно быть заполнена"),
-  okpo: Yup.string().required("Поле должно быть заполнена"),
-  bik: Yup.string().required("Поле должно быть заполнена"),
-  bank_name: Yup.string().required("Поле должно быть заполнена"),
-  checking_account: Yup.string().required("Поле должно быть заполнена"),
-  iban: Yup.string().required("Поле должно быть заполнена"),
-});
+  organization_type: Yup.string().required('Поле должно быть заполнена'),
+  legal_name: Yup.string().required('Поле должно быть заполнена'),
+  activity_type: Yup.string().required('Поле должно быть заполнена'),
+  company_reg_date: Yup.string().required('Поле должно быть заполнена'),
+  inn: Yup.string().required('Поле должно быть заполнена'),
+  okpo: Yup.string().required('Поле должно быть заполнена'),
+  bik: Yup.string().required('Поле должно быть заполнена'),
+  bank_name: Yup.string().required('Поле должно быть заполнена'),
+  checking_account: Yup.string().required('Поле должно быть заполнена'),
+  iban: Yup.string().required('Поле должно быть заполнена'),
+})
 
 export function SecondStep({ handleNext, callback, handlePrev }) {
-  const classes = useStyles();
-  const firstTabBtn = useRef();
-  const theme = useTheme();
-  const xs = useMediaQuery(theme.breakpoints.down("xs"));
-  const [tab, setTab] = React.useState(1);
-  const [isPending, setPending] = React.useState(false);
-  const data = useSelector((store) => store.reducer);
-  const newMerchant = data.addMerchant;
-  const dispatch = useDispatch();
+  const classes = useStyles()
+  const firstTabBtn = useRef()
+  const theme = useTheme()
+  const xs = useMediaQuery(theme.breakpoints.down('xs'))
+  const [tab, setTab] = React.useState(1)
+  const [isPending, setPending] = React.useState(false)
+  const data = useSelector((store) => store.reducer)
+  const newMerchant = data.addMerchant
+  const dispatch = useDispatch()
   const [checkBoxes, setCheckbox] = React.useState({
     rates: false,
     contract: false,
-  });
+  })
 
   useEffect(() => {
     if (!data.countries) {
@@ -61,80 +56,80 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
         getCountries((error) => {
           if (Boolean(error)) {
             dispatch(
-              setAlert({ open: true, severity: "error", message: error })
-            );
+              setAlert({ open: true, severity: 'error', message: error }),
+            )
           }
-        })
-      );
+        }),
+      )
     }
     if (!data.organizationTypes) {
       dispatch(
         getOrganizations((error) => {
           if (Boolean(error)) {
             dispatch(
-              setAlert({ open: true, severity: "error", message: error })
-            );
+              setAlert({ open: true, severity: 'error', message: error }),
+            )
           }
-        })
-      );
+        }),
+      )
     }
     if (!data.activityTypes) {
       dispatch(
         getActivityTypes((error) => {
           if (Boolean(error)) {
             dispatch(
-              setAlert({ open: true, severity: "error", message: error })
-            );
+              setAlert({ open: true, severity: 'error', message: error }),
+            )
           }
-        })
-      );
+        }),
+      )
     }
-  }, [dispatch, data.countries, data.organizationTypes, data.activityTypes]);
+  }, [dispatch, data.countries, data.organizationTypes, data.activityTypes])
 
   function submitFirstTab(fields) {
     if (checkBoxes.contract && checkBoxes.rates) {
-      dispatch(setData({ addMerchant: { ...newMerchant, ...fields } }));
-      nextStep();
+      dispatch(setData({ addMerchant: { ...newMerchant, ...fields } }))
+      nextStep()
     } else {
       dispatch(
-        setAlert({ open: true, severity: "error", message: "Отметьте флажок" })
-      );
+        setAlert({ open: true, severity: 'error', message: 'Отметьте флажок' }),
+      )
     }
   }
   function submitSecondTab(fields) {
-    setPending(true);
-    callback({ ...newMerchant, ...fields });
-    dispatch(setData({ addMerchant: { ...newMerchant, ...fields } }));
+    setPending(true)
+    callback({ ...newMerchant, ...fields })
+    dispatch(setData({ addMerchant: { ...newMerchant, ...fields } }))
     setTimeout(() => {
-      setPending(false);
-    }, 3000);
+      setPending(false)
+    }, 3000)
   }
   function inputChangeHandler(target) {
-    const { name, value } = target;
-    let fieldValue = { [name]: value };
-    dispatch(setData({ addMerchant: { ...newMerchant, ...fieldValue } }));
+    const { name, value } = target
+    let fieldValue = { [name]: value }
+    dispatch(setData({ addMerchant: { ...newMerchant, ...fieldValue } }))
   }
   function prevStep() {
-    setTab(tab - 1);
-    window.scrollTo(0, 300);
+    setTab(tab - 1)
+    window.scrollTo(0, 300)
   }
   function nextStep() {
-    setTab(tab + 1);
-    window.scrollTo(0, 300);
+    setTab(tab + 1)
+    window.scrollTo(0, 300)
   }
   function Loader() {
     return (
       <div className="flex_box">
         <CircularProgress />
       </div>
-    );
+    )
   }
   return (
     <div className={classes.stepContainer}>
       <ToggleButtonGroup
         exclusive
         value={tab}
-        style={{ minWidth: xs ? "100%" : 454, maxHeight: 50, marginBottom: 33 }}
+        style={{ minWidth: xs ? '100%' : 454, maxHeight: 50, marginBottom: 33 }}
       >
         <GoldToggleButton
           className={classes.toggleBtn}
@@ -170,8 +165,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                   dispatch(
                     setData({
                       addMerchant: { ...newMerchant, country: e.target.value },
-                    })
-                  );
+                    }),
+                  )
                 }}
                 items={data.countries}
                 name="country"
@@ -188,7 +183,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
 
             <div
               className="flex_box"
-              style={{ justifyContent: "flex-start", marginTop: 20 }}
+              style={{ justifyContent: 'flex-start', marginTop: 20 }}
             >
               <CustomSwitch
                 checked={checkBoxes.rates}
@@ -197,13 +192,13 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 }
               />
               <Typography variant="body2" style={{ marginLeft: 20 }}>
-                Ознакомлен и согласен с{" "}
+                Ознакомлен и согласен с{' '}
                 <a
                   href={`${window.location.origin}/rates`}
                   style={{
-                    color: "#ff9900",
-                    borderBottom: "1px dashed #ff9900",
-                    textDecoration: "none",
+                    color: '#ff9900',
+                    borderBottom: '1px dashed #ff9900',
+                    textDecoration: 'none',
                   }}
                   target="_blanck"
                 >
@@ -213,7 +208,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
             </div>
             <div
               className="flex_box"
-              style={{ justifyContent: "flex-start", marginTop: 20 }}
+              style={{ justifyContent: 'flex-start', marginTop: 20 }}
             >
               <CustomSwitch
                 checked={checkBoxes.contract}
@@ -222,13 +217,13 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 }
               />
               <Typography variant="body2" style={{ marginLeft: 20 }}>
-                Согласен на сбор персональных данных и с{" "}
+                Согласен на сбор персональных данных и с{' '}
                 <a
                   href="http://odigital.app"
                   style={{
-                    color: "#ff9900",
-                    borderBottom: "1px dashed #ff9900",
-                    textDecoration: "none",
+                    color: '#ff9900',
+                    borderBottom: '1px dashed #ff9900',
+                    textDecoration: 'none',
                   }}
                   target="_blanck"
                 >
@@ -240,8 +235,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
             <div
               className="flex_box"
               style={{
-                justifyContent: "space-between",
-                width: "50%",
+                justifyContent: 'space-between',
+                width: '50%',
                 marginTop: 40,
               }}
             >
@@ -253,7 +248,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 Назад
               </Button>
               <GoldButton
-                style={{ width: "40%" }}
+                style={{ width: '40%' }}
                 type="submit"
                 ref={firstTabBtn}
               >
@@ -274,7 +269,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
             <Form>
               <p
                 className="subtitle"
-                style={{ textTransform: "uppercase", color: "#ff9900" }}
+                style={{ textTransform: 'uppercase', color: '#ff9900' }}
               >
                 Общие сведения о вашей компании
               </p>
@@ -283,8 +278,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                   label="Тип организации"
                   value={newMerchant.organization_type}
                   onChange={(e) => {
-                    inputChangeHandler(e.target);
-                    formik.handleChange(e);
+                    inputChangeHandler(e.target)
+                    formik.handleChange(e)
                   }}
                   items={data.organizationTypes}
                   handleChange={(e) => {
@@ -294,8 +289,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                           ...newMerchant,
                           organization_type: e.target.value,
                         },
-                      })
-                    );
+                      }),
+                    )
                   }}
                   name="organization_type"
                   select
@@ -309,8 +304,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 placeholder="Введите название организации"
                 value={newMerchant.legal_name}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
               />
               {data.activityTypes ? (
@@ -319,8 +314,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                   items={data.activityTypes}
                   value={newMerchant.activity_type}
                   onChange={(e) => {
-                    inputChangeHandler(e.target);
-                    formik.handleChange(e);
+                    inputChangeHandler(e.target)
+                    formik.handleChange(e)
                   }}
                   handleChange={(e) => {
                     dispatch(
@@ -329,8 +324,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                           ...newMerchant,
                           activity_type: e.target.value,
                         },
-                      })
-                    );
+                      }),
+                    )
                   }}
                   name="activity_type"
                   select
@@ -343,8 +338,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 name="certificate"
                 value={newMerchant.certificate}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
                 upload
               />
@@ -353,8 +348,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 name="charter"
                 value={newMerchant.charter}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
                 upload
               />
@@ -363,8 +358,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 name="decisions"
                 value={newMerchant.decisions}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
                 upload
               />
@@ -374,17 +369,17 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 placeholder="Введите в формате dd-mm-yyyy"
                 value={newMerchant.company_reg_date}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
-                inputProps={{ max: new Date().toISOString().split("T")[0] }}
+                inputProps={{ max: new Date().toISOString().split('T')[0] }}
                 date
               />
               <p
                 className="subtitle"
                 style={{
-                  textTransform: "uppercase",
-                  color: "#ff9900",
+                  textTransform: 'uppercase',
+                  color: '#ff9900',
                   marginTop: 30,
                 }}
               >
@@ -396,8 +391,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 placeholder="Введите ИНН"
                 value={newMerchant.inn}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
               />
               <Inputs
@@ -406,8 +401,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 placeholder="Введите ОКПО"
                 value={newMerchant.okpo}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
               />
               <Inputs
@@ -416,8 +411,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 placeholder="Введите наименование банка"
                 value={newMerchant.bank_name}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
               />
               <Inputs
@@ -426,8 +421,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 placeholder="Введите БИК"
                 value={newMerchant.bik}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
               />
               <Inputs
@@ -436,8 +431,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 placeholder="Введите счет"
                 value={newMerchant.checking_account}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
               />
               <Inputs
@@ -446,13 +441,13 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 placeholder="Введите IBAN"
                 value={newMerchant.iban}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
               />
               <div
                 className="flex_box"
-                style={{ justifyContent: "flex-start", marginTop: 20 }}
+                style={{ justifyContent: 'flex-start', marginTop: 20 }}
               >
                 <CustomSwitch />
                 <Typography variant="body2" style={{ marginLeft: 20 }}>
@@ -462,8 +457,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               <p
                 className="subtitle"
                 style={{
-                  textTransform: "uppercase",
-                  color: "#ff9900",
+                  textTransform: 'uppercase',
+                  color: '#ff9900',
                   marginTop: 50,
                 }}
               >
@@ -475,8 +470,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 placeholder="Введите индекс"
                 value={newMerchant.index}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
               />
               <Inputs
@@ -485,13 +480,13 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                 placeholder="Введите aдрес"
                 value={newMerchant.adress}
                 onChange={(e) => {
-                  inputChangeHandler(e.target);
-                  formik.handleChange(e);
+                  inputChangeHandler(e.target)
+                  formik.handleChange(e)
                 }}
               />
               <div
                 className="flex_box"
-                style={{ justifyContent: "flex-start", marginTop: 20 }}
+                style={{ justifyContent: 'flex-start', marginTop: 20 }}
               >
                 <CustomSwitch />
                 <Typography variant="body2" style={{ marginLeft: 20 }}>
@@ -501,8 +496,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               <div
                 className="flex_box"
                 style={{
-                  justifyContent: "space-between",
-                  width: "50%",
+                  justifyContent: 'space-between',
+                  width: '50%',
                   marginTop: 40,
                 }}
               >
@@ -514,7 +509,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                   Отмена
                 </Button>
                 <GoldButton
-                  style={{ width: "40%" }}
+                  style={{ width: '40%' }}
                   type="submit"
                   disabled={isPending}
                 >
@@ -526,38 +521,38 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
         </Formik>
       )}
     </div>
-  );
+  )
 }
 
 const useStyles = makeStyles((theme) => ({
   stepContainer: {
-    borderLeft: "2px solid #ff9900",
-    padding: "0 50px",
+    borderLeft: '2px solid #ff9900',
+    padding: '0 50px',
     marginTop: 33,
     marginLeft: 60,
   },
   toggleBtn: {
-    width: "33.33%",
-    textTransform: "none",
-    color: "#000",
-    backgroundColor: "#f5f5f5",
-    [theme.breakpoints.down("xs")]: {
+    width: '33.33%',
+    textTransform: 'none',
+    color: '#000',
+    backgroundColor: '#f5f5f5',
+    [theme.breakpoints.down('xs')]: {
       fontSize: 14,
     },
-    "&:hover": {
-      color: "#FF9900",
-      backgroundColor: "#fff",
+    '&:hover': {
+      color: '#FF9900',
+      backgroundColor: '#fff',
     },
   },
   customBtn: {
-    width: "40%",
+    width: '40%',
     minHeight: 50,
     fontSize: 16,
-    color: "rgba(255, 255, 255, 0.3)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    "&:hover": {
-      color: "#fff",
-      borderColor: "#fff",
+    color: 'rgba(255, 255, 255, 0.3)',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    '&:hover': {
+      color: '#fff',
+      borderColor: '#fff',
     },
   },
-}));
+}))

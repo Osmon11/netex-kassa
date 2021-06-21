@@ -1,6 +1,6 @@
 import { Button, makeStyles, Paper, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
-import checkIcon from 'assets/check.png'
+import checkIcon from 'assets/check.webp'
 import { NavLink } from 'react-router-dom'
 import { GoldButton } from 'shared/Buttons/buttons'
 import { VerticalStepper } from './VerticalStepper'

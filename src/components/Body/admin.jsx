@@ -2,7 +2,6 @@ import {
   AppBar,
   Avatar,
   Button,
-  CircularProgress,
   Drawer,
   Grid,
   IconButton,
@@ -14,7 +13,7 @@ import React, { useEffect } from 'react'
 import './style.css'
 import Logo from '../../shared/Logo/logo'
 import ava from 'assets/avatar.png'
-import goust from 'assets/goust-icon.svg'
+import goust from 'assets/goust-icon.webp'
 import success from 'assets/success.svg'
 import fail from 'assets/fail.svg'
 import settings from 'assets/settings.svg'

@@ -14,7 +14,7 @@ import {
 import { ToggleButtonGroup } from "@material-ui/lab";
 import { ThemeInput } from "components/Auth/auth";
 import React, { useCallback, useEffect, useState } from "react";
-import goust from "assets/goust-icon.svg";
+import goust from "assets/goust-icon.webp";
 import success from "../../assets/success.svg";
 import fail from "../../assets/fail.svg";
 import warning from "../../assets/warning.svg";
@@ -67,27 +67,25 @@ export function ProjectSettings({ match }) {
   const state = useSelector((store) => store.reducer);
 
   const errorHandler = useCallback(
-    function (error, new_api_token) {
+    function (error) {
       if (Boolean(error)) {
         dispatch(setAlert({ open: true, severity: "error", message: error }));
-      }
-      if (Boolean(new_api_token)) {
-        setCurrentMerchant({
-          ...currentMerchant,
-          params: { ...currentMerchant.params, ...new_api_token },
-        });
       }
     },
     [dispatch, currentMerchant]
   );
 
+  const getCurrentMerchant = () => {
+    dispatch(
+      viewMerchant(match.params.id, (data) => {
+        setCurrentMerchant(data.view);
+      })
+    );
+  };
+
   useEffect(() => {
     if (!currentMerchant || currentMerchant.merchant_id !== match.params.id) {
-      dispatch(
-        viewMerchant(match.params.id, (data) => {
-          setCurrentMerchant(data.view);
-        })
-      );
+      getCurrentMerchant();
     }
   }, [currentMerchant, match.params.id, dispatch]);
   useEffect(() => {
@@ -119,7 +117,14 @@ export function ProjectSettings({ match }) {
     dispatch(editMerchant(fields, match.params.id, errorHandler));
   }
   function getTokenHandler() {
-    dispatch(getToken(currentMerchant.merchant_id, errorHandler));
+    dispatch(
+      getToken(currentMerchant.merchant_id, errorHandler, (new_api_token) => {
+        setCurrentMerchant({
+          ...currentMerchant,
+          params: { ...currentMerchant.params, ...new_api_token },
+        });
+      })
+    );
   }
   return (
     <>

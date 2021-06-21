@@ -82,37 +82,20 @@ function SingIn({ sm, setAlert, handleClose, setLogin }) {
   const [fogetPassword, setPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [values, setValues] = useState({
-    phone: "",
+    email: "",
     password: "",
   });
   const validate = Yup.object({
-    phone: Yup.string()
-      .max(12, "Убедитесь, что это значение содержит не более 12 символов.")
-      .required("Поля должно быть заполнена"),
+    email: Yup.string().email().required("Поля должно быть заполнена"),
     password: Yup.string()
       // .min(8, "Пароль должен быть не меньше 8")
       .required("Поле должно быть заполнена"),
   });
 
-  // useEffect(() => {
-  //   if (localStorage.password && localStorage.phone) {
-  //     setValues({
-  //       phone: localStorage.getItem("phone"),
-  //       password: localStorage.getItem("password"),
-  //     });
-  //   }
-  // }, [setValues]);
-
   function submitHandler(fields) {
-    let phone =
-      fields.phone[0] === "9"
-        ? fields.phone
-        : fields.phone[0] === "0"
-        ? fields.phone
-        : "0" + fields.phone;
     if (fogetPassword) {
       return dispatch(
-        restorePassword({ phone }, () => {
+        restorePassword(fields, () => {
           setLogin(true);
         })
       );
@@ -120,14 +103,12 @@ function SingIn({ sm, setAlert, handleClose, setLogin }) {
     if (remember) {
       setValues({
         ...fields,
-        phone,
       });
     }
     dispatch(
       login(
         {
           ...fields,
-          phone,
         },
         (alert) => {
           setAlert(alert);
@@ -161,12 +142,12 @@ function SingIn({ sm, setAlert, handleClose, setLogin }) {
             </p>
           ) : null}
           <Typography variant='body2' style={{ marginTop: 15 }}>
-            Телефон
+            Почта
           </Typography>
           <InputComponent
-            placeholder='Введите номер'
-            name='phone'
-            type='number'
+            placeholder='Введите email'
+            name='email'
+            type='email'
           />
           {!fogetPassword ? (
             <>
@@ -214,7 +195,7 @@ function SingIn({ sm, setAlert, handleClose, setLogin }) {
 function SingUp({ sm, setAlert, setLogin }) {
   const [enterCode, setCodeField] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(true);
-  const [userPhone, setUserPhone] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [timeleft, setTimeLeft] = useState(90);
   const dispatch = useDispatch();
   let minutes = Math.floor((timeleft % (60 * 60)) / 60);
@@ -223,9 +204,6 @@ function SingUp({ sm, setAlert, setLogin }) {
     firstname: Yup.string().required("Поле должно быть заполнена"),
     lastname: Yup.string().required("Поле должно быть заполнена"),
     email: Yup.string().required("Поле должно быть заполнена"),
-    phone: Yup.string()
-      .max(12, "Убедитесь, что это значение содержит не более 12 символов.")
-      .required("Поля должно быть заполнена"),
     password: Yup.string()
       .min(8, "Пароль должен быть не меньше 8")
       .required("Поле должно быть заполнена"),
@@ -244,11 +222,10 @@ function SingUp({ sm, setAlert, setLogin }) {
     }
   }, [timeleft, enterCode]);
 
-  function submitHandler({ phone, ...fields }) {
-    let phoneIsCorrect = phone[0] === "0" ? phone : "0" + phone;
-    setUserPhone({ phone: phoneIsCorrect });
+  function submitHandler(fields) {
+    setUserEmail({ email: fields.email });
     dispatch(
-      singup({ ...fields, phone: phoneIsCorrect }, (data) => {
+      singup(fields, (data) => {
         if (Boolean(data.messages)) {
           setAlert({ open: true, severity: "error", message: data.messages });
           return;
@@ -259,7 +236,7 @@ function SingUp({ sm, setAlert, setLogin }) {
   }
   function codeSubmit({ code }) {
     dispatch(
-      accountActivation({ ...userPhone, code }, (success) => {
+      accountActivation({ ...userEmail, code }, (success) => {
         setAlert({
           open: true,
           severity: "success",
@@ -299,7 +276,7 @@ function SingUp({ sm, setAlert, setLogin }) {
               disabled={btnDisabled}
               onClick={() => {
                 dispatch(
-                  resendActivationCode(userPhone, (message) =>
+                  resendActivationCode(userEmail, (message) =>
                     setAlert({ ...alert, message })
                   )
                 );
@@ -332,7 +309,6 @@ function SingUp({ sm, setAlert, setLogin }) {
             firstname: "",
             lastname: "",
             email: "",
-            phone: "",
             password: "",
             password_two: "",
           }}
@@ -375,14 +351,6 @@ function SingUp({ sm, setAlert, setLogin }) {
               placeholder='Введите email'
               name='email'
               type='email'
-            />
-            <Typography variant='body2' style={{ marginTop: 15 }}>
-              Телефон
-            </Typography>
-            <InputComponent
-              placeholder='Введите номер'
-              name='phone'
-              type='number'
             />
             <Typography variant='body2' style={{ marginTop: 15 }}>
               Пароль

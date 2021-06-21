@@ -60,13 +60,13 @@ body {
   z-index: -1;
 }
 .bg_image {
-  background-image: url("./assets/main-bg1.png");
+  background-image: url('./assets/main-bg1.webp');
 }
 .bg2_image {
-  background-image: url("./assets/app-bg1.png");
+  background-image: url('./assets/app-bg1.webp');
 }
 .bg3_image {
-  background-image: url("./assets/app-bg2.png");
+  background-image: url('./assets/app-bg2.webp');
 }
 .position_center {
   margin-left: 50%;

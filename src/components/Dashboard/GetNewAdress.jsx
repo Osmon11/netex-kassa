@@ -1,16 +1,16 @@
-import { Button, makeStyles, MenuItem, Typography } from "@material-ui/core";
-import { ThemeInput } from "components/Auth/auth";
-import React from "react";
-import qrCode from "assets/qr-code.png";
-import { GoldButton } from "shared/Buttons/buttons";
-import { NavLink } from "react-router-dom";
+import { Button, makeStyles, MenuItem, Typography } from '@material-ui/core'
+import { ThemeInput } from 'components/Auth/auth'
+import React from 'react'
+import qrCode from 'assets/qr-code.webp'
+import { GoldButton } from 'shared/Buttons/buttons'
+import { NavLink } from 'react-router-dom'
 
 export function GetNewAdress() {
-  const classes = useStyles();
-  const [project, setProject] = React.useState("Netex.kg");
-  const [wallet, setWallet] = React.useState("Bitcoin");
-  const projects = ["Netex.kg", "Bironex", "Интернет магазин Kivano"];
-  const wallets = ["Bitcoin", "Qiwi"];
+  const classes = useStyles()
+  const [project, setProject] = React.useState('Netex.kg')
+  const [wallet, setWallet] = React.useState('Bitcoin')
+  const projects = ['Netex.kg', 'Bironex', 'Интернет магазин Kivano']
+  const wallets = ['Bitcoin', 'Qiwi']
 
   return (
     <section style={{ marginBottom: 30 }}>
@@ -66,25 +66,25 @@ export function GetNewAdress() {
           </MenuItem>
         ))}
       </ThemeInput>
-      <Typography variant="body2" style={{ lineHeight: "200%" }}>
+      <Typography variant="body2" style={{ lineHeight: '200%' }}>
         Скопируйте этот адрес
       </Typography>
-      <Typography variant="body2" style={{ lineHeight: "200%" }}>
+      <Typography variant="body2" style={{ lineHeight: '200%' }}>
         0x682Ff717FCeb0e1ADeF130645615E9aF9cc80289
       </Typography>
       <img
         src={qrCode}
         alt=""
-        style={{ padding: 10, backgroundColor: "#fff", marginTop: 20 }}
+        style={{ padding: 10, backgroundColor: '#fff', marginTop: 20 }}
       />
       <div
         className="flex_box"
         style={{
-          justifyContent: "flex-start",
+          justifyContent: 'flex-start',
           marginTop: 40,
         }}
       >
-        <NavLink to="/dashboard" style={{ textDecoration: "none" }}>
+        <NavLink to="/dashboard" style={{ textDecoration: 'none' }}>
           <Button className={classes.customBtn} variant="outlined">
             Закрыть
           </Button>
@@ -96,7 +96,7 @@ export function GetNewAdress() {
         </GoldButton>
       </div>
     </section>
-  );
+  )
 }
 
 const useStyles = makeStyles({
@@ -104,28 +104,28 @@ const useStyles = makeStyles({
     width: 200,
     minHeight: 50,
     fontSize: 16,
-    color: "rgba(255, 255, 255, 0.3)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    "&:hover": {
-      color: "#fff",
-      borderColor: "#fff",
+    color: 'rgba(255, 255, 255, 0.3)',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    '&:hover': {
+      color: '#fff',
+      borderColor: '#fff',
     },
   },
   menuItem: {
-    color: "#ff9900",
+    color: '#ff9900',
     selected: {
-      "&:hover": {
-        color: "#ff9900",
+      '&:hover': {
+        color: '#ff9900',
       },
     },
-    "&:hover": {
-      backgroundColor: "#ff9900",
-      color: "#fff",
+    '&:hover': {
+      backgroundColor: '#ff9900',
+      color: '#fff',
     },
   },
   selected: {
-    "&:hover": {
-      color: "#ff9900",
+    '&:hover': {
+      color: '#ff9900',
     },
   },
-});
+})
