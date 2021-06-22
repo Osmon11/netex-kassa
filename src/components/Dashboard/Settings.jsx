@@ -104,33 +104,30 @@ export function Settings() {
                 </Typography>
                 <ValidatedInput
                   disabled
-                  margin='normal'
                   placeholder={`${firstname} ${lastname}`}
                   name='username'
                   type='text'
-                  style={{ width: "100%", marginBottom: 20 }}
+                  style={{ width: "100%", marginBottom: 20, marginTop: 8 }}
                 />
                 <Typography variant='body2' style={{ marginTop: 10 }}>
                   Почта
                 </Typography>
                 <ValidatedInput
                   disabled
-                  margin='normal'
                   placeholder={email}
                   name='email'
                   type='email'
-                  style={{ width: "100%", marginBottom: 20 }}
+                  style={{ width: "100%", marginBottom: 20, marginTop: 8 }}
                 />
                 <Typography variant='body2' style={{ marginTop: 10 }}>
                   Аватар
                 </Typography>
                 <ValidatedInput
                   disabled
-                  margin='normal'
                   placeholder='Загрузить изображение'
                   name='avatar'
                   upload
-                  style={{ width: "100%", marginBottom: 20 }}
+                  style={{ width: "100%", marginBottom: 20, marginTop: 8 }}
                 />
               </Form>
             </Formik>
@@ -218,8 +215,7 @@ export function Settings() {
                 <ValidatedInput
                   placeholder='Введите текущий пароль'
                   name='old-password'
-                  margin='normal'
-                  style={{ width: "100%", merginTop: "5px" }}
+                  style={{ width: "100%", marginTop: "8px" }}
                 />
                 <Typography variant='body2' style={{ marginTop: 15 }}>
                   Новый пароль
@@ -227,8 +223,7 @@ export function Settings() {
                 <ValidatedInput
                   placeholder='Введите новый пароль'
                   name='new-password'
-                  margin='normal'
-                  style={{ width: "100%", merginTop: "5px" }}
+                  style={{ width: "100%", marginTop: "8px" }}
                 />
                 <Typography variant='body2' style={{ marginTop: 15 }}>
                   Повторите пароль
@@ -236,8 +231,7 @@ export function Settings() {
                 <ValidatedInput
                   placeholder='Повторите новый пароль'
                   name='confirm-password'
-                  margin='normal'
-                  style={{ width: "100%", merginTop: "5px" }}
+                  style={{ width: "100%", marginTop: "8px" }}
                 />
                 <br />
                 <div className='flex_box'>
@@ -246,7 +240,7 @@ export function Settings() {
                     size='large'
                     style={{
                       marginBottom: 64,
-                      marginTop: "20px",
+                      marginTop: "40px",
                       fontSize: 16,
                       width: "50%",
                       minHeight: "56px",

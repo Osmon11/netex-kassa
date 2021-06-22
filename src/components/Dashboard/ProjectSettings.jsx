@@ -78,13 +78,16 @@ export function ProjectSettings({ match }) {
   const getCurrentMerchant = useCallback(() => {
     dispatch(
       viewMerchant(match.params.id, (data) => {
-        setCurrentMerchant(data.view);
+        setCurrentMerchant(data);
       })
     );
   }, [dispatch, match.params.id]);
 
   useEffect(() => {
-    if (!currentMerchant || currentMerchant.merchant_id !== match.params.id) {
+    if (
+      !currentMerchant ||
+      currentMerchant.view.merchant_id !== match.params.id
+    ) {
       getCurrentMerchant();
     }
   }, [currentMerchant, match.params.id, getCurrentMerchant, dispatch]);
@@ -118,12 +121,19 @@ export function ProjectSettings({ match }) {
   }
   function getTokenHandler() {
     dispatch(
-      getToken(currentMerchant.merchant_id, errorHandler, (new_api_token) => {
-        setCurrentMerchant({
-          ...currentMerchant,
-          params: { ...currentMerchant.params, ...new_api_token },
-        });
-      })
+      getToken(
+        currentMerchant.view.merchant_id,
+        errorHandler,
+        (new_api_token) => {
+          setCurrentMerchant({
+            ...currentMerchant,
+            view: {
+              ...currentMerchant.view,
+              params: { ...currentMerchant.params, ...new_api_token },
+            },
+          });
+        }
+      )
     );
   }
   function DomenNotConfirmed() {
@@ -177,7 +187,8 @@ export function ProjectSettings({ match }) {
   }
   return (
     <>
-      {!currentMerchant || currentMerchant.merchant_id !== match.params.id ? (
+      {!Boolean(currentMerchant) ||
+      currentMerchant.view.merchant_id !== match.params.id ? (
         <div className='flex_box'>
           <CircularProgress />
         </div>
@@ -185,7 +196,7 @@ export function ProjectSettings({ match }) {
         <section>
           <div className='flex_box' style={{ justifyContent: "space-between" }}>
             <span className='title' style={{ fontSize: 25 }}>
-              {currentMerchant.name}
+              {currentMerchant.view.name}
             </span>
             <span className='subtitle'>Настройки проекта</span>
           </div>
@@ -206,22 +217,12 @@ export function ProjectSettings({ match }) {
 
           {tab === "Инфо" && (
             <Grid container spacing={2}>
-              {currentMerchant.status.name === "Не подтвержден" ? (
+              {currentMerchant.view.status.name === "Не подтвержден" ? (
                 <Grid item xs={12}>
                   <DomenNotConfirmed />
                 </Grid>
               ) : (
                 <>
-                  <Grid item xs={12}>
-                    <div
-                      className='flex_box'
-                      style={{
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <span className='subtitle'>История транзакций</span>
-                    </div>
-                  </Grid>
                   <Grid
                     item
                     xs={12}
@@ -230,24 +231,119 @@ export function ProjectSettings({ match }) {
                       marginTop: 10,
                     }}
                   >
-                    <Grid item xs={12} container spacing={6}>
-                      <Grid item xs={3} lg={3}>
-                        {state.typeList && (
+                    <Grid item xs={12} style={{ padding: "12px 0px" }}>
+                      <div
+                        className='flex_box'
+                        style={{
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <span className='subtitle' style={{ fontSize: "24px" }}>
+                          История транзакций
+                        </span>
+                      </div>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={3}
+                      lg={3}
+                      style={{ padding: "24px 48px 24px 0px" }}
+                    >
+                      {state.typeList && (
+                        <ThemeInput
+                          margin='dense'
+                          name='operationType'
+                          select
+                          variant='outlined'
+                          value={options.operation_type}
+                          onChange={(e) => {
+                            filterChangeHandler({
+                              ...options,
+                              operation_type: e.target.value,
+                            });
+                          }}
+                          fullWidth
+                        >
+                          {state.typeList.map((type) => (
+                            <MenuItem
+                              key={type.name}
+                              value={type.value}
+                              className={classes.menuItem}
+                              classes={{ selected: classes.selected }}
+                            >
+                              {type.name}
+                            </MenuItem>
+                          ))}
+                        </ThemeInput>
+                      )}
+                    </Grid>
+                    <Grid item xs={6} lg={4} style={{ padding: "24px" }}>
+                      <div
+                        className='flex_box'
+                        style={{ justifyContent: "space-between" }}
+                      >
+                        <ThemeInput
+                          name='date_from'
+                          type='date'
+                          variant='outlined'
+                          margin='dense'
+                          value={options.date_from}
+                          onChange={(e) => {
+                            filterChangeHandler({
+                              ...options,
+                              date_from: e.target.value,
+                            });
+                          }}
+                          inputProps={{
+                            max: new Date().toISOString().split("T")[0],
+                          }}
+                        />
+                        <div style={{ margin: "0 10px" }}>-</div>
+                        <ThemeInput
+                          name='date_to'
+                          type='date'
+                          variant='outlined'
+                          margin='dense'
+                          value={options.date_to}
+                          onChange={(e) => {
+                            filterChangeHandler({
+                              ...options,
+                              date_to: e.target.value,
+                            });
+                          }}
+                          inputProps={{
+                            max: new Date().toISOString().split("T")[0],
+                          }}
+                        />
+                      </div>
+                    </Grid>
+                    <Grid item xs={1} lg={2} style={{ padding: "24px" }}></Grid>
+                    <Grid
+                      item
+                      xs={2}
+                      lg={3}
+                      style={{ padding: "24px 0px 24px 48px" }}
+                    >
+                      <div
+                        className='flex_box'
+                        style={{ justifyContent: "flex-end" }}
+                      >
+                        {state.statusList && (
                           <ThemeInput
                             margin='dense'
-                            name='operationType'
+                            name='status'
                             select
                             variant='outlined'
-                            value={options.operation_type}
+                            value={options.status}
                             onChange={(e) => {
                               filterChangeHandler({
                                 ...options,
-                                operation_type: e.target.value,
+                                status: e.target.value,
                               });
                             }}
                             fullWidth
                           >
-                            {state.typeList.map((type) => (
+                            {state.statusList.map((type) => (
                               <MenuItem
                                 key={type.name}
                                 value={type.value}
@@ -259,82 +355,7 @@ export function ProjectSettings({ match }) {
                             ))}
                           </ThemeInput>
                         )}
-                      </Grid>
-                      <Grid item xs={6} lg={4}>
-                        <div
-                          className='flex_box'
-                          style={{ justifyContent: "space-between" }}
-                        >
-                          <ThemeInput
-                            name='date_from'
-                            type='date'
-                            variant='outlined'
-                            margin='dense'
-                            value={options.date_from}
-                            onChange={(e) => {
-                              filterChangeHandler({
-                                ...options,
-                                date_from: e.target.value,
-                              });
-                            }}
-                            inputProps={{
-                              max: new Date().toISOString().split("T")[0],
-                            }}
-                          />
-                          <div style={{ margin: "0 10px" }}>-</div>
-                          <ThemeInput
-                            name='date_to'
-                            type='date'
-                            variant='outlined'
-                            margin='dense'
-                            value={options.date_to}
-                            onChange={(e) => {
-                              filterChangeHandler({
-                                ...options,
-                                date_to: e.target.value,
-                              });
-                            }}
-                            inputProps={{
-                              max: new Date().toISOString().split("T")[0],
-                            }}
-                          />
-                        </div>
-                      </Grid>
-                      <Grid item xs={2}></Grid>
-                      <Grid item xs={3}>
-                        <div
-                          className='flex_box'
-                          style={{ justifyContent: "flex-end" }}
-                        >
-                          {state.statusList && (
-                            <ThemeInput
-                              margin='dense'
-                              name='status'
-                              select
-                              variant='outlined'
-                              value={options.status}
-                              onChange={(e) => {
-                                filterChangeHandler({
-                                  ...options,
-                                  status: e.target.value,
-                                });
-                              }}
-                              fullWidth
-                            >
-                              {state.statusList.map((type) => (
-                                <MenuItem
-                                  key={type.name}
-                                  value={type.value}
-                                  className={classes.menuItem}
-                                  classes={{ selected: classes.selected }}
-                                >
-                                  {type.name}
-                                </MenuItem>
-                              ))}
-                            </ThemeInput>
-                          )}
-                        </div>
-                      </Grid>
+                      </div>
                     </Grid>
                   </Grid>
                   <Grid
@@ -508,13 +529,13 @@ export function ProjectSettings({ match }) {
             </Grid>
           )}
 
-          {tab === "Настройки" && (
-            <>
-              {currentMerchant.status.name === "Не подтвержден" ? (
-                <DomenNotConfirmed />
-              ) : (
+          {tab === "Настройки" &&
+            (currentMerchant.view.status.name === "Не подтвержден" ? (
+              <DomenNotConfirmed />
+            ) : (
+              <>
                 <Formik
-                  initialValues={{ ...currentMerchant.params }}
+                  initialValues={{ ...currentMerchant.view.params }}
                   validationSchema={settingsFormValidation}
                   onSubmit={settingSubmit}
                 >
@@ -584,39 +605,38 @@ export function ProjectSettings({ match }) {
                     </GoldButton>
                   </Form>
                 </Formik>
-              )}
-
-              <div style={{ marginTop: "60px" }}>
-                <p className='subtitle'>Удалить кошелек</p>
-                <Typography variant='body2' style={{ width: "45%" }}>
-                  Перед удалением убедитесь, что вы выбрали правильный кошелек.
-                  Удаление приведет к потере данных и средств на кошельке.
-                </Typography>
-                <NavLink
-                  to={`${match.url}/delete`}
-                  style={{ textDecoration: "none" }}
-                >
-                  <Button
-                    style={{
-                      borderColor: "#ff6f6f",
-                      color: "#ff6f6f",
-                      fontSize: 16,
-                      width: 175,
-                      height: 50,
-                      margin: "20px 0",
-                    }}
-                    variant='outlined'
+                <div style={{ marginTop: "60px" }}>
+                  <p className='subtitle'>Удалить кошелек</p>
+                  <Typography variant='body2' style={{ width: "45%" }}>
+                    Перед удалением убедитесь, что вы выбрали правильный
+                    кошелек. Удаление приведет к потере данных и средств на
+                    кошельке.
+                  </Typography>
+                  <NavLink
+                    to={`${match.url}/delete`}
+                    style={{ textDecoration: "none" }}
                   >
-                    Удалить
-                  </Button>
-                </NavLink>
-              </div>
-            </>
-          )}
+                    <Button
+                      style={{
+                        borderColor: "#ff6f6f",
+                        color: "#ff6f6f",
+                        fontSize: 16,
+                        width: 175,
+                        height: 50,
+                        margin: "20px 0",
+                      }}
+                      variant='outlined'
+                    >
+                      Удалить
+                    </Button>
+                  </NavLink>
+                </div>
+              </>
+            ))}
 
           {tab === "API" && (
             <>
-              {currentMerchant.status.name === "Не подтвержден" ? (
+              {currentMerchant.view.status.name === "Не подтвержден" ? (
                 <DomenNotConfirmed />
               ) : (
                 <>
@@ -673,7 +693,7 @@ export function ProjectSettings({ match }) {
                       name='key'
                       type='text'
                       style={{ width: "100%" }}
-                      value={currentMerchant.params.api_key}
+                      value={currentMerchant.view.params.api_key}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position='end'>
@@ -690,7 +710,7 @@ export function ProjectSettings({ match }) {
                               TransitionComponent={Zoom}
                             >
                               <CopyToClipboard
-                                text={currentMerchant.params.api_key}
+                                text={currentMerchant.view.params.api_key}
                                 onCopy={() => {
                                   setTooltip({ ...tooltip, a: true });
                                   closeTooltip();
@@ -728,7 +748,7 @@ export function ProjectSettings({ match }) {
                       name='token'
                       type='text'
                       style={{ width: "100%" }}
-                      value={currentMerchant.params.secret_key}
+                      value={currentMerchant.view.params.secret_key}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position='end'>
@@ -745,7 +765,7 @@ export function ProjectSettings({ match }) {
                               TransitionComponent={Zoom}
                             >
                               <CopyToClipboard
-                                text={currentMerchant.params.secret_key}
+                                text={currentMerchant.view.params.secret_key}
                                 onCopy={() => {
                                   setTooltip({ ...tooltip, b: true });
                                   closeTooltip();
