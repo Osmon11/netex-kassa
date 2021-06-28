@@ -147,10 +147,10 @@ export function Statistics({ merchant_id }) {
             <Typography variant='body1'>Дата</Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography variant='body1'>Задания</Typography>
+            <Typography variant='body1'>Платеж</Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography variant='body1'>Расходы</Typography>
+            <Typography variant='body1'>Вывод</Typography>
           </Grid>
         </Grid>
         {merchantStatistics.chart.labels.map((date, i) => (

@@ -102,7 +102,7 @@ export function WithdrawFunds() {
   }
   return (
     <>
-      {merchants ? (
+      {Boolean(merchants) ? (
         <div className='flex_box'>
           <section style={{ width: "50%" }}>
             <div

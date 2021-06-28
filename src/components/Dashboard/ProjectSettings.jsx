@@ -172,7 +172,11 @@ export function ProjectSettings({ match }) {
             </Typography>
             <Typography variant='body1'>
               2. Разместите в корне сайта:{" "}
-              <a className='doc_link' href={currentMerchant.confirm_file_path}>
+              <a
+                className='project_link'
+                style={{ textDecoration: "underline" }}
+                href={currentMerchant.confirm_file_path}
+              >
                 {currentMerchant.confirm_file_path}
               </a>
             </Typography>
