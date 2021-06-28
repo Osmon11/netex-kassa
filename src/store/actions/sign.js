@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setUser, setData, setAlert, setAuthDialog } from "../actionCreators";
+import { setUser, setData, setAlert } from "../actionCreators";
 
 const baseURL = "https://api.netex-kassa.com/";
 

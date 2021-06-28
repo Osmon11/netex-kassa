@@ -4,6 +4,7 @@ export const initialState = {
   currentDocumentationTab: { value: "Знакомство", index: 0 },
   merchants: "",
   balance: "",
+  statistics: {},
   addMerchant: {
     name: "",
     domain: "",

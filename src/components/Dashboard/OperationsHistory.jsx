@@ -219,7 +219,7 @@ export function OperationsHistory() {
             <Grid item xs={2}>
               <Typography variant='body2'>Дата</Typography>
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <Typography variant='body2' style={{ textAlign: "center" }}>
                 Сумма
               </Typography>
@@ -232,11 +232,6 @@ export function OperationsHistory() {
             <Grid item xs={2}>
               <Typography variant='body2' style={{ textAlign: "center" }}>
                 Расход
-              </Typography>
-            </Grid>
-            <Grid item xs={1}>
-              <Typography variant='body2' style={{ textAlign: "center" }}>
-                Валюта
               </Typography>
             </Grid>
             <Grid item xs={2}>
@@ -305,24 +300,19 @@ export function OperationsHistory() {
                   <Grid item xs={2}>
                     <Typography variant='body2'>{obj.date}</Typography>
                   </Grid>
-                  <Grid item xs={1}>
+                  <Grid item xs={2}>
                     <Typography variant='body2' style={{ textAlign: "center" }}>
-                      {obj.sum}
+                      {`${obj.sum}KGS`}
                     </Typography>
                   </Grid>
                   <Grid item xs={2}>
                     <Typography variant='body2' style={{ textAlign: "center" }}>
-                      {obj.debit}
+                      {`${obj.debit}${obj.currency}`}
                     </Typography>
                   </Grid>
                   <Grid item xs={2}>
                     <Typography variant='body2' style={{ textAlign: "center" }}>
                       {Boolean(obj.credit) ? obj.credit : "---"}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={1}>
-                    <Typography variant='body2' style={{ textAlign: "center" }}>
-                      {obj.currency}
                     </Typography>
                   </Grid>
                   <Grid item xs={2} style={{ textAlign: "center" }}>

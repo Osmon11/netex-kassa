@@ -9,6 +9,8 @@ import {
   setAlert,
   setBalance,
   SET_BALANCE,
+  SET_STATISTICS,
+  setMerchantStatistics,
 } from "./actionCreators";
 import { initialState } from "./initialState";
 
@@ -39,6 +41,13 @@ export function reducer(state = initialState, action) {
       return {
         ...state,
         balance: payload,
+      };
+    case SET_STATISTICS:
+      let statistics = state.statistics;
+      statistics[payload.merchant_id] = payload.data;
+      return {
+        ...state,
+        statistics,
       };
     case SET_ALERT:
       return { ...state, alert: payload };
@@ -236,6 +245,24 @@ export const getMerchantBalance =
     );
   };
 
+export const getMerchantStatistics = (merchant) => (dispatch) => {
+  creatRequest(`/account/statistics/${merchant}/`, { currency: "KGS" }).then(
+    (res) => {
+      if (Boolean(res)) {
+        dispatch(
+          setMerchantStatistics({
+            merchant_id: merchant,
+            data: {
+              ...res.data.statistics,
+              chart: parseChartData(res.data.statistics.chart),
+            },
+          })
+        );
+      }
+    }
+  );
+};
+
 function getArrFromObj(obj, withValue) {
   let arr = [];
   for (let key in obj) {
@@ -246,4 +273,19 @@ function getArrFromObj(obj, withValue) {
     }
   }
   return arr;
+}
+
+function parseChartData(chart) {
+  let labels = [];
+  let paymentData = [];
+  let cashoutData = [];
+  Object.keys(chart).forEach((date) => {
+    let dateArr = new Date(date).toDateString().split(" ");
+    labels.push(`${dateArr[2]} ${dateArr[1]}`);
+  });
+  for (let obj in chart) {
+    paymentData.push(chart[obj].payment);
+    cashoutData.push(chart[obj].cashout);
+  }
+  return { labels, paymentData, cashoutData };
 }

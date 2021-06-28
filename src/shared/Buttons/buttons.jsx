@@ -1,6 +1,5 @@
 import { Button, Switch, withStyles } from "@material-ui/core";
 import { ToggleButton } from "@material-ui/lab";
-import { useField } from "formik";
 
 export const GoldButton = withStyles({
   root: {
@@ -43,6 +42,7 @@ export const GoldToggleButton = withStyles((theme) => ({
     "&$selected": {
       color: "#fff",
       background: "#FF9900",
+      boxShadow: "0px 13px 34px rgba(255, 153, 0, 0.35)",
 
       "&:hover": {
         color: "#fff",

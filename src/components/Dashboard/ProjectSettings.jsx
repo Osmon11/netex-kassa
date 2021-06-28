@@ -7,8 +7,6 @@ import {
   MenuItem,
   Tooltip,
   Typography,
-  useMediaQuery,
-  useTheme,
   Zoom,
 } from "@material-ui/core";
 import { ToggleButtonGroup } from "@material-ui/lab";
@@ -33,12 +31,14 @@ import {
   getTypeList,
   editMerchant,
   getToken,
+  getMerchantStatistics,
 } from "store/reducer";
 import { ValidatedInput } from "./Inputs";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { setAlert } from "store/actionCreators";
 import { NavLink } from "react-router-dom";
+import { Statistics } from "./Statistics";
 
 const settingsFormValidation = Yup.object({
   success_url: Yup.string().optional(),
@@ -49,10 +49,8 @@ const settingsFormValidation = Yup.object({
 export function ProjectSettings({ match }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const theme = useTheme();
-  // const md = useMediaQuery(theme.breakpoints.down("md"));
-  const xs = useMediaQuery(theme.breakpoints.down("xs"));
-  const [tab, setTab] = useState("Инфо");
+  const [tab, setTab] = useState("Статистика");
+  const [loading, setLoading] = useState(false);
   const [tooltip, setTooltip] = useState({ a: false, b: false });
   const [currentMerchant, setCurrentMerchant] = useState(null);
   let t = new Date();
@@ -90,7 +88,16 @@ export function ProjectSettings({ match }) {
     ) {
       getCurrentMerchant();
     }
-  }, [currentMerchant, match.params.id, getCurrentMerchant, dispatch]);
+    if (!Boolean(state.statistics[match.params.id])) {
+      dispatch(getMerchantStatistics(match.params.id));
+    }
+  }, [
+    currentMerchant,
+    state.statistics,
+    match.params.id,
+    getCurrentMerchant,
+    dispatch,
+  ]);
   useEffect(() => {
     if (!state.statusList) {
       dispatch(getHistoryList(errorHandler, options));
@@ -105,8 +112,10 @@ export function ProjectSettings({ match }) {
   }
 
   function confirmMerchantHandler() {
+    setLoading(true);
     dispatch(
       confirmMerchant(currentMerchant.confirm_file, (error) => {
+        setLoading(false);
         if (Boolean(error)) {
           dispatch(setAlert({ open: true, severity: "error", message: error }));
         }
@@ -125,6 +134,13 @@ export function ProjectSettings({ match }) {
         currentMerchant.view.merchant_id,
         errorHandler,
         (new_api_token) => {
+          dispatch(
+            setAlert({
+              open: true,
+              severity: "success",
+              message: "Сгенерирован новый ключ API!",
+            })
+          );
           setCurrentMerchant({
             ...currentMerchant,
             view: {
@@ -169,14 +185,16 @@ export function ProjectSettings({ match }) {
               variant='outlined'
               style={{
                 width: 200,
-                color: "#FF9900",
+                color: loading ? "#a86500" : "#FF9900",
                 fontSize: 18,
                 fontWeight: 300,
-                border: "1px solid #FF9900",
+                border: "1px solid",
+                borderColor: loading ? "#a86500" : "#FF9900",
                 borderRadius: 8,
                 marginTop: 20,
               }}
               onClick={confirmMerchantHandler}
+              disabled={loading}
             >
               Подтвердить
             </Button>
@@ -210,10 +228,23 @@ export function ProjectSettings({ match }) {
             }}
             onChange={(_, tab) => setTab(tab)}
           >
+            <GoldToggleButton value='Статистика'>Статистика</GoldToggleButton>
             <GoldToggleButton value='Инфо'>Инфо</GoldToggleButton>
             <GoldToggleButton value='Настройки'>Настройки</GoldToggleButton>
             <GoldToggleButton value='API'>API</GoldToggleButton>
           </ToggleButtonGroup>
+
+          {tab === "Статистика" && (
+            <Grid container>
+              {currentMerchant.view.status.name === "Не подтвержден" ? (
+                <Grid item xs={12}>
+                  <DomenNotConfirmed />
+                </Grid>
+              ) : (
+                <Statistics merchant_id={options.merchant_id} />
+              )}
+            </Grid>
+          )}
 
           {tab === "Инфо" && (
             <Grid container spacing={2}>
@@ -373,7 +404,7 @@ export function ProjectSettings({ match }) {
                     <Grid item xs={2}>
                       <Typography variant='body2'>Дата</Typography>
                     </Grid>
-                    <Grid item xs={1}>
+                    <Grid item xs={2}>
                       <Typography
                         variant='body2'
                         style={{ textAlign: "center" }}
@@ -395,14 +426,6 @@ export function ProjectSettings({ match }) {
                         style={{ textAlign: "center" }}
                       >
                         Расход
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={1}>
-                      <Typography
-                        variant='body2'
-                        style={{ textAlign: "center" }}
-                      >
-                        Валюта
                       </Typography>
                     </Grid>
                     <Grid item xs={2}>
@@ -474,12 +497,12 @@ export function ProjectSettings({ match }) {
                           <Grid item xs={2}>
                             <Typography variant='body2'>{obj.date}</Typography>
                           </Grid>
-                          <Grid item xs={1}>
+                          <Grid item xs={2}>
                             <Typography
                               variant='body2'
                               style={{ textAlign: "center" }}
                             >
-                              {obj.sum}
+                              {`${obj.sum}KGS`}
                             </Typography>
                           </Grid>
                           <Grid item xs={2}>
@@ -487,7 +510,7 @@ export function ProjectSettings({ match }) {
                               variant='body2'
                               style={{ textAlign: "center" }}
                             >
-                              {obj.debit}
+                              {`${obj.debit}${obj.currency}`}
                             </Typography>
                           </Grid>
                           <Grid item xs={2}>
@@ -496,14 +519,6 @@ export function ProjectSettings({ match }) {
                               style={{ textAlign: "center" }}
                             >
                               {Boolean(obj.credit) ? obj.credit : "---"}
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={1}>
-                            <Typography
-                              variant='body2'
-                              style={{ textAlign: "center" }}
-                            >
-                              {obj.currency}
                             </Typography>
                           </Grid>
                           <Grid item xs={2} style={{ textAlign: "center" }}>
@@ -794,7 +809,7 @@ export function ProjectSettings({ match }) {
                       margin: "40px 0",
                     }}
                   >
-                    Получить ключи
+                    Сгенерировать ключ
                   </GoldButton>
                 </>
               )}

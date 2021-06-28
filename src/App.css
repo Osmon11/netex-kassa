@@ -60,13 +60,13 @@ body {
   z-index: -1;
 }
 .bg_image {
-  background-image: url('./assets/main-bg1.webp');
+  background-image: url("./assets/main-bg1.webp");
 }
 .bg2_image {
-  background-image: url('./assets/app-bg1.webp');
+  background-image: url("./assets/app-bg1.webp");
 }
 .bg3_image {
-  background-image: url('./assets/app-bg2.webp');
+  background-image: url("./assets/app-bg2.webp");
 }
 .position_center {
   margin-left: 50%;
@@ -112,6 +112,72 @@ body {
 .bitcoin3 {
   top: 42%;
   right: 1%;
+}
+.chart {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: #2a2b31;
+  box-shadow: inset 0px 4px 14px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  padding: 30px;
+  margin-bottom: 50px;
+}
+#legend-container {
+  display: flex;
+  justify-content: center;
+}
+.legend_items_container {
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 0;
+  margin: 0;
+}
+.legend_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.legend_item_box {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 10px;
+}
+.legend_item_text {
+  color: #fff;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 157.69%;
+  padding: 0;
+  margin: 0;
+}
+.tooltip_container {
+  color: #b3b3b3;
+  background-color: #53555f;
+  border-radius: 4px;
+  opacity: 1;
+  pointer-events: none;
+  position: absolute;
+  transform: translate(-50%, 0);
+  transition: all 0.1s ease;
+}
+.tooltip_table {
+  margin: 0;
+}
+.tooltip_text {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 157.69%;
+  color: #ffffff;
+  margin: 0;
 }
 
 @media (max-width: 960px) {
