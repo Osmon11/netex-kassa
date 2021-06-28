@@ -93,6 +93,7 @@ export function Chart({ labels, paymentData, cashoutData }) {
                 y: {
                   display: true,
                   color: "#fff",
+                  min: 0,
                   grid: {
                     drawOnChartArea: false,
                     borderColor: "#707070",

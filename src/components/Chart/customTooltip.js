@@ -67,7 +67,7 @@ export const externalTooltipHandler = (context) => {
       td.className = "tooltip_text";
       const bodyTextArr = body[0].split(" ");
       const text = document.createTextNode(
-        `${bodyTextArr[0]} $${bodyTextArr[1]}`
+        `${bodyTextArr[0]} ${bodyTextArr[1]}`
       );
 
       // td.appendChild(span);

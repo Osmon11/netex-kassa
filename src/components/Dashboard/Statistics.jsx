@@ -4,12 +4,11 @@ import {
   CircularProgress,
   MenuItem,
   makeStyles,
-  InputAdornment,
 } from "@material-ui/core";
 import { ThemeInput } from "components/Auth/auth";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getBalance } from "store/reducer";
+import { getBalance, getMerchantStatistics } from "store/reducer";
 import { Chart } from "../Chart";
 
 export function Statistics({ merchant_id }) {
@@ -19,7 +18,7 @@ export function Statistics({ merchant_id }) {
   let merchantStatistics = state.statistics[merchant_id];
   const [currentBalance, setCurrentBalance] = React.useState("");
   const [currency, setCurrency] = React.useState("");
-  const symbols = { USD: "$", RUB: "₽", KZT: "₸", KGS: "C" };
+  // const symbols = { USD: "$", RUB: "₽", KZT: "₸", KGS: "C" };
 
   React.useEffect(() => {
     if (!Boolean(state.balance)) {
@@ -36,6 +35,10 @@ export function Statistics({ merchant_id }) {
       setCurrency(currentBalance.currencies[0]);
     }
   }, [state.balance, currentBalance, dispatch]);
+
+  function getNewStatistics(currency) {
+    dispatch(getMerchantStatistics(merchant_id, { currency }));
+  }
 
   return Boolean(merchantStatistics) ? (
     <>
@@ -104,16 +107,9 @@ export function Statistics({ merchant_id }) {
                 select
                 variant='outlined'
                 value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment
-                      position='start'
-                      style={{ color: "#ff9900" }}
-                    >
-                      {symbols[currency.name]}
-                    </InputAdornment>
-                  ),
+                onChange={(e) => {
+                  setCurrency(e.target.value);
+                  getNewStatistics(e.target.value.name);
                 }}
               >
                 {currentBalance.currencies.map((c) => (
@@ -130,16 +126,63 @@ export function Statistics({ merchant_id }) {
             )}
           </span>
         </div>
-        <Typography variant='body1' style={{ marginBottom: 20 }}>
+        {/* <Typography variant='body1' style={{ marginBottom: 20 }}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </Typography>
+        </Typography> */}
       </Grid>
       <Chart
         labels={merchantStatistics.chart.labels}
         paymentData={merchantStatistics.chart.paymentData}
         cashoutData={merchantStatistics.chart.cashoutData}
       />
+      <Grid
+        item
+        container
+        className={classes.dataTable}
+        style={{ padding: 30 }}
+      >
+        <Grid item container style={{ textAlign: "center", padding: 15 }}>
+          <Grid item xs={4}>
+            <Typography variant='body1'>Дата</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant='body1'>Задания</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant='body1'>Расходы</Typography>
+          </Grid>
+        </Grid>
+        {merchantStatistics.chart.labels.map((date, i) => (
+          <Grid
+            item
+            container
+            key={date + i}
+            style={{
+              borderBottom:
+                i + 1 === merchantStatistics.chart.labels.length
+                  ? "none"
+                  : "1px solid #3B3D44",
+              textAlign: "center",
+              padding: 15,
+            }}
+          >
+            <Grid item xs={4}>
+              <Typography variant='body1'>{date}</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography variant='body1'>
+                {merchantStatistics.chart.paymentData[i]}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography variant='body1'>
+                {merchantStatistics.chart.cashoutData[i]}
+              </Typography>
+            </Grid>
+          </Grid>
+        ))}
+      </Grid>
     </>
   ) : (
     <Grid item xs={12}>
@@ -172,5 +215,12 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       color: "#ff9900",
     },
+  },
+  dataTable: {
+    backgroundColor: "#2a2b31",
+    boxShadow: "inset 0px 4px 14px rgba(0, 0, 0, 0.05)",
+    borderRadius: "4px",
+    padding: "30px",
+    marginBottom: "50px",
   },
 }));

@@ -245,22 +245,20 @@ export const getMerchantBalance =
     );
   };
 
-export const getMerchantStatistics = (merchant) => (dispatch) => {
-  creatRequest(`/account/statistics/${merchant}/`, { currency: "KGS" }).then(
-    (res) => {
-      if (Boolean(res)) {
-        dispatch(
-          setMerchantStatistics({
-            merchant_id: merchant,
-            data: {
-              ...res.data.statistics,
-              chart: parseChartData(res.data.statistics.chart),
-            },
-          })
-        );
-      }
+export const getMerchantStatistics = (merchant, data) => (dispatch) => {
+  creatRequest(`/account/statistics/${merchant}/`, data).then((res) => {
+    if (Boolean(res)) {
+      dispatch(
+        setMerchantStatistics({
+          merchant_id: merchant,
+          data: {
+            ...res.data.statistics,
+            chart: parseChartData(res.data.statistics.chart),
+          },
+        })
+      );
     }
-  );
+  });
 };
 
 function getArrFromObj(obj, withValue) {

@@ -302,12 +302,12 @@ export function OperationsHistory() {
                   </Grid>
                   <Grid item xs={2}>
                     <Typography variant='body2' style={{ textAlign: "center" }}>
-                      {`${obj.sum}KGS`}
+                      {`${obj.sum} ${obj.main_currency}`}
                     </Typography>
                   </Grid>
                   <Grid item xs={2}>
                     <Typography variant='body2' style={{ textAlign: "center" }}>
-                      {`${obj.debit}${obj.currency}`}
+                      {`${obj.debit} ${obj.currency}`}
                     </Typography>
                   </Grid>
                   <Grid item xs={2}>

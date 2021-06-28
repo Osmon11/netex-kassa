@@ -89,7 +89,7 @@ export function ProjectSettings({ match }) {
       getCurrentMerchant();
     }
     if (!Boolean(state.statistics[match.params.id])) {
-      dispatch(getMerchantStatistics(match.params.id));
+      dispatch(getMerchantStatistics(match.params.id, { currency: "KGS" }));
     }
   }, [
     currentMerchant,
@@ -502,7 +502,7 @@ export function ProjectSettings({ match }) {
                               variant='body2'
                               style={{ textAlign: "center" }}
                             >
-                              {`${obj.sum}KGS`}
+                              {`${obj.sum} ${obj.main_currency}`}
                             </Typography>
                           </Grid>
                           <Grid item xs={2}>
@@ -510,7 +510,7 @@ export function ProjectSettings({ match }) {
                               variant='body2'
                               style={{ textAlign: "center" }}
                             >
-                              {`${obj.debit}${obj.currency}`}
+                              {`${obj.debit} ${obj.currency}`}
                             </Typography>
                           </Grid>
                           <Grid item xs={2}>

@@ -121,7 +121,7 @@ body {
   box-shadow: inset 0px 4px 14px rgba(0, 0, 0, 0.05);
   border-radius: 4px;
   padding: 30px;
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 }
 #legend-container {
   display: flex;
