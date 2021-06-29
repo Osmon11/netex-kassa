@@ -21,13 +21,16 @@ import {
   restorePassword,
   singup,
 } from "store/actions/sign";
-import { setAlert } from "store/actionCreators";
+import { setAlert, setBackdrop } from "store/actionCreators";
 import { ValidatedInput } from "components/Dashboard/Inputs";
 
 export function Auth({ open, handleClose, login, setLogin }) {
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch();
+  const [enterCode, setCodeField] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [timeleft, setTimeLeft] = useState(90);
 
   function alertHandler(options) {
     dispatch(setAlert(options));
@@ -52,9 +55,22 @@ export function Auth({ open, handleClose, login, setLogin }) {
             setAlert={alertHandler}
             handleClose={handleClose}
             setLogin={setLogin}
+            setCodeField={(value) => setCodeField(value)}
+            setUserEmail={(value) => setUserEmail(value)}
+            setTimeLeft={(value) => setTimeLeft(value)}
           />
         ) : (
-          <SingUp sm={sm} setAlert={alertHandler} setLogin={setLogin} />
+          <SingUp
+            sm={sm}
+            setAlert={alertHandler}
+            setLogin={setLogin}
+            enterCode={enterCode}
+            setCodeField={(value) => setCodeField(value)}
+            userEmail={userEmail}
+            setUserEmail={(value) => setUserEmail(value)}
+            timeleft={timeleft}
+            setTimeLeft={(value) => setTimeLeft(value)}
+          />
         )}
 
         <div className='flex_box' style={{ margin: "20px 0" }}>
@@ -76,7 +92,15 @@ export function Auth({ open, handleClose, login, setLogin }) {
   );
 }
 
-function SingIn({ sm, setAlert, handleClose, setLogin }) {
+function SingIn({
+  sm,
+  setAlert,
+  handleClose,
+  setLogin,
+  setCodeField,
+  setUserEmail,
+  setTimeLeft,
+}) {
   const history = useHistory();
   const dispatch = useDispatch();
   const [fogetPassword, setPassword] = useState(false);
@@ -93,9 +117,11 @@ function SingIn({ sm, setAlert, handleClose, setLogin }) {
   });
 
   function submitHandler(fields) {
+    dispatch(setBackdrop(true));
     if (fogetPassword) {
       return dispatch(
         restorePassword(fields, () => {
+          dispatch(setBackdrop(false));
           setLogin(true);
         })
       );
@@ -111,7 +137,31 @@ function SingIn({ sm, setAlert, handleClose, setLogin }) {
           ...fields,
         },
         (alert) => {
+          dispatch(setBackdrop(false));
           setAlert(alert);
+          if (alert.message === "Ваш аккаунт еще не активирован!") {
+            dispatch(
+              resendActivationCode(
+                { email: fields.email },
+                (message, next_send_time) => {
+                  if (Boolean(next_send_time)) {
+                    console.log(next_send_time);
+                    setTimeLeft(parseInt(next_send_time));
+                  }
+                  if (Boolean(message)) {
+                    setAlert({
+                      open: true,
+                      severity: Boolean(next_send_time) ? "error" : "success",
+                      message,
+                    });
+                  }
+                }
+              )
+            );
+            setCodeField(true);
+            setLogin(false);
+            setUserEmail({ email: fields.email });
+          }
           if (alert.severity === "success") {
             handleClose();
             history.push("/dashboard");
@@ -141,20 +191,28 @@ function SingIn({ sm, setAlert, handleClose, setLogin }) {
               {fogetPassword ? "Восстановление пароля" : "Вход"}
             </p>
           ) : null}
-          <Typography variant='body2' style={{ marginTop: 15 }}>
+          <Typography
+            variant='body2'
+            style={{ marginTop: 15, marginBottom: 8 }}
+          >
             Почта
           </Typography>
           <InputComponent
+            autoComplete='off'
             placeholder='Введите email'
             name='email'
             type='email'
           />
           {!fogetPassword ? (
             <>
-              <Typography variant='body2' style={{ marginTop: 15 }}>
+              <Typography
+                variant='body2'
+                style={{ marginTop: 15, marginBottom: 8 }}
+              >
                 Пароль
               </Typography>
               <InputComponent
+                autoComplete='off'
                 placeholder='Введите пароль'
                 name='password'
                 type='password'
@@ -192,11 +250,18 @@ function SingIn({ sm, setAlert, handleClose, setLogin }) {
   );
 }
 
-function SingUp({ sm, setAlert, setLogin }) {
-  const [enterCode, setCodeField] = useState(false);
+function SingUp({
+  sm,
+  setAlert,
+  setLogin,
+  setCodeField,
+  enterCode,
+  userEmail,
+  setUserEmail,
+  timeleft,
+  setTimeLeft,
+}) {
   const [btnDisabled, setBtnDisabled] = useState(true);
-  const [userEmail, setUserEmail] = useState("");
-  const [timeleft, setTimeLeft] = useState(90);
   const dispatch = useDispatch();
   let minutes = Math.floor((timeleft % (60 * 60)) / 60);
   let seconds = Math.floor(timeleft % 60);
@@ -220,12 +285,14 @@ function SingUp({ sm, setAlert, setLogin }) {
           : setBtnDisabled(false);
       return () => clearInterval(timer);
     }
-  }, [timeleft, enterCode]);
+  }, [timeleft, enterCode, setTimeLeft]);
 
   function submitHandler(fields) {
+    dispatch(setBackdrop(true));
     setUserEmail({ email: fields.email });
     dispatch(
       singup(fields, (data) => {
+        dispatch(setBackdrop(false));
         if (Boolean(data.messages)) {
           setAlert({ open: true, severity: "error", message: data.messages });
           return;
@@ -235,8 +302,10 @@ function SingUp({ sm, setAlert, setLogin }) {
     );
   }
   function codeSubmit({ code }) {
+    dispatch(setBackdrop(true));
     dispatch(
       accountActivation({ ...userEmail, code }, (success) => {
+        dispatch(setBackdrop(false));
         setAlert({
           open: true,
           severity: "success",
@@ -258,7 +327,10 @@ function SingUp({ sm, setAlert, setLogin }) {
           onSubmit={codeSubmit}
         >
           <Form>
-            <Typography variant='body2' style={{ marginTop: 15 }}>
+            <Typography
+              variant='body2'
+              style={{ marginTop: 15, marginBottom: 8 }}
+            >
               Введите полученный код сюда
             </Typography>
             <ValidatedInput
@@ -285,8 +357,8 @@ function SingUp({ sm, setAlert, setLogin }) {
               }}
               fullWidth
             >
-              Отправить повторно
-              {timeleft > 0 && `через ${minutes}мин ${seconds}сек`}
+              {`Отправить повторно
+              ${timeleft > 0 ? `через ${minutes}мин ${seconds}сек` : ""}`}
             </GoldButton>
             <GoldButton
               type='submit'
@@ -328,40 +400,57 @@ function SingUp({ sm, setAlert, setLogin }) {
                 Регистрация
               </p>
             ) : null}
-            <Typography variant='body2' style={{ marginTop: 15 }}>
+            <Typography
+              variant='body2'
+              style={{ marginTop: 15, marginBottom: 8 }}
+            >
               Имя
             </Typography>
             <InputComponent
+              autoComplete='off'
               placeholder='Введите Ваше имя'
               name='firstname'
               type='text'
             />
-            <Typography variant='body2' style={{ marginTop: 15 }}>
+            <Typography
+              variant='body2'
+              style={{ marginTop: 15, marginBottom: 8 }}
+            >
               Фамилия
             </Typography>
             <InputComponent
+              autoComplete='off'
               placeholder='Введите Вашу фамилию'
               name='lastname'
               type='text'
             />
-            <Typography variant='body2' style={{ marginTop: 15 }}>
+            <Typography
+              variant='body2'
+              style={{ marginTop: 15, marginBottom: 8 }}
+            >
               Почта
             </Typography>
             <InputComponent
+              autoComplete='off'
               placeholder='Введите email'
               name='email'
               type='email'
             />
-            <Typography variant='body2' style={{ marginTop: 15 }}>
+            <Typography
+              variant='body2'
+              style={{ marginTop: 15, marginBottom: 8 }}
+            >
               Пароль
             </Typography>
             <InputComponent
+              autoComplete='off'
               placeholder='Введите пароль'
               name='password'
               type='password'
               style={{ marginBottom: 16 }}
             />
             <InputComponent
+              autoComplete='off'
               placeholder='Повторите пароль'
               name='password_two'
               type='password'

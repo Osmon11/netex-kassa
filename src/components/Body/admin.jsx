@@ -8,6 +8,8 @@ import {
   makeStyles,
   Toolbar,
   Typography,
+  Backdrop,
+  CircularProgress,
 } from "@material-ui/core";
 import React, { useEffect } from "react";
 import "./style.css";
@@ -182,6 +184,9 @@ export function Admin() {
           </Switch>
         </div>
       </section>
+      <Backdrop className={classes.backdrop} open={state.openBackdrop}>
+        <CircularProgress color='inherit' />
+      </Backdrop>
       <div className='bg3_image' />
       {/* <NavLink
         to="/dashboard/get-new-adress"
@@ -299,12 +304,15 @@ function DefaultComponent() {
                 <div className='flex_box'>
                   <NavLink
                     to={`/dashboard/project/${merchant.merchant_id}/`}
-                    style={{ marginRight: 20 }}
+                    style={{ marginRight: 20, maxHeight: 24 }}
                   >
                     <img src={settings} alt='' />
                   </NavLink>
-                  <NavLink to={`/dashboard/project/${merchant.name}/delete`}>
-                    <img src={trash} alt='' />
+                  <NavLink
+                    to={`/dashboard/project/${merchant.merchant_id}/delete`}
+                    style={{ maxHeight: 24 }}
+                  >
+                    <img src={trash} alt='' style={{ maxHeight: 24 }} />
                   </NavLink>
                 </div>
               </Grid>
@@ -411,5 +419,8 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#ff9900",
       color: "#fff",
     },
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
   },
 }));

@@ -11,6 +11,7 @@ import {
   SET_BALANCE,
   SET_STATISTICS,
   setMerchantStatistics,
+  SET_BACKDROP,
 } from "./actionCreators";
 import { initialState } from "./initialState";
 
@@ -21,6 +22,11 @@ export function reducer(state = initialState, action) {
       return {
         ...state,
         user: payload,
+      };
+    case SET_BACKDROP:
+      return {
+        ...state,
+        openBackdrop: payload,
       };
     case SET_DOCUMENTATION_TAB:
       return {
@@ -150,7 +156,18 @@ export const getMerchants = () => (dispatch) => {
 export const confirmMerchant = (confirm_file_id, callback) => (dispatch) => {
   creatRequest(`/account/confirm/${confirm_file_id}`, undefined, callback).then(
     (res) => {
-      console.log(res);
+      console.log(Boolean(res.data.response), res.data);
+      if (Boolean(res.data.response)) {
+        callback(undefined);
+      }
+    }
+  );
+};
+
+export const deleteMerchant = (merchant_id, callback) => (dispatch) => {
+  creatRequest(`/account/remove/${merchant_id}`, undefined, callback).then(
+    (res) => {
+      console.log(res.data);
     }
   );
 };

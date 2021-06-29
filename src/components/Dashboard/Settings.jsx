@@ -14,6 +14,7 @@ import { getActionLogs } from "store/reducer";
 import { changePassword } from "store/actions/sign";
 import { ValidatedInput } from "./Inputs";
 import { useDispatch, useSelector } from "react-redux";
+import { setAlert, setBackdrop } from "store/actionCreators";
 
 const passwordInitialValues = {
   "old-password": "",
@@ -58,7 +59,13 @@ export function Settings() {
   }, [state.actionLogs, dispatch]);
 
   function changePasswordHandler(fields) {
-    dispatch(changePassword(fields));
+    dispatch(setBackdrop(true));
+    dispatch(
+      changePassword(fields, (message) => {
+        dispatch(setBackdrop(false));
+        dispatch(setAlert({ open: true, severity: "success", message }));
+      })
+    );
   }
   return (
     <>
@@ -213,6 +220,7 @@ export function Settings() {
                   Текущий пароль
                 </Typography>
                 <ValidatedInput
+                  autoComplete='off'
                   placeholder='Введите текущий пароль'
                   name='old-password'
                   style={{ width: "100%", marginTop: "8px" }}
@@ -221,6 +229,7 @@ export function Settings() {
                   Новый пароль
                 </Typography>
                 <ValidatedInput
+                  autoComplete='off'
                   placeholder='Введите новый пароль'
                   name='new-password'
                   style={{ width: "100%", marginTop: "8px" }}
@@ -229,6 +238,7 @@ export function Settings() {
                   Повторите пароль
                 </Typography>
                 <ValidatedInput
+                  autoComplete='off'
                   placeholder='Повторите новый пароль'
                   name='confirm-password'
                   style={{ width: "100%", marginTop: "8px" }}

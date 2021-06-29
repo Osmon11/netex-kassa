@@ -1,6 +1,7 @@
 export const initialState = {
   user: false,
   authdialog: { open: false, login: true },
+  openBackdrop: false,
   currentDocumentationTab: { value: "Знакомство", index: 0 },
   merchants: "",
   balance: "",

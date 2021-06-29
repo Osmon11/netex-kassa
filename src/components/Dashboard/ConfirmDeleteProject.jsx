@@ -1,10 +1,26 @@
 import { Button, makeStyles, Paper, Typography } from "@material-ui/core";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { GoldButton } from "shared/Buttons/buttons";
+import { setAlert, setBackdrop } from "store/actionCreators";
+import { deleteMerchant } from "store/reducer";
 
-export function ConfirmDeleteProject() {
+export function ConfirmDeleteProject({ match }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const removeMerchant = () => {
+    dispatch(setBackdrop(true));
+    dispatch(
+      deleteMerchant(match.params.id, (message) => {
+        dispatch(setBackdrop(false));
+        dispatch(setAlert({ open: true, severity: "success", message }));
+      })
+    );
+  };
+
   return (
     <div className='flex_box'>
       <Paper className={classes.paper}>
@@ -26,15 +42,16 @@ export function ConfirmDeleteProject() {
           className='flex_box'
           style={{ justifyContent: "space-between", marginTop: 50 }}
         >
-          <NavLink
-            to='/dashboard'
-            style={{ textDecoration: "none", width: "45%" }}
+          <Button
+            className={classes.customBtn}
+            variant='outlined'
+            onClick={() => history.goBack()}
           >
-            <Button className={classes.customBtn} variant='outlined'>
-              Отменить
-            </Button>
-          </NavLink>
-          <GoldButton style={{ width: "45%" }}>Удалить</GoldButton>
+            Отменить
+          </Button>
+          <GoldButton style={{ width: "45%" }} onClick={removeMerchant}>
+            Удалить
+          </GoldButton>
         </div>
       </Paper>
     </div>
@@ -49,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "100px 0",
   },
   customBtn: {
-    width: "100%",
+    width: "45%",
     minHeight: 50,
     fontSize: 16,
     color: "rgba(255, 255, 255, 0.3)",

@@ -75,20 +75,13 @@ export const accountActivation = (fields, callback) => (dispatch) => {
     });
 };
 
-export const resendActivationCode = (phone, callback) => (dispatch) => {
-  AppAxios.post("/auth/activation/resend", phone)
+export const resendActivationCode = (email, callback) => (dispatch) => {
+  AppAxios.post("/auth/activation/resend", email)
     .then((res) => {
-      console.log(res.data);
       callback(res.data.message);
     })
     .catch(({ response }) => {
-      dispatch(
-        setAlert({
-          open: true,
-          severity: "error",
-          message: response.data.messages,
-        })
-      );
+      callback(response.data.messages, response.data.next_send);
     });
 };
 
@@ -119,6 +112,8 @@ export const restorePassword = (phone, callback) => (dispatch) => {
 
 export const changePassword = (fields, callback) => (dispatch) => {
   AppAxios.post("/profile/password", fields).then((res) => {
-    callback();
+    if (Boolean(res.data.response)) {
+      callback(res.data.messages);
+    }
   });
 };

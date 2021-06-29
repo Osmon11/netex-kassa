@@ -39,7 +39,7 @@ export function WithdrawFunds() {
     if (!Boolean(balance)) {
       dispatch(getBalance());
     }
-    if (!Boolean(currentMerchant)) {
+    if (!Boolean(currentMerchant) && Boolean(merchants)) {
       setCurrentMerchant(merchants[0]);
     }
     if (

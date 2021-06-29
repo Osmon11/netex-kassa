@@ -42,58 +42,68 @@ export function Header() {
       <ThemeDrawer
         open={drawer}
         onClose={() => setDrawer(false)}
-        anchor="right"
+        anchor='right'
       >
         <div
-          className="flex_box"
+          className='flex_box'
           style={{
             width: "100%",
             justifyContent: "space-between",
             margin: "14px 0 50px",
           }}
         >
-          <span className="menu_text">Menu</span>
+          <span className='menu_text'>Menu</span>
           <div
-            className="circle_button flex_box"
+            className='circle_button flex_box'
             onClick={() => setDrawer(false)}
           >
-            <img src={closeIcon} alt="" />
+            <img src={closeIcon} alt='' />
           </div>
         </div>
 
         <div style={{ marginRight: 70 }}>
           <Typography
-            variant="subtitle2"
+            variant='subtitle2'
             style={{ color: "#5F5F5F", marginBottom: 20 }}
           >
             СВяжитесь с нами
           </Typography>
           <Typography
-            variant="body2"
+            variant='body2'
             style={{ display: "flex", alignItems: "center", marginBottom: 20 }}
           >
-            <img src={phoneIcon} alt="" style={{ marginRight: 20 }} />
-            +7 (123) 123 456 789
+            <img src={phoneIcon} alt='' style={{ marginRight: 20 }} />
+            <a
+              style={{ textDecoration: "none", color: "#fff" }}
+              href='tel:+996703601111'
+            >
+              +996 (703) 601 111
+            </a>
           </Typography>
           <Typography
-            variant="body2"
+            variant='body2'
             style={{ display: "flex", alignItems: "center", marginBottom: 20 }}
           >
-            <img src={mailIcon} alt="" style={{ marginRight: 20 }} />
-            Info@andancer.com
+            <img src={mailIcon} alt='' style={{ marginRight: 20 }} />
+            <a
+              style={{ textDecoration: "none", color: "#fff" }}
+              href='mailto:info@netex-kassa.com'
+            >
+              info@netex-kassa.com
+            </a>
           </Typography>
           <div
-            className="flex_box"
+            className='flex_box'
             style={{ justifyContent: "space-between", maxWidth: 200 }}
           >
             <Paper style={{ ...iconStyle }} elevation={3}>
-              <img src={whatsApp} alt="" />
+              <img src={whatsApp} alt='' />
             </Paper>
             <Paper style={{ ...iconStyle }} elevation={3}>
-              <img src={telegram} alt="" />
+              <img src={telegram} alt='' />
             </Paper>
             <Paper style={{ ...iconStyle }} elevation={3}>
-              <img src={viber} alt="" />
+              <img src={viber} alt='' />
             </Paper>
           </div>
           <Divider
@@ -104,43 +114,43 @@ export function Header() {
             }}
           />
           <Typography
-            variant="subtitle2"
+            variant='subtitle2'
             style={{ color: "#5F5F5F", marginBottom: 20 }}
           >
             Навигация по сайту
           </Typography>
-          <Typography variant="body2" style={{ marginBottom: 10 }}>
-            <NavLink to="/" className="nav_link">
+          <Typography variant='body2' style={{ marginBottom: 10 }}>
+            <NavLink to='/' className='nav_link'>
               Главная
             </NavLink>
           </Typography>
-          <Typography variant="body2" style={{ marginBottom: 10 }}>
-            <NavLink to="/documentation" className="nav_link">
+          <Typography variant='body2' style={{ marginBottom: 10 }}>
+            <NavLink to='/documentation' className='nav_link'>
               Документация
             </NavLink>
           </Typography>
-          <Typography variant="body2" style={{ marginBottom: 10 }}>
-            <NavLink to="/about-us" className="nav_link">
+          <Typography variant='body2' style={{ marginBottom: 10 }}>
+            <NavLink to='/about-us' className='nav_link'>
               О компании
             </NavLink>
           </Typography>
-          <Typography variant="body2" style={{ marginBottom: 10 }}>
-            <NavLink to="/rates" className="nav_link">
+          <Typography variant='body2' style={{ marginBottom: 10 }}>
+            <NavLink to='/rates' className='nav_link'>
               Тарифы
             </NavLink>
           </Typography>
-          <Typography variant="body2" style={{ marginBottom: 10 }}>
+          <Typography variant='body2' style={{ marginBottom: 10 }}>
             {!user ? (
               <span
                 onClick={() =>
                   dispatch(setAuthDialog({ open: true, login: true }))
                 }
-                className="nav_link"
+                className='nav_link'
               >
                 Вход в личный кабинет
               </span>
             ) : (
-              <NavLink to="/dashboard" className="nav_link">
+              <NavLink to='/dashboard' className='nav_link'>
                 Профиль
               </NavLink>
             )}
@@ -151,7 +161,7 @@ export function Header() {
   }
   return (
     <AppBar
-      position="static"
+      position='static'
       style={{
         backgroundColor: "#18191D",
         borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
@@ -160,7 +170,7 @@ export function Header() {
       <Container>
         <Toolbar style={{ padding: "10px 0" }}>
           <div
-            className="flex_box"
+            className='flex_box'
             style={{
               justifyContent: "space-between",
               width: "100%",
@@ -168,39 +178,39 @@ export function Header() {
             }}
           >
             <span
-              className="flex_box"
+              className='flex_box'
               style={{ flexDirection: sm ? "column" : "row" }}
             >
-              <NavLink to="/" className="nav_link">
+              <NavLink to='/' className='nav_link'>
                 <Logo />
               </NavLink>
             </span>
 
             {sm ? (
               <IconButton onClick={() => setDrawer(true)}>
-                <img src={menuIcon} alt="" />
+                <img src={menuIcon} alt='' />
               </IconButton>
             ) : (
               <>
                 <div
-                  className="flex_box"
+                  className='flex_box'
                   style={{ justifyContent: "space-between", width: 485 }}
                 >
-                  <NavLink exact to="/" className="nav_link">
+                  <NavLink exact to='/' className='nav_link'>
                     Главная
                   </NavLink>
-                  <NavLink to="/about-us" className="nav_link">
+                  <NavLink to='/about-us' className='nav_link'>
                     О нас
                   </NavLink>
-                  <NavLink to="/documentation" className="nav_link">
+                  <NavLink to='/documentation' className='nav_link'>
                     Документация
                   </NavLink>
-                  <NavLink to="/rates" className="nav_link">
+                  <NavLink to='/rates' className='nav_link'>
                     Тарифы
                   </NavLink>
                 </div>
 
-                <span className="flex_box">
+                <span className='flex_box'>
                   {!user ? (
                     <>
                       <GoldButton
@@ -208,12 +218,12 @@ export function Header() {
                         onClick={() =>
                           dispatch(setAuthDialog({ open: true, login: true }))
                         }
-                        variant="outlined"
+                        variant='outlined'
                       >
                         Вход
                       </GoldButton>
                       <p
-                        className="nav_link"
+                        className='nav_link'
                         style={{ marginLeft: 20 }}
                         onClick={() =>
                           dispatch(setAuthDialog({ open: true, login: false }))
@@ -223,7 +233,7 @@ export function Header() {
                       </p>
                     </>
                   ) : (
-                    <NavLink to="/dashboard" className="nav_link">
+                    <NavLink to='/dashboard' className='nav_link'>
                       <GoldButton
                         style={{ minWidth: 90, minHeight: 40 }}
                         // variant="outlined"

@@ -36,7 +36,7 @@ import {
 import { ValidatedInput } from "./Inputs";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { setAlert } from "store/actionCreators";
+import { setAlert, setBackdrop } from "store/actionCreators";
 import { NavLink } from "react-router-dom";
 import { Statistics } from "./Statistics";
 
@@ -50,7 +50,6 @@ export function ProjectSettings({ match }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [tab, setTab] = useState("Статистика");
-  const [loading, setLoading] = useState(false);
   const [tooltip, setTooltip] = useState({ a: false, b: false });
   const [currentMerchant, setCurrentMerchant] = useState(null);
   let t = new Date();
@@ -112,12 +111,14 @@ export function ProjectSettings({ match }) {
   }
 
   function confirmMerchantHandler() {
-    setLoading(true);
+    dispatch(setBackdrop(true));
     dispatch(
       confirmMerchant(currentMerchant.confirm_file, (error) => {
-        setLoading(false);
+        dispatch(setBackdrop(false));
         if (Boolean(error)) {
           dispatch(setAlert({ open: true, severity: "error", message: error }));
+        } else {
+          getCurrentMerchant();
         }
       })
     );
@@ -129,11 +130,13 @@ export function ProjectSettings({ match }) {
     dispatch(editMerchant(fields, match.params.id, errorHandler));
   }
   function getTokenHandler() {
+    dispatch(setBackdrop(true));
     dispatch(
       getToken(
         currentMerchant.view.merchant_id,
         errorHandler,
         (new_api_token) => {
+          dispatch(setBackdrop(false));
           dispatch(
             setAlert({
               open: true,
@@ -189,16 +192,15 @@ export function ProjectSettings({ match }) {
               variant='outlined'
               style={{
                 width: 200,
-                color: loading ? "#a86500" : "#FF9900",
+                color: "#FF9900",
                 fontSize: 18,
                 fontWeight: 300,
                 border: "1px solid",
-                borderColor: loading ? "#a86500" : "#FF9900",
+                borderColor: "#FF9900",
                 borderRadius: 8,
                 marginTop: 20,
               }}
               onClick={confirmMerchantHandler}
-              disabled={loading}
             >
               Подтвердить
             </Button>
