@@ -35,7 +35,7 @@ import { getProfile } from "store/actions/profile";
 import { logout } from "store/actions/sign";
 import { GoldButton } from "shared/Buttons/buttons";
 import { AppAxios } from "store/actions/sign";
-import { getMerchants } from "store/reducer";
+import { getMerchants, getBalance } from "store/reducer";
 
 let drawerWidth = 280;
 
@@ -57,6 +57,9 @@ export function Admin() {
     }
     if (!merchants.merchants) {
       dispatch(getMerchants());
+    }
+    if (!Boolean(state.balance)) {
+      dispatch(getBalance());
     }
   }, [state.profileInfo, merchants.merchants, dispatch]);
 

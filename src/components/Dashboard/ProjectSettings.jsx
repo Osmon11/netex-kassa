@@ -65,6 +65,7 @@ export function ProjectSettings({ match }) {
 
   const errorHandler = useCallback(
     function (error) {
+      dispatch(setBackdrop(false));
       if (Boolean(error)) {
         dispatch(setAlert({ open: true, severity: "error", message: error }));
       }
@@ -127,6 +128,7 @@ export function ProjectSettings({ match }) {
     setTimeout(() => setTooltip({ a: false, b: false }), 1500);
   }
   function settingSubmit(fields) {
+    dispatch(setBackdrop(true));
     dispatch(editMerchant(fields, match.params.id, errorHandler));
   }
   function getTokenHandler() {
@@ -578,7 +580,7 @@ export function ProjectSettings({ match }) {
                       <ValidatedInput
                         name='success_url'
                         style={{ width: "100%" }}
-                        placeholder={`Например,`}
+                        placeholder={`Например, ${currentMerchant.view.params.domain}/success`}
                       />
                     </div>
                     <div
@@ -598,7 +600,7 @@ export function ProjectSettings({ match }) {
                       <ValidatedInput
                         name='fail_url'
                         style={{ width: "100%" }}
-                        placeholder={`Например,`}
+                        placeholder={`Например, ${currentMerchant.view.params.domain}/fail`}
                       />
                     </div>
                     <div
@@ -618,7 +620,7 @@ export function ProjectSettings({ match }) {
                       <ValidatedInput
                         name='status_url'
                         style={{ width: "100%" }}
-                        placeholder={`Например,`}
+                        placeholder={`Например, ${currentMerchant.view.params.domain}/status`}
                       />
                     </div>
                     <GoldButton type='submit' style={{ width: 175 }}>
