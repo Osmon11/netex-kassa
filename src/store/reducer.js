@@ -12,12 +12,23 @@ import {
   SET_STATISTICS,
   setMerchantStatistics,
   SET_BACKDROP,
+  setBackdrop,
+  SET_FILETOUPLOAD,
 } from "./actionCreators";
 import { initialState } from "./initialState";
+import { getProfile } from "./actions/profile";
 
 export function reducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
+    case SET_FILETOUPLOAD:
+      return {
+        ...state,
+        filesToUpload: {
+          ...state.filesToUpload,
+          ...payload,
+        },
+      };
     case SET_USER:
       return {
         ...state,
@@ -71,7 +82,7 @@ const somethingWentWrong = (endpoint) => {
 
 export function creatRequest(endpoint, data, errorCallback) {
   return data
-    ? AppAxios.post(endpoint, JSON.stringify(data)).catch(({ response }) =>
+    ? AppAxios.post(endpoint, data).catch(({ response }) =>
         errorCallback(response.data.messages)
       )
     : AppAxios.get(endpoint).catch(({ response }) =>
@@ -120,7 +131,9 @@ export const addMerchant = (data, callback) => (dispatch) => {
 };
 
 export const editMerchant = (data, id, callback) => (dispatch) => {
-  creatRequest(`/account/edit/${id}`, data, callback).then((res) => {});
+  creatRequest(`/account/edit/${id}`, JSON.stringify(data), callback).then(
+    (res) => {}
+  );
 };
 
 export const viewMerchant = (id, callback) => (dispatch) => {
@@ -173,15 +186,18 @@ export const deleteMerchant = (merchant_id, callback) => (dispatch) => {
 };
 
 export const getHistoryList = (errorHandler, options) => (dispatch) => {
-  creatRequest("/operations/list", options, errorHandler).then((res) => {
-    if (Boolean(res)) {
-      dispatch(
-        setData({
-          historyList: res.data.list ? getArrFromObj(res.data.list) : false,
-        })
-      );
+  creatRequest("/operations/list", JSON.stringify(options), errorHandler).then(
+    (res) => {
+      if (Boolean(res)) {
+        dispatch(
+          setData({
+            historyList: res.data.list ? getArrFromObj(res.data.list) : false,
+          })
+        );
+        dispatch(setBackdrop(false));
+      }
     }
-  });
+  );
 };
 
 export const getStatusList = (errorHandler) => (dispatch) => {
@@ -221,12 +237,14 @@ export const getToken = (merchant_id, errorHandler, callback) => (dispatch) => {
 };
 
 export const cashOut = (data, callback) => (dispatch) => {
-  creatRequest("/cashout/send-request", data, callback).then((res) => {
-    if (Boolean(res)) {
-      callback();
-      console.log(res.data);
+  creatRequest("/cashout/send-request", JSON.stringify(data), callback).then(
+    (res) => {
+      if (Boolean(res)) {
+        callback();
+        console.log(res.data);
+      }
     }
-  });
+  );
 };
 
 export const getBalance = () => (dispatch) => {
@@ -263,17 +281,36 @@ export const getMerchantBalance =
   };
 
 export const getMerchantStatistics = (merchant, data) => (dispatch) => {
-  creatRequest(`/account/statistics/${merchant}/`, data).then((res) => {
+  creatRequest(`/account/statistics/${merchant}/`, JSON.stringify(data)).then(
+    (res) => {
+      if (Boolean(res)) {
+        dispatch(
+          setMerchantStatistics({
+            merchant_id: merchant,
+            data: {
+              ...res.data.statistics,
+              chart: parseChartData(res.data.statistics.chart),
+            },
+          })
+        );
+      }
+    }
+  );
+};
+
+export const changeAvatar = (avatar) => (dispatch) => {
+  creatRequest("/profile/personal/edit", avatar).then((res) => {
     if (Boolean(res)) {
+      console.log(res);
+      dispatch(setBackdrop(false));
       dispatch(
-        setMerchantStatistics({
-          merchant_id: merchant,
-          data: {
-            ...res.data.statistics,
-            chart: parseChartData(res.data.statistics.chart),
-          },
+        setAlert({
+          open: true,
+          severity: "success",
+          message: res.data.messages,
         })
       );
+      dispatch(getProfile());
     }
   });
 };

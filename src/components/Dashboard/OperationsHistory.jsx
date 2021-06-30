@@ -34,8 +34,9 @@ import {
   getStatusList,
   getTypeList,
   getHistoryList,
+  getBalance,
 } from "../../store/reducer";
-import { setAlert } from "store/actionCreators";
+import { setAlert, setBackdrop } from "store/actionCreators";
 
 export function OperationsHistory() {
   const classes = useStyles();
@@ -51,7 +52,7 @@ export function OperationsHistory() {
     date_to: new Date().toISOString().split("T")[0],
     status: 2,
     merchant_id: Boolean(merchants) ? merchants[0].merchant_id : "",
-    currency,
+    currency: "",
   });
   const errorHandler = useCallback(
     function (error) {
@@ -68,8 +69,27 @@ export function OperationsHistory() {
       dispatch(getStatusList(errorHandler));
       dispatch(getTypeList(errorHandler));
     }
-  }, [state.statusList, dispatch, errorHandler, merchants, options]);
+    if (!Boolean(state.balance)) {
+      dispatch(getBalance());
+    }
+    if (!Boolean(currentBalance) && Boolean(state.balance)) {
+      setCurrentBalance(state.balance[0]);
+    }
+    if (!Boolean(options.currency) && Boolean(currentBalance)) {
+      setOptions({ ...options, currency: currentBalance.currencies[0].name });
+    }
+  }, [
+    state.statusList,
+    state.balance,
+    dispatch,
+    errorHandler,
+    merchants,
+    options,
+    currentBalance,
+  ]);
+
   function filterChangeHandler(newOptions) {
+    dispatch(setBackdrop(true));
     setOptions(newOptions);
     dispatch(getHistoryList(errorHandler, newOptions));
   }
@@ -212,16 +232,18 @@ export function OperationsHistory() {
                   margin='dense'
                   select
                   variant='outlined'
-                  value={currency}
+                  value={options.currency}
                   onChange={(e) => {
-                    setCurrency(e.target.value);
-                    getNewStatistics(e.target.value.name);
+                    filterChangeHandler({
+                      ...options,
+                      currency: e.target.value,
+                    });
                   }}
                 >
                   {currentBalance.currencies.map((c) => (
                     <MenuItem
                       key={c.name}
-                      value={c}
+                      value={c.name}
                       className={classes.menuItem}
                       classes={{ selected: classes.selected }}
                     >

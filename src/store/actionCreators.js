@@ -6,6 +6,14 @@ export const SET_AUTH_DIALOG = "SET_AUTH_DIALOG";
 export const SET_BALANCE = "SET_BALANCE";
 export const SET_STATISTICS = "SET_STATISTICS";
 export const SET_BACKDROP = "SET_BACKDROP";
+export const SET_FILETOUPLOAD = "SET_FILETOUPLOAD";
+
+export function setFileToUpload(payload) {
+  return {
+    payload,
+    type: SET_FILETOUPLOAD,
+  };
+}
 
 export function setBackdrop(payload) {
   return {

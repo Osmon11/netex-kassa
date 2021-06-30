@@ -34,7 +34,7 @@ export function Statistics({ merchant_id }) {
     if (!Boolean(currency) && Boolean(currentBalance)) {
       setCurrency(currentBalance.currencies[0]);
     }
-  }, [state.balance, currentBalance, dispatch]);
+  }, [state.balance, currentBalance, currency, merchant_id, dispatch]);
 
   function getNewStatistics(currency) {
     dispatch(getMerchantStatistics(merchant_id, { currency }));

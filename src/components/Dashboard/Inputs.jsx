@@ -8,6 +8,8 @@ import { ThemeInput } from "components/Auth/auth";
 import React, { useRef, useState } from "react";
 import uploadIcon from "assets/upload-icon.png";
 import { ErrorMessage, useField } from "formik";
+import { useDispatch } from "react-redux";
+import { setFileToUpload } from "store/actionCreators";
 
 export function ValidatedInput({ children, style, ...props }) {
   const [field, meta] = useField(props);
@@ -18,7 +20,7 @@ export function ValidatedInput({ children, style, ...props }) {
       {...props}
       error={Boolean(meta.touched && meta.error)}
       helperText={meta.error ? <ErrorMessage name={field.name} /> : ""}
-      variant="outlined"
+      variant='outlined'
       style={{ marginBottom: 20, width: 334, ...style }}
     >
       {children}
@@ -34,24 +36,31 @@ export function Inputs({
   upload,
   date,
   items,
+  withoutLabel,
   ...props
 }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const avatar = useRef();
   const [fileInputsState, setInputState] = useState({});
   const [currentFileInput, setCurrentInput] = useState("");
 
   return (
     <div
-      className="flex_box"
-      style={{ justifyContent: "space-between", paddingRight: "25%" }}
+      className='flex_box'
+      style={{
+        justifyContent: withoutLabel ? "flex-start" : "space-between",
+        paddingRight: withoutLabel ? 0 : "25%",
+      }}
     >
-      <Typography
-        variant="body2"
-        style={{ fontSize: 16, fontWeight: 300, width: "40%" }}
-      >
-        {label}
-      </Typography>
+      {!withoutLabel && (
+        <Typography
+          variant='body2'
+          style={{ fontSize: 16, fontWeight: 300, width: "40%" }}
+        >
+          {label}
+        </Typography>
+      )}
       {/* if type select */}
       {select ? (
         <ValidatedInput {...props} value={value} select onChange={handleChange}>
@@ -80,8 +89,8 @@ export function Inputs({
           }}
           InputProps={{
             endAdornment: (
-              <InputAdornment position="end">
-                <img src={uploadIcon} alt="" />
+              <InputAdornment position='end'>
+                <img src={uploadIcon} alt='' />
               </InputAdornment>
             ),
           }}
@@ -89,18 +98,19 @@ export function Inputs({
         />
       ) : // if date then input with mask
       date ? (
-        <ValidatedInput {...props} type="date" />
+        <ValidatedInput {...props} type='date' />
       ) : (
         // simple input
         <ValidatedInput {...props} />
       )}
       {/* it required to select and upload file  */}
       <input
-        name="upload_file"
-        type="file"
+        name='upload_file'
+        type='file'
         ref={avatar}
         onChange={(e) => {
           let newState = { ...fileInputsState };
+          dispatch(setFileToUpload({ [currentFileInput]: e.target.files[0] }));
           newState[currentFileInput] = e.target.files[0];
           setInputState(newState);
         }}

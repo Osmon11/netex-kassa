@@ -10,9 +10,9 @@ import * as Yup from "yup";
 import React, { useEffect, useState } from "react";
 import { GoldButton } from "shared/Buttons/buttons";
 import { GoldToggleButton } from "shared/Buttons/buttons";
-import { getActionLogs } from "store/reducer";
+import { changeAvatar, getActionLogs } from "store/reducer";
 import { changePassword } from "store/actions/sign";
-import { ValidatedInput } from "./Inputs";
+import { ValidatedInput, Inputs } from "./Inputs";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setBackdrop } from "store/actionCreators";
 
@@ -67,6 +67,23 @@ export function Settings() {
       })
     );
   }
+
+  function profileSubmitHandler(fields) {
+    if (!Boolean(state.filesToUpload.avatar)) {
+      dispatch(
+        setAlert({
+          open: true,
+          severity: "warning",
+          message: "Вы не выбрали файл!",
+        })
+      );
+    } else {
+      dispatch(setBackdrop(true));
+      let data = new FormData();
+      data.append("photo[]", state.filesToUpload.avatar);
+      dispatch(changeAvatar(data));
+    }
+  }
   return (
     <>
       <div>
@@ -104,7 +121,10 @@ export function Settings() {
       <div className='flex_box'>
         {tab === "Профиль" && (
           <div style={{ width: "50%" }}>
-            <Formik>
+            <Formik
+              initialValues={{ username: "", email: "", avatar: "" }}
+              onSubmit={profileSubmitHandler}
+            >
               <Form>
                 <Typography variant='body2' style={{ marginTop: 10 }}>
                   Имя
@@ -129,13 +149,29 @@ export function Settings() {
                 <Typography variant='body2' style={{ marginTop: 10 }}>
                   Аватар
                 </Typography>
-                <ValidatedInput
-                  disabled
+                <Inputs
                   placeholder='Загрузить изображение'
                   name='avatar'
                   upload
+                  withoutLabel
                   style={{ width: "100%", marginBottom: 20, marginTop: 8 }}
                 />
+                <br />
+                <div className='flex_box'>
+                  <GoldButton
+                    type='submit'
+                    size='large'
+                    style={{
+                      marginBottom: 64,
+                      marginTop: "10px",
+                      fontSize: 16,
+                      width: "50%",
+                      minHeight: "56px",
+                    }}
+                  >
+                    Сменить аватар
+                  </GoldButton>
+                </div>
               </Form>
             </Formik>
           </div>

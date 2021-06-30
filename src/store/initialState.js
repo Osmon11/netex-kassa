@@ -26,6 +26,7 @@ export const initialState = {
     certificate: "",
     upload_file: "",
   },
+  filesToUpload: {},
   alert: {
     open: false,
     severity: "success",
