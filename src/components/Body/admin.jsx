@@ -36,6 +36,8 @@ import { logout } from "store/actions/sign";
 import { GoldButton } from "shared/Buttons/buttons";
 import { AppAxios } from "store/actions/sign";
 import { getMerchants, getBalance } from "store/reducer";
+import { setData } from "store/actionCreators";
+import { initialState } from "store/initialState";
 
 let drawerWidth = 280;
 
@@ -61,16 +63,13 @@ export function Admin() {
     if (!Boolean(state.balance)) {
       dispatch(getBalance());
     }
-  }, [state.profileInfo, merchants.merchants, dispatch]);
+  }, [state.profileInfo, state.balance, merchants.merchants, dispatch]);
 
   function logoutHandler() {
     dispatch(
       logout(() => {
         history.push("/");
-        dispatch({
-          type: "GET_MERCHANTS",
-          merchants: false,
-        });
+        dispatch(setData(initialState));
       })
     );
   }

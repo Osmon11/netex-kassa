@@ -180,7 +180,18 @@ export const confirmMerchant = (confirm_file_id, callback) => (dispatch) => {
 export const deleteMerchant = (merchant_id, callback) => (dispatch) => {
   creatRequest(`/account/remove/${merchant_id}`, undefined, callback).then(
     (res) => {
-      console.log(res.data);
+      if (Boolean(res.data.response)) {
+        dispatch(setBackdrop(false));
+        dispatch(getMerchants());
+        dispatch(
+          setAlert({
+            open: true,
+            severity: "success",
+            message: "Успешно удалено!",
+          })
+        );
+        callback(undefined, res.data.response);
+      }
     }
   );
 };
@@ -301,7 +312,6 @@ export const getMerchantStatistics = (merchant, data) => (dispatch) => {
 export const changeAvatar = (avatar) => (dispatch) => {
   creatRequest("/profile/personal/edit", avatar).then((res) => {
     if (Boolean(res)) {
-      console.log(res);
       dispatch(setBackdrop(false));
       dispatch(
         setAlert({

@@ -49,8 +49,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
   const newMerchant = state.addMerchant;
   const dispatch = useDispatch();
   const [checkBoxes, setCheckbox] = React.useState({
-    rates: false,
-    contract: false,
+    rates: true,
+    contract: true,
   });
 
   useEffect(() => {
@@ -106,17 +106,15 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
       Boolean(state.filesToUpload.decisions)
     ) {
       const addMerchant = { ...newMerchant, ...fields };
-      // const data = new FormData();
-      // for (let field in addMerchant) {
-      //   data.append(field, addMerchant[field]);
-      // }
-      // data.append("documents[1]", state.filesToUpload.certificate);
-      // data.append("documents[2]", state.filesToUpload.charter);
-      // data.append("documents[3]", state.filesToUpload.decisions);
-      // console.log(data);
+      const data = new FormData();
+      data.append("documents[]", state.filesToUpload.certificate);
+      data.append("documents[]", state.filesToUpload.charter);
+      data.append("documents[]", state.filesToUpload.decisions);
+      for (let field in addMerchant) {
+        data.append(field, addMerchant[field]);
+      }
       // dispatch(setBackdrop(true));
       callback(JSON.stringify(addMerchant));
-      dispatch(setData({ addMerchant }));
     } else {
       dispatch(
         setAlert({
@@ -180,106 +178,112 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
           validationSchema={validateFirstTab}
           onSubmit={submitFirstTab}
         >
-          <Form>
-            {state.countries ? (
+          {(formik) => (
+            <Form>
+              {state.countries ? (
+                <Inputs
+                  label='Страна регистрации вашей компании'
+                  value={newMerchant.country}
+                  handleChange={(e) => {
+                    formik.handleChange(e);
+                    dispatch(
+                      setData({
+                        addMerchant: {
+                          ...newMerchant,
+                          country: e.target.value,
+                        },
+                      })
+                    );
+                  }}
+                  items={state.countries}
+                  name='country'
+                  select
+                />
+              ) : (
+                <Loader />
+              )}
               <Inputs
-                label='Страна регистрации вашей компании'
-                value={newMerchant.country}
-                handleChange={(e) => {
-                  dispatch(
-                    setData({
-                      addMerchant: { ...newMerchant, country: e.target.value },
-                    })
-                  );
+                label='Город регистрации вашей компании'
+                name='city'
+                placeholder='Введите свой город'
+              />
+
+              <div
+                className='flex_box'
+                style={{ justifyContent: "flex-start", marginTop: 20 }}
+              >
+                <CustomSwitch
+                  checked={checkBoxes.rates}
+                  onChange={(e) =>
+                    setCheckbox({ ...checkBoxes, rates: e.target.checked })
+                  }
+                />
+                <Typography variant='body2' style={{ marginLeft: 20 }}>
+                  Ознакомлен и согласен с{" "}
+                  <a
+                    href={`${window.location.origin}/rates`}
+                    style={{
+                      color: "#ff9900",
+                      borderBottom: "1px dashed #ff9900",
+                      textDecoration: "none",
+                    }}
+                    target='_blanck'
+                  >
+                    тарифом
+                  </a>
+                </Typography>
+              </div>
+              <div
+                className='flex_box'
+                style={{ justifyContent: "flex-start", marginTop: 20 }}
+              >
+                <CustomSwitch
+                  checked={checkBoxes.contract}
+                  onChange={(e) =>
+                    setCheckbox({ ...checkBoxes, contract: e.target.checked })
+                  }
+                />
+                <Typography variant='body2' style={{ marginLeft: 20 }}>
+                  Согласен на сбор персональных данных и с{" "}
+                  <a
+                    href='http://odigital.app'
+                    style={{
+                      color: "#ff9900",
+                      borderBottom: "1px dashed #ff9900",
+                      textDecoration: "none",
+                    }}
+                    target='_blanck'
+                  >
+                    договором присоединения
+                  </a>
+                </Typography>
+              </div>
+
+              <div
+                className='flex_box'
+                style={{
+                  justifyContent: "space-between",
+                  width: "50%",
+                  marginTop: 40,
                 }}
-                items={state.countries}
-                name='country'
-                select
-              />
-            ) : (
-              <Loader />
-            )}
-            <Inputs
-              label='Город регистрации вашей компании'
-              name='city'
-              placeholder='Введите свой город'
-            />
-
-            <div
-              className='flex_box'
-              style={{ justifyContent: "flex-start", marginTop: 20 }}
-            >
-              <CustomSwitch
-                checked={checkBoxes.rates}
-                onChange={(e) =>
-                  setCheckbox({ ...checkBoxes, rates: e.target.checked })
-                }
-              />
-              <Typography variant='body2' style={{ marginLeft: 20 }}>
-                Ознакомлен и согласен с{" "}
-                <a
-                  href={`${window.location.origin}/rates`}
-                  style={{
-                    color: "#ff9900",
-                    borderBottom: "1px dashed #ff9900",
-                    textDecoration: "none",
-                  }}
-                  target='_blanck'
-                >
-                  тарифом
-                </a>
-              </Typography>
-            </div>
-            <div
-              className='flex_box'
-              style={{ justifyContent: "flex-start", marginTop: 20 }}
-            >
-              <CustomSwitch
-                checked={checkBoxes.contract}
-                onChange={(e) =>
-                  setCheckbox({ ...checkBoxes, contract: e.target.checked })
-                }
-              />
-              <Typography variant='body2' style={{ marginLeft: 20 }}>
-                Согласен на сбор персональных данных и с{" "}
-                <a
-                  href='http://odigital.app'
-                  style={{
-                    color: "#ff9900",
-                    borderBottom: "1px dashed #ff9900",
-                    textDecoration: "none",
-                  }}
-                  target='_blanck'
-                >
-                  договором присоединения
-                </a>
-              </Typography>
-            </div>
-
-            <div
-              className='flex_box'
-              style={{
-                justifyContent: "space-between",
-                width: "50%",
-                marginTop: 40,
-              }}
-            >
-              <Button
-                className={classes.customBtn}
-                onClick={handlePrev}
-                variant='outlined'
               >
-                Назад
-              </Button>
-              <GoldButton
-                style={{ width: "40%" }}
-                type='submit'
-                ref={firstTabBtn}
-              >
-                Далее
-              </GoldButton>
-            </div>
-          </Form>
+                <Button
+                  className={classes.customBtn}
+                  onClick={handlePrev}
+                  variant='outlined'
+                >
+                  Назад
+                </Button>
+                <GoldButton
+                  style={{ width: "40%" }}
+                  type='submit'
+                  ref={firstTabBtn}
+                >
+                  Далее
+                </GoldButton>
+              </div>
+            </Form>
+          )}
         </Formik>
       )}
 
@@ -469,15 +473,6 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                   formik.handleChange(e);
                 }}
               />
-              <div
-                className='flex_box'
-                style={{ justifyContent: "flex-start", marginTop: 20 }}
-              >
-                <CustomSwitch />
-                <Typography variant='body2' style={{ marginLeft: 20 }}>
-                  Организация является плательщиком НДС
-                </Typography>
-              </div>
               <p
                 className='subtitle'
                 style={{
@@ -508,15 +503,6 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
                   formik.handleChange(e);
                 }}
               />
-              <div
-                className='flex_box'
-                style={{ justifyContent: "flex-start", marginTop: 20 }}
-              >
-                <CustomSwitch />
-                <Typography variant='body2' style={{ marginLeft: 20 }}>
-                  Фактический адрес не совпадает с юридическим
-                </Typography>
-              </div>
               <div
                 className='flex_box'
                 style={{

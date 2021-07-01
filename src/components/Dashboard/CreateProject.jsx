@@ -36,6 +36,30 @@ export function CreateProject() {
           dispatch(setBackdrop(false));
           setSuccess(true);
           dispatch(getMerchants());
+          // dispatch(
+          //   setData({
+          //     addMerchant: {
+          //       name: "",
+          //       domain: "",
+          //       country: 1,
+          //       city: "",
+          //       organization_type: 1,
+          //       legal_name: "",
+          //       activity_type: 1,
+          //       company_reg_date: "",
+          //       inn: "",
+          //       okpo: "",
+          //       bik: "",
+          //       bank_name: "",
+          //       checking_account: "",
+          //       iban: "",
+          //       decisions: "",
+          //       charter: "",
+          //       certificate: "",
+          //       upload_file: "",
+          //     },
+          //   })
+          // );
         }
       })
     );

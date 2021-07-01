@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setUser, setData, setAlert } from "../actionCreators";
+import { setUser, setData, setAlert, setBackdrop } from "../actionCreators";
 
 const baseURL = "https://api.netex-kassa.com/";
 
@@ -110,10 +110,28 @@ export const restorePassword = (phone, callback) => (dispatch) => {
     });
 };
 
-export const changePassword = (fields, callback) => (dispatch) => {
-  AppAxios.post("/profile/password", fields).then((res) => {
-    if (Boolean(res.data.response)) {
-      callback(res.data.messages);
-    }
-  });
+export const changePassword = (fields) => (dispatch) => {
+  AppAxios.post("/profile/password", fields)
+    .then((res) => {
+      if (Boolean(res.data.response)) {
+        dispatch(setBackdrop(false));
+        dispatch(
+          setAlert({
+            open: true,
+            severity: "success",
+            message: res.data.messages,
+          })
+        );
+      }
+    })
+    .catch(({ response }) => {
+      dispatch(setBackdrop(false));
+      dispatch(
+        setAlert({
+          open: true,
+          severity: "error",
+          message: response.data.messages,
+        })
+      );
+    });
 };

@@ -4,7 +4,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { ToggleButtonGroup } from "@material-ui/lab";
+import { Pagination, ToggleButtonGroup } from "@material-ui/lab";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import React, { useEffect, useState } from "react";
@@ -45,6 +45,17 @@ const validateChangePassword = Yup.object({
     .required("Поля должно быть заполнена"),
 });
 
+export function formatBytes(a, b = 2) {
+  if (0 === a) return "0 Bytes";
+  const c = 0 > b ? 0 : b,
+    d = Math.floor(Math.log(a) / Math.log(1024));
+  return (
+    parseFloat((a / Math.pow(1024, d)).toFixed(c)) +
+    " " +
+    ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"][d]
+  );
+}
+
 export function Settings() {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -60,12 +71,7 @@ export function Settings() {
 
   function changePasswordHandler(fields) {
     dispatch(setBackdrop(true));
-    dispatch(
-      changePassword(fields, (message) => {
-        dispatch(setBackdrop(false));
-        dispatch(setAlert({ open: true, severity: "success", message }));
-      })
-    );
+    dispatch(changePassword(fields));
   }
 
   function profileSubmitHandler(fields) {
@@ -78,9 +84,10 @@ export function Settings() {
         })
       );
     } else {
-      dispatch(setBackdrop(true));
+      // dispatch(setBackdrop(true));
       let data = new FormData();
-      data.append("photo[]", state.filesToUpload.avatar);
+      console.log(formatBytes(state.filesToUpload.avatar.size));
+      data.append("photo", state.filesToUpload.avatar);
       dispatch(changeAvatar(data));
     }
   }
@@ -131,20 +138,28 @@ export function Settings() {
                 </Typography>
                 <ValidatedInput
                   disabled
-                  placeholder={`${firstname} ${lastname}`}
+                  value={`${firstname} ${lastname}`}
                   name='username'
                   type='text'
-                  style={{ width: "100%", marginBottom: 20, marginTop: 8 }}
+                  style={{
+                    width: "100%",
+                    marginBottom: 20,
+                    marginTop: 8,
+                  }}
                 />
                 <Typography variant='body2' style={{ marginTop: 10 }}>
                   Почта
                 </Typography>
                 <ValidatedInput
                   disabled
-                  placeholder={email}
+                  value={email}
                   name='email'
                   type='email'
-                  style={{ width: "100%", marginBottom: 20, marginTop: 8 }}
+                  style={{
+                    width: "100%",
+                    marginBottom: 20,
+                    marginTop: 8,
+                  }}
                 />
                 <Typography variant='body2' style={{ marginTop: 10 }}>
                   Аватар
@@ -178,7 +193,7 @@ export function Settings() {
         )}
       </div>
       {tab === "Журнал входа" && (
-        <>
+        <Grid container>
           <Grid
             item
             xs={12}
@@ -241,7 +256,8 @@ export function Settings() {
               <CircularProgress />
             </div>
           )}
-        </>
+          <Pagination count={10} variant='outlined' />
+        </Grid>
       )}
       {tab === "Пароль" && (
         <div className='flex_box'>

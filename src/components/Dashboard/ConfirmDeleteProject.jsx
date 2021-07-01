@@ -14,9 +14,12 @@ export function ConfirmDeleteProject({ match }) {
   const removeMerchant = () => {
     dispatch(setBackdrop(true));
     dispatch(
-      deleteMerchant(match.params.id, (message) => {
-        dispatch(setBackdrop(false));
-        dispatch(setAlert({ open: true, severity: "success", message }));
+      deleteMerchant(match.params.id, (message, response) => {
+        if (response) {
+          history.push("/dashboard");
+        } else {
+          dispatch(setAlert({ open: true, severity: "error", message }));
+        }
       })
     );
   };
