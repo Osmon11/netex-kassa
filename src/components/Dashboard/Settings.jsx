@@ -62,6 +62,12 @@ export function Settings() {
   const state = useSelector((store) => store.reducer);
   const { firstname, lastname, email } = state.profileInfo;
   const [tab, setTab] = useState("Профиль");
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    dispatch(setBackdrop(true));
+    dispatch(getActionLogs(value));
+    setPage(value);
+  };
 
   useEffect(() => {
     if (!state.actionLogs) {
@@ -226,7 +232,7 @@ export function Settings() {
             </Grid>
           </Grid>
           {state.actionLogs ? (
-            state.actionLogs.map((obj) => (
+            state.actionLogs.map((obj, i) => (
               <Grid
                 item
                 xs={12}
@@ -235,7 +241,7 @@ export function Settings() {
                   borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
                   padding: "25px 15px",
                 }}
-                key={obj.ip + obj.date}
+                key={obj.ip + obj.date + i}
               >
                 <Grid item xs={2}>
                   <Typography variant='body2'>{obj.ip}</Typography>
@@ -256,7 +262,19 @@ export function Settings() {
               <CircularProgress />
             </div>
           )}
-          <Pagination count={10} variant='outlined' />
+          <div
+            className='flex_box'
+            style={{ width: "100%", padding: "25px 0px" }}
+          >
+            <Pagination
+              count={10}
+              page={page}
+              onChange={handleChange}
+              classes={{ ul: classes.ul }}
+              variant='outlined'
+              color='primary'
+            />
+          </div>
         </Grid>
       )}
       {tab === "Пароль" && (
@@ -332,6 +350,16 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       color: "#FF9900",
       backgroundColor: "#fff",
+    },
+  },
+  ul: {
+    "& li .MuiPaginationItem-root": {
+      color: "#fff",
+      borderColor: "#fff",
+    },
+    "& li .MuiPaginationItem-root.Mui-selected": {
+      color: "#ff9900",
+      borderColor: "#ff9900",
     },
   },
 }));

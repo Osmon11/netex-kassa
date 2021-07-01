@@ -8,7 +8,7 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { ValidatedInput } from "./Inputs";
 import { useDispatch, useSelector } from "react-redux";
-import { addMerchant, getMerchants } from "store/reducer";
+import { addMerchant, getBalance, getMerchants } from "store/reducer";
 import { setAlert, setBackdrop, setData } from "store/actionCreators";
 
 const validationSchema = Yup.object({
@@ -36,30 +36,31 @@ export function CreateProject() {
           dispatch(setBackdrop(false));
           setSuccess(true);
           dispatch(getMerchants());
-          // dispatch(
-          //   setData({
-          //     addMerchant: {
-          //       name: "",
-          //       domain: "",
-          //       country: 1,
-          //       city: "",
-          //       organization_type: 1,
-          //       legal_name: "",
-          //       activity_type: 1,
-          //       company_reg_date: "",
-          //       inn: "",
-          //       okpo: "",
-          //       bik: "",
-          //       bank_name: "",
-          //       checking_account: "",
-          //       iban: "",
-          //       decisions: "",
-          //       charter: "",
-          //       certificate: "",
-          //       upload_file: "",
-          //     },
-          //   })
-          // );
+          dispatch(getBalance());
+          dispatch(
+            setData({
+              addMerchant: {
+                name: "",
+                domain: "",
+                country: 1,
+                city: "",
+                organization_type: 1,
+                legal_name: "",
+                activity_type: 1,
+                company_reg_date: "",
+                inn: "",
+                okpo: "",
+                bik: "",
+                bank_name: "",
+                checking_account: "",
+                iban: "",
+                decisions: "",
+                charter: "",
+                certificate: "",
+                upload_file: "",
+              },
+            })
+          );
         }
       })
     );
@@ -163,7 +164,7 @@ export function Success({ text }) {
         to='/dashboard'
         style={{ textDecoration: "none", width: "100%", textAlign: "center" }}
       >
-        <GoldButton style={{ minHeight: 50, marginTop: 30, width: "40%" }}>
+        <GoldButton style={{ minHeight: 50, marginTop: 30, width: "300px" }}>
           Закрыть
         </GoldButton>
       </NavLink>

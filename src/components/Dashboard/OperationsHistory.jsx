@@ -34,7 +34,6 @@ import {
   getStatusList,
   getTypeList,
   getHistoryList,
-  getBalance,
 } from "../../store/reducer";
 import { setAlert, setBackdrop } from "store/actionCreators";
 
@@ -45,14 +44,13 @@ export function OperationsHistory() {
   const merchants = useSelector((store) => store.reducer.merchants);
   let t = new Date();
   t.setDate(t.getDate() - 7);
-  const [currentBalance, setCurrentBalance] = React.useState("");
   const [options, setOptions] = useState({
     operation_type: 1,
     date_from: t.toISOString().split("T")[0],
     date_to: new Date().toISOString().split("T")[0],
     status: 2,
     merchant_id: Boolean(merchants) ? merchants[0].merchant_id : "",
-    currency: "",
+    currency: Boolean(state.currencies) ? state.currencies[0].alias : "",
   });
   const errorHandler = useCallback(
     function (error) {
@@ -69,24 +67,7 @@ export function OperationsHistory() {
       dispatch(getStatusList(errorHandler));
       dispatch(getTypeList(errorHandler));
     }
-    if (!Boolean(state.balance)) {
-      dispatch(getBalance());
-    }
-    if (!Boolean(currentBalance) && Boolean(state.balance)) {
-      setCurrentBalance(state.balance[0]);
-    }
-    if (!Boolean(options.currency) && Boolean(currentBalance)) {
-      setOptions({ ...options, currency: currentBalance.currencies[0].name });
-    }
-  }, [
-    state.statusList,
-    state.balance,
-    dispatch,
-    errorHandler,
-    merchants,
-    options,
-    currentBalance,
-  ]);
+  }, [state.statusList, dispatch, errorHandler, merchants, options]);
 
   function filterChangeHandler(newOptions) {
     dispatch(setBackdrop(true));
@@ -99,7 +80,7 @@ export function OperationsHistory() {
       {state.statusList ? (
         <Grid container>
           <Grid item xs={12} container spacing={6}>
-            <Grid item xs={4}>
+            <Grid item xs={2}>
               {state.typeList && (
                 <ThemeInput
                   margin='dense'
@@ -128,7 +109,7 @@ export function OperationsHistory() {
                 </ThemeInput>
               )}
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={2}>
               {merchants && (
                 <ThemeInput
                   margin='dense'
@@ -193,7 +174,7 @@ export function OperationsHistory() {
                 />
               </div>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={2}>
               <div className='flex_box' style={{ justifyContent: "flex-end" }}>
                 {state.statusList && (
                   <ThemeInput
@@ -224,8 +205,8 @@ export function OperationsHistory() {
                 )}
               </div>
             </Grid>
-            <Grid item xs={4}>
-              {Boolean(currentBalance) && (
+            <Grid item xs={2}>
+              {Boolean(state.currencies) && (
                 <ThemeInput
                   className={classes.selectCurrency}
                   name='currency'
@@ -240,14 +221,14 @@ export function OperationsHistory() {
                     });
                   }}
                 >
-                  {currentBalance.currencies.map((c) => (
+                  {state.currencies.map((c) => (
                     <MenuItem
                       key={c.name}
-                      value={c.name}
+                      value={c.alias}
                       className={classes.menuItem}
                       classes={{ selected: classes.selected }}
                     >
-                      {c.name}
+                      {c.alias}
                     </MenuItem>
                   ))}
                 </ThemeInput>

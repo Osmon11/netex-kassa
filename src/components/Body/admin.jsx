@@ -35,7 +35,7 @@ import { getProfile } from "store/actions/profile";
 import { logout } from "store/actions/sign";
 import { GoldButton } from "shared/Buttons/buttons";
 import { AppAxios } from "store/actions/sign";
-import { getMerchants, getBalance } from "store/reducer";
+import { getCurrencies, getMerchants } from "store/reducer";
 import { setData } from "store/actionCreators";
 import { initialState } from "store/initialState";
 
@@ -60,10 +60,10 @@ export function Admin() {
     if (!merchants.merchants) {
       dispatch(getMerchants());
     }
-    if (!Boolean(state.balance)) {
-      dispatch(getBalance());
+    if (!state.currencies) {
+      dispatch(getCurrencies());
     }
-  }, [state.profileInfo, state.balance, merchants.merchants, dispatch]);
+  }, [state.profileInfo, state.currencies, merchants.merchants, dispatch]);
 
   function logoutHandler() {
     dispatch(

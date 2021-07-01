@@ -18,7 +18,7 @@ import { NavLink } from "react-router-dom";
 import { GoldButton } from "shared/Buttons/buttons";
 import { Success } from "./CreateProject";
 import goust from "assets/goust-icon.webp";
-import { cashOut } from "store/reducer";
+import { cashOut, getBalance } from "store/reducer";
 import { setAlert } from "store/actionCreators";
 
 export function WithdrawFunds() {
@@ -36,6 +36,9 @@ export function WithdrawFunds() {
   const steps = ["Создать", "Потвердить", "Успешно"];
 
   React.useEffect(() => {
+    if (!Boolean(balance)) {
+      dispatch(getBalance());
+    }
     if (!Boolean(currentMerchant) && Boolean(merchants)) {
       setCurrentMerchant(merchants[0]);
     }

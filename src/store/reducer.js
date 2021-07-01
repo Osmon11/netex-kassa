@@ -155,6 +155,7 @@ export const getActionLogs = (page) => (dispatch) => {
       array.push(res.data.action[key]);
     }
     dispatch(setData({ actionLogs: array }));
+    dispatch(setBackdrop(false));
   });
 };
 
@@ -306,6 +307,12 @@ export const getMerchantStatistics = (merchant, data) => (dispatch) => {
         );
       }
     }
+  );
+};
+
+export const getCurrencies = () => (dispatch) => {
+  creatRequest("/currencies").then((res) =>
+    dispatch(setData({ currencies: getArrFromObj(res.data.list) }))
   );
 };
 

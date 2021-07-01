@@ -49,8 +49,8 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
   const newMerchant = state.addMerchant;
   const dispatch = useDispatch();
   const [checkBoxes, setCheckbox] = React.useState({
-    rates: true,
-    contract: true,
+    rates: false,
+    contract: false,
   });
 
   useEffect(() => {
@@ -107,14 +107,18 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
     ) {
       const addMerchant = { ...newMerchant, ...fields };
       const data = new FormData();
-      data.append("documents[]", state.filesToUpload.certificate);
-      data.append("documents[]", state.filesToUpload.charter);
-      data.append("documents[]", state.filesToUpload.decisions);
+      data.append("documents[0]", state.filesToUpload.certificate);
+      data.append("documents[1]", state.filesToUpload.charter);
+      data.append("documents[2]", state.filesToUpload.decisions);
+
       for (let field in addMerchant) {
         data.append(field, addMerchant[field]);
       }
-      // dispatch(setBackdrop(true));
-      callback(JSON.stringify(addMerchant));
+      // for (let pair of data.entries()) {
+      //   console.log(pair[0] + ", " + pair[1]);
+      // }
+      dispatch(setBackdrop(true));
+      callback(data);
     } else {
       dispatch(
         setAlert({
@@ -364,7 +368,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               <Inputs
                 label='Скан копия свидетельства о государственной регистрации'
                 name='certificate'
-                value={newMerchant.certificate}
+                value={state.filesToUpload.certificate}
                 onChange={(e) => {
                   inputChangeHandler(e.target);
                   formik.handleChange(e);
@@ -374,7 +378,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               <Inputs
                 label='Скан копия устава'
                 name='charter'
-                value={newMerchant.charter}
+                value={state.filesToUpload.charter}
                 onChange={(e) => {
                   inputChangeHandler(e.target);
                   formik.handleChange(e);
@@ -384,7 +388,7 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
               <Inputs
                 label='Скан решения о создании компании'
                 name='decisions'
-                value={newMerchant.decisions}
+                value={state.filesToUpload.decisions}
                 onChange={(e) => {
                   inputChangeHandler(e.target);
                   formik.handleChange(e);
