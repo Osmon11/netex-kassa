@@ -38,6 +38,7 @@ import { AppAxios } from "store/actions/sign";
 import { getCurrencies, getMerchants } from "store/reducer";
 import { setData } from "store/actionCreators";
 import { initialState } from "store/initialState";
+import cookie from "cookie_js";
 
 let drawerWidth = 280;
 

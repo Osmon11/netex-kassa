@@ -1,4 +1,5 @@
 import { AppAxios } from "./actions/sign";
+import cookie from "cookie_js";
 import {
   setData,
   SET_DOCUMENTATION_TAB,
@@ -81,6 +82,12 @@ const somethingWentWrong = (endpoint) => {
 };
 
 export function creatRequest(endpoint, data, errorCallback) {
+  if (
+    Boolean(cookie.get("token")) &&
+    !Boolean(AppAxios.defaults.headers.Authorization)
+  ) {
+    AppAxios.defaults.headers.Authorization = cookie.get("token");
+  }
   return data
     ? AppAxios.post(endpoint, data).catch(({ response }) =>
         errorCallback(response.data.messages)
@@ -123,11 +130,13 @@ export const getActivityTypes = (callback) => (dispatch) => {
 };
 
 export const addMerchant = (data, callback) => (dispatch) => {
-  creatRequest("/account/add", data, callback).then((res) => {
-    if (res) {
-      callback();
-    }
-  });
+  creatRequest("/account/add", data, callback)
+    .then((res) => {
+      if (res) {
+        callback();
+      }
+    })
+    .catch(() => callback());
 };
 
 export const editMerchant = (data, id, callback) => (dispatch) => {
@@ -154,7 +163,12 @@ export const getActionLogs = (page) => (dispatch) => {
     for (let key in res.data.action) {
       array.push(res.data.action[key]);
     }
-    dispatch(setData({ actionLogs: array }));
+    dispatch(
+      setData({
+        actionLogs: array,
+        actionLogsPages: Math.round(res.data.action_total / 10),
+      })
+    );
     dispatch(setBackdrop(false));
   });
 };

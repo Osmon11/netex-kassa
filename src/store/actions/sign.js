@@ -1,4 +1,5 @@
 import axios from "axios";
+import cookie from "cookie_js";
 import { setUser, setData, setAlert, setBackdrop } from "../actionCreators";
 
 const baseURL = "https://api.netex-kassa.com/";
@@ -16,7 +17,13 @@ export const login = (data, callback) => (dispatch) => {
       if (Boolean(res)) {
         AppAxios.defaults.headers.Authorization = `Bearer ${res.data.token}`;
         dispatch(setData({ token: `Bearer ${res.data.token}` }));
-        localStorage.setItem("token", `Bearer ${res.data.token}`);
+        cookie.set("user", `true`, {
+          expires: new Date(res.data.expires * 1000).toUTCString(),
+        });
+        cookie.set("token", `Bearer ${res.data.token}`, {
+          expires: new Date(res.data.expires * 1000).toUTCString(),
+        });
+
         dispatch(setUser(Boolean(res.data?.response)));
         callback({ message: "Logged in", severity: "success", open: true });
       } else
@@ -114,7 +121,9 @@ export const changePassword = (fields) => (dispatch) => {
   AppAxios.post("/profile/password", fields)
     .then((res) => {
       if (Boolean(res.data.response)) {
-        dispatch(setBackdrop(false));
+        setTimeout(() => {
+          dispatch(setBackdrop(false));
+        }, 5000);
         dispatch(
           setAlert({
             open: true,

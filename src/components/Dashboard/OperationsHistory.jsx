@@ -4,6 +4,8 @@ import {
   makeStyles,
   MenuItem,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@material-ui/core";
 import { ThemeInput } from "components/Auth/auth";
 import React, { useCallback, useEffect, useState } from "react";
@@ -34,14 +36,17 @@ import {
   getStatusList,
   getTypeList,
   getHistoryList,
+  getMerchants,
+  getCurrencies,
 } from "../../store/reducer";
 import { setAlert, setBackdrop } from "store/actionCreators";
 
 export function OperationsHistory() {
   const classes = useStyles();
+  const theme = useTheme();
+  const md = useMediaQuery(theme.breakpoints.down(1388));
   const dispatch = useDispatch();
   const state = useSelector((store) => store.reducer);
-  const merchants = useSelector((store) => store.reducer.merchants);
   let t = new Date();
   t.setDate(t.getDate() - 7);
   const [options, setOptions] = useState({
@@ -49,8 +54,8 @@ export function OperationsHistory() {
     date_from: t.toISOString().split("T")[0],
     date_to: new Date().toISOString().split("T")[0],
     status: 2,
-    merchant_id: Boolean(merchants) ? merchants[0].merchant_id : "",
-    currency: Boolean(state.currencies) ? state.currencies[0].alias : "",
+    merchant_id: "",
+    currency: "",
   });
   const errorHandler = useCallback(
     function (error) {
@@ -62,12 +67,31 @@ export function OperationsHistory() {
   );
 
   useEffect(() => {
+    if (!state.merchants) {
+      dispatch(getMerchants());
+    }
+    if (!state.currencies) {
+      dispatch(getCurrencies());
+    }
+    if (!Boolean(options.marchant_id) && Boolean(state.merchants[0])) {
+      setOptions({ ...options, merchant_id: state.merchants[0].merchant_id });
+    }
+    if (!Boolean(options.currency) && Boolean(state.currencies[0])) {
+      setOptions({ ...options, currency: state.currencies[0].alias });
+    }
     if (!state.statusList) {
       dispatch(getHistoryList(errorHandler, options));
       dispatch(getStatusList(errorHandler));
       dispatch(getTypeList(errorHandler));
     }
-  }, [state.statusList, dispatch, errorHandler, merchants, options]);
+  }, [
+    state.statusList,
+    dispatch,
+    errorHandler,
+    state.merchants,
+    state.currencies,
+    options,
+  ]);
 
   function filterChangeHandler(newOptions) {
     dispatch(setBackdrop(true));
@@ -79,7 +103,7 @@ export function OperationsHistory() {
     <>
       {state.statusList ? (
         <Grid container>
-          <Grid item xs={12} container spacing={6}>
+          <Grid item xs={12} container spacing={md ? 3 : 6}>
             <Grid item xs={2}>
               {state.typeList && (
                 <ThemeInput
@@ -110,7 +134,7 @@ export function OperationsHistory() {
               )}
             </Grid>
             <Grid item xs={2}>
-              {merchants && (
+              {state.merchants ? (
                 <ThemeInput
                   margin='dense'
                   name='projects'
@@ -125,7 +149,7 @@ export function OperationsHistory() {
                   }}
                   fullWidth
                 >
-                  {merchants.map((merchant) => (
+                  {state.merchants.map((merchant) => (
                     <MenuItem
                       key={merchant.name}
                       value={merchant.merchant_id}
@@ -136,6 +160,10 @@ export function OperationsHistory() {
                     </MenuItem>
                   ))}
                 </ThemeInput>
+              ) : (
+                <div className='flex_box' style={{ height: "100%" }}>
+                  <img src={goust} style={{ height: "40px" }} alt='' />
+                </div>
               )}
             </Grid>
             <Grid item xs={4}>

@@ -75,9 +75,10 @@ export function Settings() {
     }
   }, [state.actionLogs, dispatch]);
 
-  function changePasswordHandler(fields) {
+  function changePasswordHandler(fields, { resetForm }) {
     dispatch(setBackdrop(true));
     dispatch(changePassword(fields));
+    resetForm(passwordInitialValues);
   }
 
   function profileSubmitHandler(fields) {
@@ -89,8 +90,18 @@ export function Settings() {
           message: "Вы не выбрали файл!",
         })
       );
+    } else if (
+      parseInt(formatBytes(state.filesToUpload.avatar.size).split(" ")[0]) > 170
+    ) {
+      dispatch(
+        setAlert({
+          open: true,
+          severity: "warning",
+          message: "Выбрынный файл не должен превышать 170 kB!",
+        })
+      );
     } else {
-      // dispatch(setBackdrop(true));
+      dispatch(setBackdrop(true));
       let data = new FormData();
       console.log(formatBytes(state.filesToUpload.avatar.size));
       data.append("photo", state.filesToUpload.avatar);
@@ -267,7 +278,7 @@ export function Settings() {
             style={{ width: "100%", padding: "25px 0px" }}
           >
             <Pagination
-              count={10}
+              count={state.actionLogsPages}
               page={page}
               onChange={handleChange}
               classes={{ ul: classes.ul }}

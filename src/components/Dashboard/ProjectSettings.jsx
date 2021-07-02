@@ -552,11 +552,11 @@ export function ProjectSettings({ match }) {
             </Grid>
           )}
 
-          {tab === "Настройки" && (
-            <>
-              {currentMerchant.view.status.name === "Не подтвержден" ? (
-                <DomenNotConfirmed />
-              ) : (
+          {tab === "Настройки" &&
+            (currentMerchant.view.status.name === "Не подтвержден" ? (
+              <DomenNotConfirmed />
+            ) : (
+              <>
                 <Formik
                   initialValues={{ ...currentMerchant.view.params }}
                   validationSchema={settingsFormValidation}
@@ -628,34 +628,34 @@ export function ProjectSettings({ match }) {
                     </GoldButton>
                   </Form>
                 </Formik>
-              )}
-              <div style={{ marginTop: "60px" }}>
-                <p className='subtitle'>Удалить кошелек</p>
-                <Typography variant='body2' style={{ width: "45%" }}>
-                  Перед удалением убедитесь, что вы выбрали правильный кошелек.
-                  Удаление приведет к потере данных и средств на кошельке.
-                </Typography>
-                <NavLink
-                  to={`${match.url}/delete`}
-                  style={{ textDecoration: "none" }}
-                >
-                  <Button
-                    style={{
-                      borderColor: "#ff6f6f",
-                      color: "#ff6f6f",
-                      fontSize: 16,
-                      width: 175,
-                      height: 50,
-                      margin: "20px 0",
-                    }}
-                    variant='outlined'
+                <div style={{ marginTop: "60px" }}>
+                  <p className='subtitle'>Удалить проект</p>
+                  <Typography variant='body2' style={{ width: "45%" }}>
+                    Перед удалением убедитесь, что вы выбрали правильный
+                    кошелек. Удаление приведет к потере данных и средств на
+                    кошельке.
+                  </Typography>
+                  <NavLink
+                    to={`${match.url}/delete`}
+                    style={{ textDecoration: "none" }}
                   >
-                    Удалить
-                  </Button>
-                </NavLink>
-              </div>
-            </>
-          )}
+                    <Button
+                      style={{
+                        borderColor: "#ff6f6f",
+                        color: "#ff6f6f",
+                        fontSize: 16,
+                        width: 175,
+                        height: 50,
+                        margin: "20px 0",
+                      }}
+                      variant='outlined'
+                    >
+                      Удалить
+                    </Button>
+                  </NavLink>
+                </div>
+              </>
+            ))}
 
           {tab === "API" && (
             <>

@@ -1,5 +1,12 @@
+import cookie from "cookie_js";
+import { AppAxios } from "./actions/sign";
+
+if (Boolean(cookie.get("token"))) {
+  AppAxios.defaults.headers.Authorization = cookie.get("token");
+}
+
 export const initialState = {
-  user: false,
+  user: Boolean(cookie.get("user")) && Boolean(cookie.get("token")),
   authdialog: { open: false, login: true },
   openBackdrop: false,
   currentDocumentationTab: { value: "Знакомство", index: 0 },

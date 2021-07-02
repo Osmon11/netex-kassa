@@ -107,9 +107,9 @@ export function SecondStep({ handleNext, callback, handlePrev }) {
     ) {
       const addMerchant = { ...newMerchant, ...fields };
       const data = new FormData();
-      data.append("documents[0]", state.filesToUpload.certificate);
-      data.append("documents[1]", state.filesToUpload.charter);
-      data.append("documents[2]", state.filesToUpload.decisions);
+      data.append("certificate", state.filesToUpload.certificate);
+      data.append("charter", state.filesToUpload.charter);
+      data.append("decision", state.filesToUpload.decisions);
 
       for (let field in addMerchant) {
         data.append(field, addMerchant[field]);
