@@ -67,6 +67,7 @@ export function Admin() {
   }, [state.profileInfo, state.currencies, merchants.merchants, dispatch]);
 
   function logoutHandler() {
+    cookie.remove("user", "token");
     dispatch(
       logout(() => {
         history.push("/");

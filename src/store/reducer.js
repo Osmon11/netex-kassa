@@ -77,16 +77,16 @@ export function reducer(state = initialState, action) {
 export const baseURL = "https://api.netex-kassa.com";
 
 const somethingWentWrong = (endpoint) => {
-  alert(`О нет, что-то пошло не так:
+  console.log(`О нет, что-то пошло не так:
   проверьте запрос на ${endpoint}`);
 };
 
-export function creatRequest(endpoint, data, errorCallback) {
-  if (
-    Boolean(cookie.get("token")) &&
-    !Boolean(AppAxios.defaults.headers.Authorization)
-  ) {
-    AppAxios.defaults.headers.Authorization = cookie.get("token");
+export async function creatRequest(endpoint, data, errorCallback) {
+  let token = await cookie.get("token");
+  console.log(AppAxios.defaults.headers.Authorization);
+  if (!Boolean(AppAxios.defaults.headers.Authorization)) {
+    console.log(token);
+    AppAxios.defaults.headers.Authorization = token;
   }
   return data
     ? AppAxios.post(endpoint, data).catch(({ response }) =>

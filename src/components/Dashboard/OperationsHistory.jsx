@@ -73,10 +73,10 @@ export function OperationsHistory() {
     if (!state.currencies) {
       dispatch(getCurrencies());
     }
-    if (!Boolean(options.marchant_id) && Boolean(state.merchants[0])) {
+    if (!Boolean(options.marchant_id) && Boolean(state.merchants)) {
       setOptions({ ...options, merchant_id: state.merchants[0].merchant_id });
     }
-    if (!Boolean(options.currency) && Boolean(state.currencies[0])) {
+    if (!Boolean(options.currency) && Boolean(state.currencies)) {
       setOptions({ ...options, currency: state.currencies[0].alias });
     }
     if (!state.statusList) {
