@@ -106,16 +106,21 @@ function Acquaintance() {
       </p>
       <span className='title'>Попробуйте сейчас</span>
       <p className='subtitle' style={{ marginTop: 0 }}>
-        Попробуйте примеры ниже что бы увидеть как работает Biwse API.
+        Попробуйте примеры ниже что бы увидеть как работает Netex Kassa API.
       </p>
       <p className='subtitle' style={{ fontSize: xs ? 20 : 25 }}>
         Создание страницы оплаты
       </p>
-      <CodeExample />
+      <CodeExample
+        link={`https://api.netex-kassa.com/v1.0/app/{MERCHANT_ID}/invoice`}
+        postRequest
+      />
       <p className='subtitle' style={{ fontSize: xs ? 20 : 25 }}>
         Получение баланса кошелька
       </p>
-      <CodeExample />
+      <CodeExample
+        link={`https://api.netex-kassa.com/v1.0/app/{MERCHANT_ID}/balance`}
+      />
       <p className='title' style={{ marginTop: 50 }}>
         Что дальше?
       </p>
@@ -170,7 +175,7 @@ function BeginningOfWork() {
         Теперь с помощью API токена вы можете создать страницу оплаты: В личном
         кабинете вы можете получить токен доступа.
       </p>
-      <CodeExample />
+      <CodeExample noContent />
       <p className='subtitle'>
         Вы можете посетить ссылку которая находится в ответе сервера и убедится
         что страница оплаты готова к работе!
@@ -220,14 +225,15 @@ function APIClients() {
       </ToggleButtonGroup>
       <p className='title'>{tab}</p>
       <p className='subtitle'>Установите пакет через npm</p>
-      <CodeExample />
+      <CodeExample noContent />
     </div>
   );
 }
 
-const CodeExample = () => {
+const CodeExample = ({ noContent, postRequest = false, link }) => {
   const theme = useTheme();
   const d400 = useMediaQuery(theme.breakpoints.down(400));
+
   return (
     <Paper
       style={{
@@ -235,27 +241,47 @@ const CodeExample = () => {
         borderRadius: 4,
         padding: d400 ? 10 : 32,
         overflowX: "auto",
-        height: "276px",
+        height: "290px",
       }}
       elevation={0}
     >
-      {/* <p className='blue_text'>
-        curl -X POST \<br />
-        -H <span className='red_text'>"Content-Type: application/json" </span>
-        <span style={{ color: "#fff" }}>\</span>
-        -H <span className='red_text'>"Accept: application/json" </span>
-        <span style={{ color: "#fff" }}>\</span>
-        -H <span className='red_text'>"Authorization: Bearer YOUR_TOKEN" </span>
-        <span style={{ color: "#fff" }}>\</span>
-        https://api.biwse.com/v1/app/YOUR_APP_ID/invoice -d{" "}
-        <span className='red_text'>'{'{ "amount": 0.0001 }'}' </span>
-        <span style={{ color: "#fff" }}>\</span>
-      </p>
-      <p className='green_text' style={{ marginTop: 20 }}>
+      {!noContent && (
+        <p className='blue_text'>
+          curl -X POST \<br />
+          -H <span className='red_text'>"Content-Type: application/json" </span>
+          <span style={{ color: "#fff" }}>
+            \<br />
+          </span>
+          -H <span className='red_text'>"Accept: application/json" </span>
+          <span style={{ color: "#fff" }}>
+            \<br />
+          </span>
+          -H{" "}
+          <span className='red_text'>"Authorization: Bearer YOUR_TOKEN" </span>
+          <span style={{ color: "#fff" }}>
+            \<br />
+          </span>
+          {link} -d
+          <br />
+          {postRequest && (
+            <>
+              <span className='red_text'>
+                '
+                {
+                  '{ "amount": 0.0001, "symbol": "USD-BTC", "order_id": "123", "sign": ... }'
+                }
+                '{" "}
+              </span>
+              <span style={{ color: "#fff" }}>\</span>
+            </>
+          )}
+        </p>
+      )}
+      {/* <p className='green_text' style={{ marginTop: 20 }}>
         # Response:
         <br />#
         {
-          '{"status":true,"id":"invoice_id...","url":"https://biwse.com/invoice?id=invoice_id..."}'
+          '{"status":true,"id":"invoice_id...","url":"https://netex-kassa.com/invoice?id=invoice_id..."}'
         }
       </p> */}
     </Paper>

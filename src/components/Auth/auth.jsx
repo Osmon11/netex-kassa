@@ -52,6 +52,7 @@ export function Auth({ open, handleClose, login, setLogin }) {
         {login ? (
           <SingIn
             sm={sm}
+            userEmail={userEmail}
             setAlert={alertHandler}
             handleClose={handleClose}
             setLogin={setLogin}
@@ -98,6 +99,7 @@ function SingIn({
   handleClose,
   setLogin,
   setCodeField,
+  userEmail,
   setUserEmail,
   setTimeLeft,
 }) {
@@ -117,6 +119,7 @@ function SingIn({
   });
 
   function submitHandler(fields) {
+    console.log(fields);
     dispatch(setBackdrop(true));
     if (fogetPassword) {
       return dispatch(
@@ -172,39 +175,44 @@ function SingIn({
   }
   return (
     <>
-      <Formik
-        onSubmit={submitHandler}
-        initialValues={values}
-        validationSchema={validate}
-      >
-        <Form className='auth-form'>
-          {sm ? (
-            <p
-              className='title'
-              style={{
-                fontSize: 25,
-                textAlign: "center",
-                marginBottom: 40,
-                marginTop: 0,
-              }}
-            >
-              {fogetPassword ? "Восстановление пароля" : "Вход"}
-            </p>
-          ) : null}
-          <Typography
-            variant='body2'
-            style={{ marginTop: 15, marginBottom: 8 }}
-          >
-            Почта
-          </Typography>
-          <InputComponent
-            autoComplete='off'
-            placeholder='Введите email'
-            name='email'
-            type='email'
-          />
-          {!fogetPassword ? (
-            <>
+      {!fogetPassword ? (
+        <Formik
+          onSubmit={submitHandler}
+          initialValues={values}
+          validationSchema={validate}
+        >
+          {(formik) => (
+            <Form className='auth-form'>
+              {sm ? (
+                <p
+                  className='title'
+                  style={{
+                    fontSize: 25,
+                    textAlign: "center",
+                    marginBottom: 40,
+                    marginTop: 0,
+                  }}
+                >
+                  {fogetPassword ? "Восстановление пароля" : "Вход"}
+                </p>
+              ) : null}
+              <Typography
+                variant='body2'
+                style={{ marginTop: 15, marginBottom: 8 }}
+              >
+                Почта
+              </Typography>
+              <InputComponent
+                value={userEmail}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  setUserEmail(e.target.value);
+                }}
+                autoComplete='off'
+                placeholder='Введите email'
+                name='email'
+                type='email'
+              />
               <Typography
                 variant='body2'
                 style={{ marginTop: 15, marginBottom: 8 }}
@@ -238,14 +246,41 @@ function SingIn({
                   Забыли пароль?
                 </span>
               </div>
-            </>
-          ) : null}
 
-          <GoldButton style={{ ...btnStyle }} type={"submit"}>
-            {fogetPassword ? "Отправить пароль" : "Войти"}
-          </GoldButton>
-        </Form>
-      </Formik>
+              <GoldButton style={{ ...btnStyle }} type={"submit"}>
+                Войти
+              </GoldButton>
+            </Form>
+          )}
+        </Formik>
+      ) : (
+        <Formik
+          initialValues={{ email: values.email }}
+          validationSchema={Yup.object({
+            email: Yup.string().email().required("Поля должно быть заполнена"),
+          })}
+          onSubmit={submitHandler}
+        >
+          {(formik) => (
+            <Form>
+              <InputComponent
+                value={userEmail}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  setUserEmail(e.target.value);
+                }}
+                autoComplete='off'
+                placeholder='Введите email'
+                name='email'
+                type='email'
+              />
+              <GoldButton style={{ ...btnStyle }} type={"submit"}>
+                Отправить пароль
+              </GoldButton>
+            </Form>
+          )}
+        </Formik>
+      )}
     </>
   );
 }

@@ -8,8 +8,6 @@ import {
   makeStyles,
   Toolbar,
   Typography,
-  Backdrop,
-  CircularProgress,
 } from "@material-ui/core";
 import React, { useEffect } from "react";
 import "./style.css";
@@ -188,9 +186,6 @@ export function Admin() {
           </Switch>
         </div>
       </section>
-      <Backdrop className={classes.backdrop} open={state.openBackdrop}>
-        <CircularProgress color='inherit' />
-      </Backdrop>
       <div className='bg3_image' />
       {/* <NavLink
         to="/dashboard/get-new-adress"
@@ -423,8 +418,5 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#ff9900",
       color: "#fff",
     },
-  },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
   },
 }));

@@ -114,6 +114,7 @@ export const restorePassword = (phone, callback) => (dispatch) => {
           message: response.data.messages,
         })
       );
+      callback();
     });
 };
 

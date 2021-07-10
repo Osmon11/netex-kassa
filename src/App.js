@@ -1,4 +1,5 @@
 import {
+  Backdrop,
   CircularProgress,
   createMuiTheme,
   CssBaseline,
@@ -21,6 +22,7 @@ const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 
 export default function App() {
   const dispatch = useDispatch();
+  const { openBackdrop } = useSelector((store) => store.reducer);
   const alert = useSelector((store) => store.reducer.alert);
 
   return (
@@ -62,6 +64,9 @@ export default function App() {
           {alert.message}
         </Alert>
       </Snackbar>
+      <Backdrop style={{ zIndex: 1301 }} open={openBackdrop}>
+        <CircularProgress color='inherit' />
+      </Backdrop>
     </div>
   );
 }
