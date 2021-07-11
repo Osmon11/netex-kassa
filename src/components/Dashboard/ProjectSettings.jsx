@@ -107,6 +107,7 @@ export function ProjectSettings({ match }) {
   }, [state.statusList, dispatch, errorHandler, options]);
 
   function filterChangeHandler(newOptions) {
+    dispatch(setBackdrop(true));
     setOptions(newOptions);
     dispatch(getHistoryList(errorHandler, newOptions));
   }
@@ -446,7 +447,7 @@ export function ProjectSettings({ match }) {
                     </Grid>
                   </Grid>
                   {state.historyList ? (
-                    state.historyList.map((obj) => {
+                    state.historyList.map((obj, i) => {
                       const statusImg = [
                         null,
                         <img
@@ -495,7 +496,7 @@ export function ProjectSettings({ match }) {
                             borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
                             padding: "25px 15px",
                           }}
-                          key={obj.order_id + obj.date}
+                          key={obj.order_id + obj.date + i}
                         >
                           <Grid item xs={2}>
                             <Typography variant='body2'>
@@ -518,7 +519,9 @@ export function ProjectSettings({ match }) {
                               variant='body2'
                               style={{ textAlign: "center" }}
                             >
-                              {`${obj.debit} ${obj.currency}`}
+                              {Boolean(obj.debit)
+                                ? `${obj.debit} ${obj.currency}`
+                                : "---"}
                             </Typography>
                           </Grid>
                           <Grid item xs={2}>

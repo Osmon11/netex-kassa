@@ -83,7 +83,7 @@ const somethingWentWrong = (endpoint) => {
 
 export async function creatRequest(endpoint, data, errorCallback) {
   let token = await cookie.get("token");
-  console.log(AppAxios.defaults.headers.Authorization);
+
   if (!Boolean(AppAxios.defaults.headers.Authorization)) {
     console.log(token);
     AppAxios.defaults.headers.Authorization = token;

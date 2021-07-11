@@ -40,6 +40,7 @@ import {
   getCurrencies,
 } from "../../store/reducer";
 import { setAlert, setBackdrop } from "store/actionCreators";
+import { Pagination } from "@material-ui/lab";
 
 export function OperationsHistory() {
   const classes = useStyles();
@@ -57,6 +58,12 @@ export function OperationsHistory() {
     merchant_id: "",
     currency: "",
   });
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    dispatch(setBackdrop(true));
+    //  dispatch(getActionLogs(value));
+    setPage(value);
+  };
   const errorHandler = useCallback(
     function (error) {
       if (Boolean(error)) {
@@ -73,7 +80,7 @@ export function OperationsHistory() {
     if (!state.currencies) {
       dispatch(getCurrencies());
     }
-    if (!Boolean(options.marchant_id) && Boolean(state.merchants)) {
+    if (!Boolean(options.merchant_id) && Boolean(state.merchants)) {
       setOptions({ ...options, merchant_id: state.merchants[0].merchant_id });
     }
     if (!Boolean(options.currency) && Boolean(state.currencies)) {
@@ -301,7 +308,7 @@ export function OperationsHistory() {
             </Grid>
           </Grid>
           {state.historyList ? (
-            state.historyList.map((obj) => {
+            state.historyList.map((obj, i) => {
               const statusImg = [
                 null,
                 <img
@@ -350,7 +357,7 @@ export function OperationsHistory() {
                     borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
                     padding: "25px 15px",
                   }}
-                  key={obj.order_id + obj.date}
+                  key={obj.order_id + obj.date + i}
                 >
                   <Grid item xs={2}>
                     <Typography variant='body2'>
@@ -393,6 +400,19 @@ export function OperationsHistory() {
               </div>
             </Grid>
           )}
+          <div
+            className='flex_box'
+            style={{ width: "100%", padding: "25px 0px" }}
+          >
+            <Pagination
+              count={state.actionLogsPages}
+              page={page}
+              onChange={handleChange}
+              classes={{ ul: classes.ul }}
+              variant='outlined'
+              color='primary'
+            />
+          </div>
         </Grid>
       ) : (
         <Grid item xs={12}>
