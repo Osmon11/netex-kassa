@@ -116,7 +116,7 @@ export function Footer() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  marginBottom: 10,
+                  marginBottom: 40,
                 }}
               >
                 <img src={mailIcon} alt='' style={{ marginRight: 10 }} />

@@ -15,6 +15,7 @@ import {
   SET_BACKDROP,
   setBackdrop,
   SET_FILETOUPLOAD,
+  SET_CURRENCY,
 } from "./actionCreators";
 import { initialState } from "./initialState";
 import { getProfile } from "./actions/profile";
@@ -22,6 +23,11 @@ import { getProfile } from "./actions/profile";
 export function reducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
+    case SET_CURRENCY:
+      return {
+        ...state,
+        currentCurrency: payload,
+      };
     case SET_FILETOUPLOAD:
       return {
         ...state,
@@ -141,14 +147,21 @@ export const addMerchant = (data, callback) => (dispatch) => {
 
 export const editMerchant = (data, id, callback) => (dispatch) => {
   creatRequest(`/account/edit/${id}`, JSON.stringify(data), callback).then(
-    (res) => {}
+    (res) => {
+      if (Boolean(res.data.response)) {
+        dispatch(setBackdrop(false));
+        dispatch(
+          setAlert({ open: true, severity: "success", message: "Сохранено!" })
+        );
+      }
+    }
   );
 };
 
 export const viewMerchant = (id, callback) => (dispatch) => {
   creatRequest(`/account/view/${id}`, undefined, (error) => {
     if (error) {
-      setAlert({ open: true, severity: "error", message: error });
+      dispatch(setAlert({ open: true, severity: "error", message: error }));
     }
   }).then((res) => {
     if (res) {
@@ -211,19 +224,24 @@ export const deleteMerchant = (merchant_id, callback) => (dispatch) => {
   );
 };
 
-export const getHistoryList = (errorHandler, options) => (dispatch) => {
-  creatRequest("/operations/list", JSON.stringify(options), errorHandler).then(
-    (res) => {
-      if (Boolean(res)) {
-        dispatch(
-          setData({
-            historyList: res.data.list ? getArrFromObj(res.data.list) : false,
-          })
-        );
-        dispatch(setBackdrop(false));
-      }
+export const getHistoryList = (errorHandler, options, page) => (dispatch) => {
+  creatRequest(
+    page ? `/operations/list/${page}` : "/operations/list",
+    JSON.stringify(options),
+    errorHandler
+  ).then((res) => {
+    if (Boolean(res)) {
+      dispatch(
+        setData({
+          historyList: res.data.list ? getArrFromObj(res.data.list) : false,
+          totalHistoryList: Math.round(
+            parseInt(res.data.total.total_operations) / 10
+          ),
+        })
+      );
+      dispatch(setBackdrop(false));
     }
-  );
+  });
 };
 
 export const getStatusList = (errorHandler) => (dispatch) => {
@@ -364,11 +382,11 @@ function parseChartData(chart) {
   let cashoutData = [];
   Object.keys(chart).forEach((date) => {
     let dateArr = new Date(date).toDateString().split(" ");
-    labels.push(`${dateArr[2]} ${dateArr[1]}`);
+    labels.unshift(`${dateArr[2]} ${dateArr[1]}`);
   });
   for (let obj in chart) {
-    paymentData.push(chart[obj].payment);
-    cashoutData.push(chart[obj].cashout);
+    paymentData.unshift(chart[obj].payment);
+    cashoutData.unshift(chart[obj].cashout);
   }
   return { labels, paymentData, cashoutData };
 }

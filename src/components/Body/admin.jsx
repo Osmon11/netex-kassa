@@ -16,8 +16,13 @@ import ava from "assets/avatar.png";
 import goust from "assets/goust-icon.webp";
 import success from "assets/success.svg";
 import fail from "assets/fail.svg";
+import pending from "assets/pending.svg";
 import settings from "assets/settings.svg";
 import trash from "assets/trash.svg";
+import projectsIco from "assets/projects-ico.svg";
+import historyIco from "assets/history-ico.svg";
+import settingsIco from "assets/settings-ico.svg";
+import withdrawIco from "assets/withdraw-ico.svg";
 import {
   CreateProject,
   ProjectSettings,
@@ -38,7 +43,7 @@ import { setData } from "store/actionCreators";
 import { initialState } from "store/initialState";
 import cookie from "cookie_js";
 
-let drawerWidth = 280;
+let drawerWidth = 320;
 
 export function Admin() {
   const { state, merchants } = useSelector((store) => ({
@@ -78,10 +83,17 @@ export function Admin() {
       <AppBar position='absolute' className={classes.appBar}>
         <Toolbar style={{ paddingLeft: "15%" }}>
           <div className='flex_box'>
-            <span className='subtitle' style={{ cursor: "pointer" }}>
+            <span
+              className='subtitle'
+              style={{ cursor: "pointer" }}
+              onClick={() => history.push("/dashboard/settings")}
+            >
               {`${firstname} ${lastname}`}
             </span>
-            <IconButton style={{ marginLeft: 20 }}>
+            <IconButton
+              style={{ marginLeft: 20 }}
+              onClick={() => history.push("/dashboard/settings")}
+            >
               <Avatar alt='' src={avatar} />
             </IconButton>
             <Button
@@ -107,7 +119,13 @@ export function Admin() {
           <Logo />
         </NavLink>
         <p className='subtitle' style={{ margin: "30px 0 0" }}>
-          <NavLink exact to='/dashboard' className='nav_link'>
+          <NavLink
+            exact
+            to='/dashboard'
+            className='nav_link flex_box'
+            style={{ justifyContent: "flex-start" }}
+          >
+            <img src={projectsIco} alt='' style={{ marginRight: "20px" }} />
             Проекты
           </NavLink>
         </p>
@@ -133,17 +151,32 @@ export function Admin() {
         </ul>
 
         <p className='subtitle' style={{ margin: "8px 0" }}>
-          <NavLink to='/dashboard/operations' className='nav_link'>
+          <NavLink
+            to='/dashboard/operations'
+            className='nav_link flex_box'
+            style={{ justifyContent: "flex-start" }}
+          >
+            <img src={historyIco} alt='' style={{ marginRight: "20px" }} />
             История операций
           </NavLink>
         </p>
         <p className='subtitle' style={{ margin: "8px 0" }}>
-          <NavLink to='/dashboard/withdrawal-of-funds' className='nav_link'>
+          <NavLink
+            to='/dashboard/withdrawal-of-funds'
+            className='nav_link flex_box'
+            style={{ justifyContent: "flex-start" }}
+          >
+            <img src={settingsIco} alt='' style={{ marginRight: "20px" }} />
             Вывод средств
           </NavLink>
         </p>
         <p className='subtitle' style={{ margin: "8px 0" }}>
-          <NavLink to='/dashboard/settings' className='nav_link'>
+          <NavLink
+            to='/dashboard/settings'
+            className='nav_link flex_box'
+            style={{ justifyContent: "flex-start" }}
+          >
+            <img src={withdrawIco} alt='' style={{ marginRight: "20px" }} />
             Настройки
           </NavLink>
         </p>
@@ -287,7 +320,11 @@ function DefaultComponent() {
                 <div className='flex_box'>
                   <img
                     src={
-                      merchant.status.slug === "not-confirmed" ? fail : success
+                      merchant.status.slug === "not-confirmed"
+                        ? fail
+                        : merchant.status.slug === "active"
+                        ? success
+                        : pending
                     }
                     style={{ width: 24 }}
                     alt=''
@@ -296,17 +333,31 @@ function DefaultComponent() {
               </Grid>
               <Grid item xs={2}>
                 <div className='flex_box'>
-                  <img src={success} alt='' />
+                  <img
+                    src={merchant.status.slug === "blocked" ? fail : success}
+                    style={{ width: 24 }}
+                    alt=''
+                  />
                 </div>
               </Grid>
               <Grid item xs={1}>
-                <div className='flex_box'>
-                  <NavLink
-                    to={`/dashboard/project/${merchant.merchant_id}/`}
-                    style={{ marginRight: 20, maxHeight: 24 }}
-                  >
-                    <img src={settings} alt='' />
-                  </NavLink>
+                <div
+                  className='flex_box'
+                  style={{
+                    justifyContent:
+                      merchant.status.slug !== "blocked"
+                        ? "center"
+                        : "flex-end",
+                  }}
+                >
+                  {merchant.status.slug !== "blocked" && (
+                    <NavLink
+                      to={`/dashboard/project/${merchant.merchant_id}/`}
+                      style={{ marginRight: 20, maxHeight: 24 }}
+                    >
+                      <img src={settings} alt='' />
+                    </NavLink>
+                  )}
                   <NavLink
                     to={`/dashboard/project/${merchant.merchant_id}/delete`}
                     style={{ maxHeight: 24 }}

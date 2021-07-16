@@ -27,6 +27,7 @@ export function WithdrawFunds() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const { merchants, balance } = useSelector((store) => store.reducer);
+  const [merchantsFiltered, setFilteredMerchants] = React.useState(false);
   const [currentMerchant, setCurrentMerchant] = React.useState("");
   const [currentBalance, setCurrentBalance] = React.useState("");
   const [currency, setCurrency] = React.useState("");
@@ -39,8 +40,13 @@ export function WithdrawFunds() {
     if (!Boolean(balance)) {
       dispatch(getBalance());
     }
-    if (!Boolean(currentMerchant) && Boolean(merchants)) {
-      setCurrentMerchant(merchants[0]);
+    if (!Boolean(currentMerchant) && Boolean(merchantsFiltered)) {
+      setCurrentMerchant(merchantsFiltered[0]);
+    }
+    if (!merchantsFiltered && Boolean(merchants)) {
+      setFilteredMerchants(
+        merchants.filter((merchant) => merchant.status.slug !== "blocked")
+      );
     }
     if (
       !Boolean(currentBalance) &&
@@ -59,7 +65,7 @@ export function WithdrawFunds() {
     }
   }, [
     merchants,
-    sum,
+    merchantsFiltered,
     balance,
     currentBalance,
     currentMerchant,
@@ -102,7 +108,7 @@ export function WithdrawFunds() {
   }
   return (
     <>
-      {Boolean(merchants) ? (
+      {Boolean(merchantsFiltered) ? (
         <div className='flex_box'>
           <section style={{ width: "50%" }}>
             <div
@@ -128,7 +134,7 @@ export function WithdrawFunds() {
               })}
             </Stepper>
             {activeStep === 2 ? (
-              <Success text='Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel necessitatibus nihil excepturi! Rem fugit commodi esse saepe distinctio consequatur eius suscipit adipisci, placeat sit quaerat molestias ipsam quisquam reiciendis impedit pariatur similique tempore dignissimos quod ipsum nostrum. Nam modi amet iusto, temporibus excepturi facilis neque commodi dolores eos veritatis aliquam.' />
+              <Success text='Ваша заявка на вывод средств успешно оформлена. Выплата происходит в течении 3х рабочих дней после проверки заявки службой безопасности.' />
             ) : (
               <div className='flex_box'>
                 <form>
@@ -136,8 +142,7 @@ export function WithdrawFunds() {
                     className='flex_box'
                     style={{
                       justifyContent: "space-between",
-                      marginBottom: 20,
-                      marginTop: 15,
+                      margin: "15px 0px 5px",
                     }}
                   >
                     <Typography variant='body2'>Проект</Typography>
@@ -154,10 +159,19 @@ export function WithdrawFunds() {
                     disabled={activeStep > 0}
                     variant='outlined'
                     value={currentMerchant}
-                    onChange={(e) => setCurrentMerchant(e.target.value)}
+                    onChange={(e) => {
+                      let newBalance = balance.filter(
+                        (item) =>
+                          parseInt(item.merchant_id) ===
+                          parseInt(e.target.value.merchant_id)
+                      )[0];
+                      setCurrentMerchant(e.target.value);
+                      setCurrentBalance(newBalance);
+                      setCurrency(newBalance.currencies[0]);
+                    }}
                     style={{ width: 334 }}
                   >
-                    {merchants.map((merchant) => (
+                    {merchantsFiltered.map((merchant) => (
                       <MenuItem
                         key={merchant.name}
                         value={merchant}
@@ -169,20 +183,23 @@ export function WithdrawFunds() {
                     ))}
                   </ThemeInput>
 
-                  <Typography variant='body2' style={{ marginTop: 15 }}>
+                  <Typography
+                    variant='body2'
+                    style={{ margin: "15px 0px 5px" }}
+                  >
                     Валюта
                   </Typography>
-                  <ThemeInput
-                    name='username'
-                    select
-                    disabled={activeStep > 0}
-                    variant='outlined'
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value)}
-                    style={{ width: 334 }}
-                  >
-                    {Boolean(currentBalance) &&
-                      currentBalance.currencies.map((c) => (
+                  {Boolean(currentBalance) && (
+                    <ThemeInput
+                      name='username'
+                      select
+                      disabled={activeStep > 0}
+                      variant='outlined'
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      style={{ width: 334 }}
+                    >
+                      {currentBalance.currencies.map((c) => (
                         <MenuItem
                           key={c.name}
                           value={c}
@@ -192,8 +209,12 @@ export function WithdrawFunds() {
                           {c.name}
                         </MenuItem>
                       ))}
-                  </ThemeInput>
-                  <Typography variant='body2' style={{ marginTop: 15 }}>
+                    </ThemeInput>
+                  )}
+                  <Typography
+                    variant='body2'
+                    style={{ margin: "15px 0px 5px" }}
+                  >
                     {`Введите сумму (${currency.name})`}
                   </Typography>
                   <ThemeInput
@@ -207,7 +228,10 @@ export function WithdrawFunds() {
                     onChange={(e) => {
                       setErr("");
                       setSum(e.target.value);
-                      if (e.target.value > currency.balance) {
+                      if (
+                        parseInt(e.target.value) >
+                        Math.round(parseInt(currency.balance))
+                      ) {
                         setErr("Недостаточно денег");
                       }
                     }}

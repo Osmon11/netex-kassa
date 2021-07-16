@@ -7,6 +7,14 @@ export const SET_BALANCE = "SET_BALANCE";
 export const SET_STATISTICS = "SET_STATISTICS";
 export const SET_BACKDROP = "SET_BACKDROP";
 export const SET_FILETOUPLOAD = "SET_FILETOUPLOAD";
+export const SET_CURRENCY = "SET_CURRENCY";
+
+export function setCurrency(payload) {
+  return {
+    payload,
+    type: SET_CURRENCY,
+  };
+}
 
 export function setFileToUpload(payload) {
   return {

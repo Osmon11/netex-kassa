@@ -2,20 +2,20 @@ import {
   Grid,
   Typography,
   CircularProgress,
-  MenuItem,
   makeStyles,
 } from "@material-ui/core";
-import { ThemeInput } from "components/Auth/auth";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getBalance, getMerchantStatistics } from "store/reducer";
 import { Chart } from "../Chart";
+import SelectCurrency from "./SelectCurrency";
 
 export function Statistics({ merchant_id }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const state = useSelector((store) => store.reducer);
   let merchantStatistics = state.statistics[merchant_id];
+  let tableDataStatistics = merchantStatistics;
   const [currentBalance, setCurrentBalance] = React.useState("");
   const [currency, setCurrency] = React.useState("");
   // const symbols = { USD: "$", RUB: "₽", KZT: "₸", KGS: "C" };
@@ -99,31 +99,7 @@ export function Statistics({ merchant_id }) {
 
           <span>
             <Typography variant='body1'>Валюта </Typography>
-            {Boolean(currentBalance) && (
-              <ThemeInput
-                className={classes.selectCurrency}
-                name='currency'
-                margin='dense'
-                select
-                variant='outlined'
-                value={currency}
-                onChange={(e) => {
-                  setCurrency(e.target.value);
-                  getNewStatistics(e.target.value.name);
-                }}
-              >
-                {currentBalance.currencies.map((c) => (
-                  <MenuItem
-                    key={c.name}
-                    value={c}
-                    className={classes.menuItem}
-                    classes={{ selected: classes.selected }}
-                  >
-                    {c.name}
-                  </MenuItem>
-                ))}
-              </ThemeInput>
-            )}
+            <SelectCurrency onChange={(value) => getNewStatistics(value)} />
           </span>
         </div>
         {/* <Typography variant='body1' style={{ marginBottom: 20 }}>
@@ -153,14 +129,14 @@ export function Statistics({ merchant_id }) {
             <Typography variant='body1'>Вывод</Typography>
           </Grid>
         </Grid>
-        {merchantStatistics.chart.labels.map((date, i) => (
+        {tableDataStatistics.chart.labels.map((date, i) => (
           <Grid
             item
             container
             key={date + i}
             style={{
               borderBottom:
-                i + 1 === merchantStatistics.chart.labels.length
+                i + 1 === tableDataStatistics.chart.labels.length
                   ? "none"
                   : "1px solid #3B3D44",
               textAlign: "center",
@@ -172,12 +148,12 @@ export function Statistics({ merchant_id }) {
             </Grid>
             <Grid item xs={4}>
               <Typography variant='body1'>
-                {merchantStatistics.chart.paymentData[i]}
+                {tableDataStatistics.chart.paymentData[i]}
               </Typography>
             </Grid>
             <Grid item xs={4}>
               <Typography variant='body1'>
-                {merchantStatistics.chart.cashoutData[i]}
+                {tableDataStatistics.chart.cashoutData[i]}
               </Typography>
             </Grid>
           </Grid>

@@ -39,6 +39,7 @@ import * as Yup from "yup";
 import { setAlert, setBackdrop } from "store/actionCreators";
 import { NavLink } from "react-router-dom";
 import { Statistics } from "./Statistics";
+import SelectCurrency from "./SelectCurrency";
 
 const settingsFormValidation = Yup.object({
   success_url: Yup.string().optional(),
@@ -357,7 +358,6 @@ export function ProjectSettings({ match }) {
                         />
                       </div>
                     </Grid>
-                    <Grid item xs={1} lg={2} style={{ padding: "24px" }}></Grid>
                     <Grid
                       item
                       xs={2}
@@ -396,6 +396,13 @@ export function ProjectSettings({ match }) {
                           </ThemeInput>
                         )}
                       </div>
+                    </Grid>
+                    <Grid item xs={1} lg={2} style={{ padding: "24px" }}>
+                      <SelectCurrency
+                        onChange={(currency) =>
+                          filterChangeHandler({ ...options, currency })
+                        }
+                      />
                     </Grid>
                   </Grid>
                   <Grid
@@ -634,9 +641,8 @@ export function ProjectSettings({ match }) {
                 <div style={{ marginTop: "60px" }}>
                   <p className='subtitle'>Удалить проект</p>
                   <Typography variant='body2' style={{ width: "45%" }}>
-                    Перед удалением убедитесь, что вы выбрали правильный
-                    кошелек. Удаление приведет к потере данных и средств на
-                    кошельке.
+                    Перед удалением убедитесь, что вы выбрали правильный проект.
+                    Удаление приведет к потере данных и средств на кошельке.
                   </Typography>
                   <NavLink
                     to={`${match.url}/delete`}
@@ -816,11 +822,11 @@ export function ProjectSettings({ match }) {
                     style={{
                       fontSize: 16,
                       minHeight: 50,
-                      width: 200,
+                      width: 250,
                       margin: "40px 0",
                     }}
                   >
-                    Сгенерировать ключ
+                    Сгенерировать новый ключ
                   </GoldButton>
                 </>
               )}

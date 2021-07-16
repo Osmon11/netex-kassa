@@ -15,32 +15,15 @@ import fail from "../../assets/fail.svg";
 import warning from "../../assets/warning.svg";
 import pending from "../../assets/pending.svg";
 import goust from "assets/goust-icon.webp";
-// import visa from "../../assets/visa.png";
-// import master from "../../assets/master.png";
-// import paypal from "../../assets/paypal.png";
-
-// const PS = {
-//   creditCard: (
-//     <div className='flex_box'>
-//       <img src={visa} alt='' />
-//       <img src={master} alt='' />
-//     </div>
-//   ),
-//   electron: (
-//     <div className='flex_box'>
-//       <img src={paypal} alt='' />
-//     </div>
-//   ),
-// };
 import {
   getStatusList,
   getTypeList,
   getHistoryList,
   getMerchants,
-  getCurrencies,
 } from "../../store/reducer";
 import { setAlert, setBackdrop } from "store/actionCreators";
 import { Pagination } from "@material-ui/lab";
+import SelectCurrency from "./SelectCurrency";
 
 export function OperationsHistory() {
   const classes = useStyles();
@@ -56,13 +39,14 @@ export function OperationsHistory() {
     date_to: new Date().toISOString().split("T")[0],
     status: 2,
     merchant_id: "",
-    currency: "",
+    currency: "KGS",
   });
   const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
+  const [merchantsFiltered, setFilteredMerchants] = React.useState(false);
+  const handleChange = (event, page) => {
     dispatch(setBackdrop(true));
-    //  dispatch(getActionLogs(value));
-    setPage(value);
+    dispatch(getHistoryList(errorHandler, options, page));
+    setPage(page);
   };
   const errorHandler = useCallback(
     function (error) {
@@ -77,26 +61,25 @@ export function OperationsHistory() {
     if (!state.merchants) {
       dispatch(getMerchants());
     }
-    if (!state.currencies) {
-      dispatch(getCurrencies());
-    }
-    if (!Boolean(options.merchant_id) && Boolean(state.merchants)) {
-      setOptions({ ...options, merchant_id: state.merchants[0].merchant_id });
-    }
-    if (!Boolean(options.currency) && Boolean(state.currencies)) {
-      setOptions({ ...options, currency: state.currencies[0].alias });
+    if (!Boolean(options.merchant_id) && Boolean(merchantsFiltered)) {
+      setOptions({ ...options, merchant_id: merchantsFiltered[0].merchant_id });
     }
     if (!state.statusList) {
       dispatch(getHistoryList(errorHandler, options));
       dispatch(getStatusList(errorHandler));
       dispatch(getTypeList(errorHandler));
     }
+    if (!merchantsFiltered && Boolean(state.merchants)) {
+      setFilteredMerchants(
+        state.merchants.filter((merchant) => merchant.status.slug !== "blocked")
+      );
+    }
   }, [
     state.statusList,
     dispatch,
     errorHandler,
     state.merchants,
-    state.currencies,
+    merchantsFiltered,
     options,
   ]);
 
@@ -141,7 +124,7 @@ export function OperationsHistory() {
               )}
             </Grid>
             <Grid item xs={2}>
-              {state.merchants ? (
+              {merchantsFiltered ? (
                 <ThemeInput
                   margin='dense'
                   name='projects'
@@ -156,7 +139,7 @@ export function OperationsHistory() {
                   }}
                   fullWidth
                 >
-                  {state.merchants.map((merchant) => (
+                  {merchantsFiltered.map((merchant) => (
                     <MenuItem
                       key={merchant.name}
                       value={merchant.merchant_id}
@@ -241,33 +224,11 @@ export function OperationsHistory() {
               </div>
             </Grid>
             <Grid item xs={2}>
-              {Boolean(state.currencies) && (
-                <ThemeInput
-                  className={classes.selectCurrency}
-                  name='currency'
-                  margin='dense'
-                  select
-                  variant='outlined'
-                  value={options.currency}
-                  onChange={(e) => {
-                    filterChangeHandler({
-                      ...options,
-                      currency: e.target.value,
-                    });
-                  }}
-                >
-                  {state.currencies.map((c) => (
-                    <MenuItem
-                      key={c.name}
-                      value={c.alias}
-                      className={classes.menuItem}
-                      classes={{ selected: classes.selected }}
-                    >
-                      {c.alias}
-                    </MenuItem>
-                  ))}
-                </ThemeInput>
-              )}
+              <SelectCurrency
+                onChange={(value) =>
+                  filterChangeHandler({ ...options, currency: value })
+                }
+              />
             </Grid>
           </Grid>
           <Grid
@@ -374,7 +335,9 @@ export function OperationsHistory() {
                   </Grid>
                   <Grid item xs={2}>
                     <Typography variant='body2' style={{ textAlign: "center" }}>
-                      {`${obj.debit} ${obj.currency}`}
+                      {Boolean(obj.debit)
+                        ? `${obj.debit} ${obj.currency}`
+                        : "---"}
                     </Typography>
                   </Grid>
                   <Grid item xs={2}>
@@ -400,19 +363,21 @@ export function OperationsHistory() {
               </div>
             </Grid>
           )}
-          <div
-            className='flex_box'
-            style={{ width: "100%", padding: "25px 0px" }}
-          >
-            <Pagination
-              count={state.actionLogsPages}
-              page={page}
-              onChange={handleChange}
-              classes={{ ul: classes.ul }}
-              variant='outlined'
-              color='primary'
-            />
-          </div>
+          {Boolean(state.totalHistoryList) && state.totalHistoryList > 1 && (
+            <div
+              className='flex_box'
+              style={{ width: "100%", padding: "25px 0px" }}
+            >
+              <Pagination
+                count={state.totalHistoryList}
+                page={page}
+                onChange={handleChange}
+                classes={{ ul: classes.ul }}
+                variant='outlined'
+                color='primary'
+              />
+            </div>
+          )}
         </Grid>
       ) : (
         <Grid item xs={12}>
@@ -435,6 +400,16 @@ const useStyles = makeStyles({
   selected: {
     "&:hover": {
       color: "#ff9900",
+    },
+  },
+  ul: {
+    "& li .MuiPaginationItem-root": {
+      color: "#fff",
+      borderColor: "#fff",
+    },
+    "& li .MuiPaginationItem-root.Mui-selected": {
+      color: "#ff9900",
+      borderColor: "#ff9900",
     },
   },
 });

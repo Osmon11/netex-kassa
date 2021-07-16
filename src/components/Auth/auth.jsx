@@ -29,7 +29,7 @@ export function Auth({ open, handleClose, login, setLogin }) {
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch();
   const [enterCode, setCodeField] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
+  const [userEmail, setUserEmail] = useState("kosmos_kg@inbox.ru");
   const [timeleft, setTimeLeft] = useState(90);
 
   function alertHandler(options) {
@@ -108,8 +108,8 @@ function SingIn({
   const [fogetPassword, setPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [values, setValues] = useState({
-    email: "kosmos_kg@inbox.ru",
-    password: "testtest2",
+    email: userEmail,
+    password: "testtest1",
   });
   const validate = Yup.object({
     email: Yup.string().email().required("Поля должно быть заполнена"),
