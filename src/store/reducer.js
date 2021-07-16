@@ -16,6 +16,8 @@ import {
   setBackdrop,
   SET_FILETOUPLOAD,
   SET_CURRENCY,
+  SET_OPERATION_DETAIL,
+  setOperationDetail,
 } from "./actionCreators";
 import { initialState } from "./initialState";
 import { getProfile } from "./actions/profile";
@@ -23,6 +25,11 @@ import { getProfile } from "./actions/profile";
 export function reducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
+    case SET_OPERATION_DETAIL:
+      return {
+        ...state,
+        operationDetails: { ...state.operationDetails, ...payload },
+      };
     case SET_CURRENCY:
       return {
         ...state,
@@ -242,6 +249,16 @@ export const getHistoryList = (errorHandler, options, page) => (dispatch) => {
       dispatch(setBackdrop(false));
     }
   });
+};
+
+export const getOperationDetail = (id, errorHandler) => (dispatch) => {
+  creatRequest(`/operations/detail/${id}`, undefined, errorHandler).then(
+    (res) => {
+      if (Boolean(res)) {
+        dispatch(setOperationDetail({ [id]: res.data.detail }));
+      }
+    }
+  );
 };
 
 export const getStatusList = (errorHandler) => (dispatch) => {

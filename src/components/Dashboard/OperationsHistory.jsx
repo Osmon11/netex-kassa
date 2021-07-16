@@ -24,9 +24,11 @@ import {
 import { setAlert, setBackdrop } from "store/actionCreators";
 import { Pagination } from "@material-ui/lab";
 import SelectCurrency from "./SelectCurrency";
+import { useHistory } from "react-router-dom";
 
 export function OperationsHistory() {
   const classes = useStyles();
+  const history = useHistory();
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down(1388));
   const dispatch = useDispatch();
@@ -313,11 +315,13 @@ export function OperationsHistory() {
                 <Grid
                   item
                   xs={12}
+                  onClick={() =>
+                    history.push(
+                      `/dashboard/operations/detail/${obj.operation_id}`
+                    )
+                  }
                   container
-                  style={{
-                    borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-                    padding: "25px 15px",
-                  }}
+                  className={classes.operationItem}
                   key={obj.order_id + obj.date + i}
                 >
                   <Grid item xs={2}>
@@ -410,6 +414,14 @@ const useStyles = makeStyles({
     "& li .MuiPaginationItem-root.Mui-selected": {
       color: "#ff9900",
       borderColor: "#ff9900",
+    },
+  },
+  operationItem: {
+    cursor: "pointer",
+    borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+    padding: "25px 15px",
+    "&:hover p": {
+      color: "#ff9900",
     },
   },
 });

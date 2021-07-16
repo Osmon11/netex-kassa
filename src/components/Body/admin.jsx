@@ -16,6 +16,7 @@ import ava from "assets/avatar.png";
 import goust from "assets/goust-icon.webp";
 import success from "assets/success.svg";
 import fail from "assets/fail.svg";
+import warning from "assets/warning.svg";
 import pending from "assets/pending.svg";
 import settings from "assets/settings.svg";
 import trash from "assets/trash.svg";
@@ -42,6 +43,7 @@ import { getCurrencies, getMerchants } from "store/reducer";
 import { setData } from "store/actionCreators";
 import { initialState } from "store/initialState";
 import cookie from "cookie_js";
+import OperationDetail from "components/Dashboard/OperationDetail";
 
 let drawerWidth = 320;
 
@@ -213,6 +215,11 @@ export function Admin() {
               component={OperationsHistory}
             />
             <Route
+              exact
+              path='/dashboard/operations/detail/:id'
+              component={OperationDetail}
+            />
+            <Route
               path='/dashboard/project/:id/delete'
               component={ConfirmDeleteProject}
             />
@@ -320,11 +327,13 @@ function DefaultComponent() {
                 <div className='flex_box'>
                   <img
                     src={
-                      merchant.status.slug === "not-confirmed"
-                        ? fail
-                        : merchant.status.slug === "active"
+                      parseInt(merchant.status.id) === 2
                         ? success
-                        : pending
+                        : parseInt(merchant.status.id) === 1
+                        ? pending
+                        : merchant.status.slug === "blocked"
+                        ? warning
+                        : fail
                     }
                     style={{ width: 24 }}
                     alt=''
@@ -334,7 +343,15 @@ function DefaultComponent() {
               <Grid item xs={2}>
                 <div className='flex_box'>
                   <img
-                    src={merchant.status.slug === "blocked" ? fail : success}
+                    src={
+                      parseInt(merchant.status.id) === 2
+                        ? success
+                        : parseInt(merchant.status.id) === 1
+                        ? pending
+                        : merchant.status.slug === "blocked"
+                        ? warning
+                        : fail
+                    }
                     style={{ width: 24 }}
                     alt=''
                   />

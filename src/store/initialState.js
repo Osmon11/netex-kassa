@@ -14,6 +14,7 @@ export const initialState = {
   merchants: "",
   balance: "",
   statistics: {},
+  operationDetails: {},
   addMerchant: {
     name: "",
     domain: "",

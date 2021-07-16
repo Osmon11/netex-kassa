@@ -8,6 +8,14 @@ export const SET_STATISTICS = "SET_STATISTICS";
 export const SET_BACKDROP = "SET_BACKDROP";
 export const SET_FILETOUPLOAD = "SET_FILETOUPLOAD";
 export const SET_CURRENCY = "SET_CURRENCY";
+export const SET_OPERATION_DETAIL = "SET_OPERATION_DETAIL";
+
+export function setOperationDetail(payload) {
+  return {
+    payload,
+    type: SET_OPERATION_DETAIL,
+  };
+}
 
 export function setCurrency(payload) {
   return {
