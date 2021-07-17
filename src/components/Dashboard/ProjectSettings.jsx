@@ -13,10 +13,10 @@ import { ToggleButtonGroup } from "@material-ui/lab";
 import { ThemeInput } from "components/Auth/auth";
 import React, { useCallback, useEffect, useState } from "react";
 import goust from "assets/goust-icon.webp";
-import success from "../../assets/success.svg";
-import fail from "../../assets/fail.svg";
-import warning from "../../assets/warning.svg";
-import pending from "../../assets/pending.svg";
+import success from "assets/success.svg";
+import fail from "assets/fail.svg";
+import warning from "assets/warning.svg";
+import pending from "assets/pending.svg";
 import copyIcon from "assets/copy-icon.png";
 import { GoldToggleButton } from "shared/Buttons/buttons";
 import { GoldButton } from "shared/Buttons/buttons";
@@ -37,7 +37,7 @@ import { ValidatedInput } from "./Inputs";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { setAlert, setBackdrop } from "store/actionCreators";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { Statistics } from "./Statistics";
 import SelectCurrency from "./SelectCurrency";
 
@@ -48,8 +48,11 @@ const settingsFormValidation = Yup.object({
 });
 
 export function ProjectSettings({ match }) {
+  const history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { merchantDetails, statistics, statusList, typeList, historyList } =
+    useSelector((store) => store.reducer);
   const [tab, setTab] = useState("Статистика");
   const [tooltip, setTooltip] = useState({ a: false, b: false });
   const [currentMerchant, setCurrentMerchant] = useState(null);
@@ -62,7 +65,6 @@ export function ProjectSettings({ match }) {
     status: 2,
     merchant_id: match.params.id,
   });
-  const state = useSelector((store) => store.reducer);
 
   const errorHandler = useCallback(
     function (error) {
@@ -75,37 +77,34 @@ export function ProjectSettings({ match }) {
   );
 
   const getCurrentMerchant = useCallback(() => {
-    dispatch(
-      viewMerchant(match.params.id, (data) => {
-        setCurrentMerchant(data);
-      })
-    );
+    dispatch(viewMerchant(match.params.id));
   }, [dispatch, match.params.id]);
 
   useEffect(() => {
-    if (
-      !currentMerchant ||
-      currentMerchant.view.merchant_id !== match.params.id
-    ) {
+    if (Boolean(merchantDetails[match.params.id])) {
+      setCurrentMerchant(merchantDetails[match.params.id]);
+    }
+    if (!currentMerchant && !Boolean(merchantDetails[match.params.id])) {
       getCurrentMerchant();
     }
-    if (!Boolean(state.statistics[match.params.id])) {
+    if (!Boolean(statistics[match.params.id])) {
       dispatch(getMerchantStatistics(match.params.id, { currency: "KGS" }));
     }
   }, [
     currentMerchant,
-    state.statistics,
+    merchantDetails,
+    statistics,
     match.params.id,
     getCurrentMerchant,
     dispatch,
   ]);
   useEffect(() => {
-    if (!state.statusList) {
+    if (!statusList) {
       dispatch(getHistoryList(errorHandler, options));
       dispatch(getStatusList(errorHandler));
       dispatch(getTypeList(errorHandler));
     }
-  }, [state.statusList, dispatch, errorHandler, options]);
+  }, [statusList, dispatch, errorHandler, options]);
 
   function filterChangeHandler(newOptions) {
     dispatch(setBackdrop(true));
@@ -136,27 +135,23 @@ export function ProjectSettings({ match }) {
   function getTokenHandler() {
     dispatch(setBackdrop(true));
     dispatch(
-      getToken(
-        currentMerchant.view.merchant_id,
-        errorHandler,
-        (new_api_token) => {
-          dispatch(setBackdrop(false));
-          dispatch(
-            setAlert({
-              open: true,
-              severity: "success",
-              message: "Сгенерирован новый ключ API!",
-            })
-          );
-          setCurrentMerchant({
+      getToken(currentMerchant.merchant_id, errorHandler, (new_api_token) => {
+        dispatch(setBackdrop(false));
+        dispatch(
+          setAlert({
+            open: true,
+            severity: "success",
+            message: "Сгенерирован новый ключ API!",
+          })
+        );
+        setCurrentMerchant({
+          ...currentMerchant,
+          view: {
             ...currentMerchant,
-            view: {
-              ...currentMerchant.view,
-              params: { ...currentMerchant.params, ...new_api_token },
-            },
-          });
-        }
-      )
+            params: { ...currentMerchant.params, ...new_api_token },
+          },
+        });
+      })
     );
   }
   function DomenNotConfirmed() {
@@ -216,7 +211,7 @@ export function ProjectSettings({ match }) {
   return (
     <>
       {!Boolean(currentMerchant) ||
-      currentMerchant.view.merchant_id !== match.params.id ? (
+      currentMerchant.merchant_id !== match.params.id ? (
         <div className='flex_box'>
           <CircularProgress />
         </div>
@@ -224,7 +219,7 @@ export function ProjectSettings({ match }) {
         <section>
           <div className='flex_box' style={{ justifyContent: "space-between" }}>
             <span className='title' style={{ fontSize: 25 }}>
-              {currentMerchant.view.name}
+              {currentMerchant.name}
             </span>
             <span className='subtitle'>Настройки проекта</span>
           </div>
@@ -246,7 +241,7 @@ export function ProjectSettings({ match }) {
 
           {tab === "Статистика" && (
             <Grid container>
-              {currentMerchant.view.status.name === "Не подтвержден" ? (
+              {currentMerchant.status.name === "Не подтвержден" ? (
                 <Grid item xs={12}>
                   <DomenNotConfirmed />
                 </Grid>
@@ -257,8 +252,8 @@ export function ProjectSettings({ match }) {
           )}
 
           {tab === "Инфо" && (
-            <Grid container spacing={2}>
-              {currentMerchant.view.status.name === "Не подтвержден" ? (
+            <Grid container>
+              {currentMerchant.status.name === "Не подтвержден" ? (
                 <Grid item xs={12}>
                   <DomenNotConfirmed />
                 </Grid>
@@ -290,7 +285,7 @@ export function ProjectSettings({ match }) {
                       lg={3}
                       style={{ padding: "24px 48px 24px 0px" }}
                     >
-                      {state.typeList && (
+                      {typeList && (
                         <ThemeInput
                           margin='dense'
                           name='operationType'
@@ -305,7 +300,7 @@ export function ProjectSettings({ match }) {
                           }}
                           fullWidth
                         >
-                          {state.typeList.map((type) => (
+                          {typeList.map((type) => (
                             <MenuItem
                               key={type.name}
                               value={type.value}
@@ -368,7 +363,7 @@ export function ProjectSettings({ match }) {
                         className='flex_box'
                         style={{ justifyContent: "flex-end" }}
                       >
-                        {state.statusList && (
+                        {statusList && (
                           <ThemeInput
                             margin='dense'
                             name='status'
@@ -383,7 +378,7 @@ export function ProjectSettings({ match }) {
                             }}
                             fullWidth
                           >
-                            {state.statusList.map((type) => (
+                            {statusList.map((type) => (
                               <MenuItem
                                 key={type.name}
                                 value={type.value}
@@ -453,8 +448,8 @@ export function ProjectSettings({ match }) {
                       </Typography>
                     </Grid>
                   </Grid>
-                  {state.historyList ? (
-                    state.historyList.map((obj, i) => {
+                  {historyList ? (
+                    historyList.map((obj, i) => {
                       const statusImg = [
                         null,
                         <img
@@ -499,24 +494,34 @@ export function ProjectSettings({ match }) {
                           item
                           xs={12}
                           container
-                          style={{
-                            borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
-                            padding: "25px 15px",
-                          }}
+                          onClick={() =>
+                            history.push(
+                              `/dashboard/operations/detail/${obj.operation_id}`
+                            )
+                          }
+                          className={classes.operationItem}
                           key={obj.order_id + obj.date + i}
                         >
                           <Grid item xs={2}>
-                            <Typography variant='body2'>
+                            <Typography
+                              variant='body2'
+                              style={{ marginTop: "6px" }}
+                            >
                               {obj.operation_type.name}
                             </Typography>
                           </Grid>
                           <Grid item xs={2}>
-                            <Typography variant='body2'>{obj.date}</Typography>
+                            <Typography
+                              variant='body2'
+                              style={{ marginTop: "6px" }}
+                            >
+                              {obj.date}
+                            </Typography>
                           </Grid>
                           <Grid item xs={2}>
                             <Typography
                               variant='body2'
-                              style={{ textAlign: "center" }}
+                              style={{ textAlign: "center", marginTop: "6px" }}
                             >
                               {`${obj.sum} ${obj.main_currency}`}
                             </Typography>
@@ -524,7 +529,7 @@ export function ProjectSettings({ match }) {
                           <Grid item xs={2}>
                             <Typography
                               variant='body2'
-                              style={{ textAlign: "center" }}
+                              style={{ textAlign: "center", marginTop: "6px" }}
                             >
                               {Boolean(obj.debit)
                                 ? `${obj.debit} ${obj.currency}`
@@ -534,12 +539,16 @@ export function ProjectSettings({ match }) {
                           <Grid item xs={2}>
                             <Typography
                               variant='body2'
-                              style={{ textAlign: "center" }}
+                              style={{ textAlign: "center", marginTop: "6px" }}
                             >
                               {Boolean(obj.credit) ? obj.credit : "---"}
                             </Typography>
                           </Grid>
-                          <Grid item xs={2} style={{ textAlign: "center" }}>
+                          <Grid
+                            item
+                            xs={2}
+                            style={{ textAlign: "center", marginTop: "6px" }}
+                          >
                             {statusImg[obj.status.value]}
                           </Grid>
                         </Grid>
@@ -563,12 +572,12 @@ export function ProjectSettings({ match }) {
           )}
 
           {tab === "Настройки" &&
-            (currentMerchant.view.status.name === "Не подтвержден" ? (
+            (currentMerchant.status.name === "Не подтвержден" ? (
               <DomenNotConfirmed />
             ) : (
               <>
                 <Formik
-                  initialValues={{ ...currentMerchant.view.params }}
+                  initialValues={{ ...currentMerchant.params }}
                   validationSchema={settingsFormValidation}
                   onSubmit={settingSubmit}
                 >
@@ -590,7 +599,7 @@ export function ProjectSettings({ match }) {
                       <ValidatedInput
                         name='success_url'
                         style={{ width: "100%" }}
-                        placeholder={`Например, ${currentMerchant.view.params.domain}/success`}
+                        placeholder={`Например, ${currentMerchant.params.domain}/success`}
                       />
                     </div>
                     <div
@@ -610,7 +619,7 @@ export function ProjectSettings({ match }) {
                       <ValidatedInput
                         name='fail_url'
                         style={{ width: "100%" }}
-                        placeholder={`Например, ${currentMerchant.view.params.domain}/fail`}
+                        placeholder={`Например, ${currentMerchant.params.domain}/fail`}
                       />
                     </div>
                     <div
@@ -630,7 +639,7 @@ export function ProjectSettings({ match }) {
                       <ValidatedInput
                         name='status_url'
                         style={{ width: "100%" }}
-                        placeholder={`Например, ${currentMerchant.view.params.domain}/status`}
+                        placeholder={`Например, ${currentMerchant.params.domain}/status`}
                       />
                     </div>
                     <GoldButton type='submit' style={{ width: 175 }}>
@@ -668,7 +677,7 @@ export function ProjectSettings({ match }) {
 
           {tab === "API" && (
             <>
-              {currentMerchant.view.status.name === "Не подтвержден" ? (
+              {currentMerchant.status.name === "Не подтвержден" ? (
                 <DomenNotConfirmed />
               ) : (
                 <>
@@ -725,7 +734,7 @@ export function ProjectSettings({ match }) {
                       name='key'
                       type='text'
                       style={{ width: "100%" }}
-                      value={currentMerchant.view.params.api_key}
+                      value={currentMerchant.params.api_key}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position='end'>
@@ -742,7 +751,7 @@ export function ProjectSettings({ match }) {
                               TransitionComponent={Zoom}
                             >
                               <CopyToClipboard
-                                text={currentMerchant.view.params.api_key}
+                                text={currentMerchant.params.api_key}
                                 onCopy={() => {
                                   setTooltip({ ...tooltip, a: true });
                                   closeTooltip();
@@ -780,7 +789,7 @@ export function ProjectSettings({ match }) {
                       name='token'
                       type='text'
                       style={{ width: "100%" }}
-                      value={currentMerchant.view.params.secret_key}
+                      value={currentMerchant.params.secret_key}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position='end'>
@@ -797,7 +806,7 @@ export function ProjectSettings({ match }) {
                               TransitionComponent={Zoom}
                             >
                               <CopyToClipboard
-                                text={currentMerchant.view.params.secret_key}
+                                text={currentMerchant.params.secret_key}
                                 onCopy={() => {
                                   setTooltip({ ...tooltip, b: true });
                                   closeTooltip();
@@ -848,6 +857,14 @@ const useStyles = makeStyles((theme) => ({
   },
   selected: {
     "&:hover": {
+      color: "#ff9900",
+    },
+  },
+  operationItem: {
+    cursor: "pointer",
+    borderBottom: "1px solid rgba(255, 255, 255, 0.5)",
+    padding: "25px 15px",
+    "&:hover p": {
       color: "#ff9900",
     },
   },

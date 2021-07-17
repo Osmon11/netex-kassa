@@ -325,31 +325,46 @@ export function OperationsHistory() {
                   key={obj.order_id + obj.date + i}
                 >
                   <Grid item xs={2}>
-                    <Typography variant='body2'>
+                    <Typography variant='body2' style={{ marginTop: "6px" }}>
                       {obj.operation_type.name}
                     </Typography>
                   </Grid>
                   <Grid item xs={2}>
-                    <Typography variant='body2'>{obj.date}</Typography>
+                    <Typography variant='body2' style={{ marginTop: "6px" }}>
+                      {obj.date}
+                    </Typography>
                   </Grid>
                   <Grid item xs={2}>
-                    <Typography variant='body2' style={{ textAlign: "center" }}>
+                    <Typography
+                      variant='body2'
+                      style={{ textAlign: "center", marginTop: "6px" }}
+                    >
                       {`${obj.sum} ${obj.main_currency}`}
                     </Typography>
                   </Grid>
                   <Grid item xs={2}>
-                    <Typography variant='body2' style={{ textAlign: "center" }}>
+                    <Typography
+                      variant='body2'
+                      style={{ textAlign: "center", marginTop: "6px" }}
+                    >
                       {Boolean(obj.debit)
                         ? `${obj.debit} ${obj.currency}`
                         : "---"}
                     </Typography>
                   </Grid>
                   <Grid item xs={2}>
-                    <Typography variant='body2' style={{ textAlign: "center" }}>
+                    <Typography
+                      variant='body2'
+                      style={{ textAlign: "center", marginTop: "6px" }}
+                    >
                       {Boolean(obj.credit) ? obj.credit : "---"}
                     </Typography>
                   </Grid>
-                  <Grid item xs={2} style={{ textAlign: "center" }}>
+                  <Grid
+                    item
+                    xs={2}
+                    style={{ textAlign: "center", marginTop: "6px" }}
+                  >
                     {statusImg[obj.status.value]}
                   </Grid>
                 </Grid>

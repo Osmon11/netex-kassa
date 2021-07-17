@@ -18,6 +18,8 @@ import {
   SET_CURRENCY,
   SET_OPERATION_DETAIL,
   setOperationDetail,
+  SET_MERCHANT_DETAIL,
+  setMerchantDetail,
 } from "./actionCreators";
 import { initialState } from "./initialState";
 import { getProfile } from "./actions/profile";
@@ -25,6 +27,14 @@ import { getProfile } from "./actions/profile";
 export function reducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
+    case SET_MERCHANT_DETAIL:
+      return {
+        ...state,
+        merchantDetails: {
+          ...state.merchantDetails,
+          ...payload,
+        },
+      };
     case SET_OPERATION_DETAIL:
       return {
         ...state,
@@ -94,32 +104,42 @@ const somethingWentWrong = (endpoint) => {
   проверьте запрос на ${endpoint}`);
 };
 
-export async function creatRequest(endpoint, data, errorCallback) {
-  let token = await cookie.get("token");
+const errorHandler = function (error, dispatch) {
+  dispatch(setBackdrop(false));
+  if (Boolean(error)) {
+    dispatch(setAlert({ open: true, severity: "error", message: error }));
+  }
+};
 
+export async function creatRequest(
+  endpoint,
+  data,
+  errorCallback = errorHandler,
+  dispatch
+) {
+  let token = await cookie.get("token");
   if (!Boolean(AppAxios.defaults.headers.Authorization)) {
-    console.log(token);
     AppAxios.defaults.headers.Authorization = token;
   }
   return data
     ? AppAxios.post(endpoint, data).catch(({ response }) =>
-        errorCallback(response.data.messages)
+        errorCallback(response.data.messages, dispatch)
       )
     : AppAxios.get(endpoint).catch(({ response }) =>
         !!errorCallback
-          ? errorCallback(response.data.messages)
+          ? errorCallback(response.data.messages, dispatch)
           : somethingWentWrong(endpoint)
       );
 }
 
 export const getTariffPlans = () => (dispatch) => {
-  creatRequest("/tariff-plans").then((res) => {
+  creatRequest("/tariff-plans", undefined, undefined, dispatch).then((res) => {
     dispatch(setData({ tariffPlans: res.data.plans }));
   });
 };
 
 export const getCountries = (callback) => (dispatch) => {
-  creatRequest("/countries", undefined, callback).then((res) => {
+  creatRequest("/countries", undefined, callback, dispatch).then((res) => {
     if (res.status === 200) {
       dispatch(setData({ countries: res.data.countries }));
     }
@@ -127,15 +147,17 @@ export const getCountries = (callback) => (dispatch) => {
 };
 
 export const getOrganizations = (callback) => (dispatch) => {
-  creatRequest("/organization-types", undefined, callback).then((res) => {
-    if (res) {
-      dispatch(setData({ organizationTypes: res.data.list }));
+  creatRequest("/organization-types", undefined, callback, dispatch).then(
+    (res) => {
+      if (res) {
+        dispatch(setData({ organizationTypes: res.data.list }));
+      }
     }
-  });
+  );
 };
 
 export const getActivityTypes = (callback) => (dispatch) => {
-  creatRequest("/activity-types", undefined, callback).then((res) => {
+  creatRequest("/activity-types", undefined, callback, dispatch).then((res) => {
     if (res) {
       dispatch(setData({ activityTypes: res.data.list }));
     }
@@ -143,7 +165,7 @@ export const getActivityTypes = (callback) => (dispatch) => {
 };
 
 export const addMerchant = (data, callback) => (dispatch) => {
-  creatRequest("/account/add", data, callback)
+  creatRequest("/account/add", data, callback, dispatch)
     .then((res) => {
       if (res) {
         callback();
@@ -153,32 +175,46 @@ export const addMerchant = (data, callback) => (dispatch) => {
 };
 
 export const editMerchant = (data, id, callback) => (dispatch) => {
-  creatRequest(`/account/edit/${id}`, JSON.stringify(data), callback).then(
-    (res) => {
-      if (Boolean(res.data.response)) {
-        dispatch(setBackdrop(false));
-        dispatch(
-          setAlert({ open: true, severity: "success", message: "Сохранено!" })
-        );
-      }
+  creatRequest(
+    `/account/edit/${id}`,
+    JSON.stringify(data),
+    callback,
+    dispatch
+  ).then((res) => {
+    if (Boolean(res.data.response)) {
+      dispatch(setBackdrop(false));
+      dispatch(
+        setAlert({ open: true, severity: "success", message: "Сохранено!" })
+      );
     }
-  );
+  });
 };
 
-export const viewMerchant = (id, callback) => (dispatch) => {
-  creatRequest(`/account/view/${id}`, undefined, (error) => {
-    if (error) {
-      dispatch(setAlert({ open: true, severity: "error", message: error }));
-    }
-  }).then((res) => {
+export const viewMerchant = (id) => (dispatch) => {
+  creatRequest(
+    `/account/view/${id}`,
+    undefined,
+    (error) => {
+      if (error) {
+        dispatch(setAlert({ open: true, severity: "error", message: error }));
+      }
+    },
+    dispatch
+  ).then((res) => {
     if (res) {
-      callback(res.data);
+      let details = res.data.view;
+      dispatch(setMerchantDetail({ [details.merchant_id]: details }));
     }
   });
 };
 
 export const getActionLogs = (page) => (dispatch) => {
-  creatRequest(`/profile/action-log/${page}`).then((res) => {
+  creatRequest(
+    `/profile/action-log/${page}`,
+    undefined,
+    undefined,
+    dispatch
+  ).then((res) => {
     const array = [];
     for (let key in res.data.action) {
       array.push(res.data.action[key]);
@@ -194,7 +230,7 @@ export const getActionLogs = (page) => (dispatch) => {
 };
 
 export const getMerchants = () => (dispatch) => {
-  creatRequest("/account/list").then((res) => {
+  creatRequest("/account/list", undefined, undefined, dispatch).then((res) => {
     if (Boolean(res)) {
       dispatch(setData({ merchants: res.data.list }));
     }
@@ -202,40 +238,47 @@ export const getMerchants = () => (dispatch) => {
 };
 
 export const confirmMerchant = (confirm_file_id, callback) => (dispatch) => {
-  creatRequest(`/account/confirm/${confirm_file_id}`, undefined, callback).then(
-    (res) => {
-      console.log(Boolean(res.data.response), res.data);
-      if (Boolean(res.data.response)) {
-        callback(undefined);
-      }
+  creatRequest(
+    `/account/confirm/${confirm_file_id}`,
+    undefined,
+    callback,
+    dispatch
+  ).then((res) => {
+    console.log(Boolean(res.data.response), res.data);
+    if (Boolean(res.data.response)) {
+      callback(undefined);
     }
-  );
+  });
 };
 
 export const deleteMerchant = (merchant_id, callback) => (dispatch) => {
-  creatRequest(`/account/remove/${merchant_id}`, undefined, callback).then(
-    (res) => {
-      if (Boolean(res.data.response)) {
-        dispatch(setBackdrop(false));
-        dispatch(getMerchants());
-        dispatch(
-          setAlert({
-            open: true,
-            severity: "success",
-            message: "Успешно удалено!",
-          })
-        );
-        callback(undefined, res.data.response);
-      }
+  creatRequest(
+    `/account/remove/${merchant_id}`,
+    undefined,
+    callback,
+    dispatch
+  ).then((res) => {
+    if (Boolean(res.data.response)) {
+      dispatch(setBackdrop(false));
+      dispatch(getMerchants());
+      dispatch(
+        setAlert({
+          open: true,
+          severity: "success",
+          message: "Успешно удалено!",
+        })
+      );
+      callback(undefined, res.data.response);
     }
-  );
+  });
 };
 
 export const getHistoryList = (errorHandler, options, page) => (dispatch) => {
   creatRequest(
     page ? `/operations/list/${page}` : "/operations/list",
     JSON.stringify(options),
-    errorHandler
+    errorHandler,
+    dispatch
   ).then((res) => {
     if (Boolean(res)) {
       dispatch(
@@ -252,44 +295,54 @@ export const getHistoryList = (errorHandler, options, page) => (dispatch) => {
 };
 
 export const getOperationDetail = (id, errorHandler) => (dispatch) => {
-  creatRequest(`/operations/detail/${id}`, undefined, errorHandler).then(
-    (res) => {
-      if (Boolean(res)) {
-        dispatch(setOperationDetail({ [id]: res.data.detail }));
-      }
+  creatRequest(
+    `/operations/detail/${id}`,
+    undefined,
+    errorHandler,
+    dispatch
+  ).then((res) => {
+    if (Boolean(res)) {
+      dispatch(setOperationDetail({ [id]: res.data.detail }));
     }
-  );
+  });
 };
 
 export const getStatusList = (errorHandler) => (dispatch) => {
-  creatRequest("/operations/options/status", undefined, errorHandler).then(
-    (res) => {
-      if (Boolean(res)) {
-        dispatch(
-          setData({ statusList: getArrFromObj(res.data.list, "withValue") })
-        );
-      }
+  creatRequest(
+    "/operations/options/status",
+    undefined,
+    errorHandler,
+    dispatch
+  ).then((res) => {
+    if (Boolean(res)) {
+      dispatch(
+        setData({ statusList: getArrFromObj(res.data.list, "withValue") })
+      );
     }
-  );
+  });
 };
 
 export const getTypeList = (errorHandler) => (dispatch) => {
-  creatRequest("/operations/options/type", undefined, errorHandler).then(
-    (res) => {
-      if (Boolean(res)) {
-        dispatch(
-          setData({ typeList: getArrFromObj(res.data.list, "withValue") })
-        );
-      }
+  creatRequest(
+    "/operations/options/type",
+    undefined,
+    errorHandler,
+    dispatch
+  ).then((res) => {
+    if (Boolean(res)) {
+      dispatch(
+        setData({ typeList: getArrFromObj(res.data.list, "withValue") })
+      );
     }
-  );
+  });
 };
 
 export const getToken = (merchant_id, errorHandler, callback) => (dispatch) => {
   creatRequest(
     `/account/get-api-token/${merchant_id}`,
     undefined,
-    errorHandler
+    errorHandler,
+    dispatch
   ).then((res) => {
     if (Boolean(res)) {
       callback(res.data);
@@ -298,18 +351,21 @@ export const getToken = (merchant_id, errorHandler, callback) => (dispatch) => {
 };
 
 export const cashOut = (data, callback) => (dispatch) => {
-  creatRequest("/cashout/send-request", JSON.stringify(data), callback).then(
-    (res) => {
-      if (Boolean(res)) {
-        callback();
-        console.log(res.data);
-      }
+  creatRequest(
+    "/cashout/send-request",
+    JSON.stringify(data),
+    callback,
+    dispatch
+  ).then((res) => {
+    if (Boolean(res)) {
+      callback();
+      console.log(res.data);
     }
-  );
+  });
 };
 
 export const getBalance = () => (dispatch) => {
-  creatRequest("/balance/get", undefined).then((res) => {
+  creatRequest("/balance/get", undefined, undefined, dispatch).then((res) => {
     if (Boolean(res)) {
       let balance = res.data.balance;
       let newData = [];
@@ -332,53 +388,62 @@ export const getBalance = () => (dispatch) => {
 
 export const getMerchantBalance =
   (merchant, currency, callback) => (dispatch) => {
-    creatRequest(`/balance/get/${merchant}/${currency}`, undefined).then(
-      (res) => {
-        if (Boolean(res)) {
-          dispatch(setData({ balance: res.data.balance }));
-        }
+    creatRequest(
+      `/balance/get/${merchant}/${currency}`,
+      undefined,
+      undefined,
+      dispatch
+    ).then((res) => {
+      if (Boolean(res)) {
+        dispatch(setData({ balance: res.data.balance }));
       }
-    );
+    });
   };
 
 export const getMerchantStatistics = (merchant, data) => (dispatch) => {
-  creatRequest(`/account/statistics/${merchant}/`, JSON.stringify(data)).then(
-    (res) => {
-      if (Boolean(res)) {
-        dispatch(
-          setMerchantStatistics({
-            merchant_id: merchant,
-            data: {
-              ...res.data.statistics,
-              chart: parseChartData(res.data.statistics.chart),
-            },
-          })
-        );
-      }
+  creatRequest(
+    `/account/statistics/${merchant}/`,
+    JSON.stringify(data),
+    undefined,
+    dispatch
+  ).then((res) => {
+    if (Boolean(res)) {
+      dispatch(
+        setMerchantStatistics({
+          merchant_id: merchant,
+          data: {
+            ...res.data.statistics,
+            chart: parseChartData(res.data.statistics.chart),
+            dataTable: parseChartData(res.data.statistics.chart, true),
+          },
+        })
+      );
     }
-  );
+  });
 };
 
-export const getCurrencies = () => (dispatch) => {
-  creatRequest("/currencies").then((res) =>
+export const getCurrencies = (errorHandler) => (dispatch) => {
+  creatRequest("/currencies", undefined, undefined, dispatch).then((res) =>
     dispatch(setData({ currencies: getArrFromObj(res.data.list) }))
   );
 };
 
 export const changeAvatar = (avatar) => (dispatch) => {
-  creatRequest("/profile/personal/edit", avatar).then((res) => {
-    if (Boolean(res)) {
-      dispatch(setBackdrop(false));
-      dispatch(
-        setAlert({
-          open: true,
-          severity: "success",
-          message: res.data.messages,
-        })
-      );
-      dispatch(getProfile());
+  creatRequest("/profile/personal/edit", avatar, undefined, dispatch).then(
+    (res) => {
+      if (Boolean(res)) {
+        dispatch(setBackdrop(false));
+        dispatch(
+          setAlert({
+            open: true,
+            severity: "success",
+            message: res.data.messages,
+          })
+        );
+        dispatch(getProfile());
+      }
     }
-  });
+  );
 };
 
 function getArrFromObj(obj, withValue) {
@@ -393,17 +458,24 @@ function getArrFromObj(obj, withValue) {
   return arr;
 }
 
-function parseChartData(chart) {
+function parseChartData(chart, reverse = false) {
   let labels = [];
   let paymentData = [];
   let cashoutData = [];
   Object.keys(chart).forEach((date) => {
     let dateArr = new Date(date).toDateString().split(" ");
-    labels.unshift(`${dateArr[2]} ${dateArr[1]}`);
+    return reverse
+      ? labels.unshift(`${dateArr[2]} ${dateArr[1]}`)
+      : labels.push(`${dateArr[2]} ${dateArr[1]}`);
   });
   for (let obj in chart) {
-    paymentData.unshift(chart[obj].payment);
-    cashoutData.unshift(chart[obj].cashout);
+    if (reverse) {
+      paymentData.unshift(chart[obj].payment);
+      cashoutData.unshift(chart[obj].cashout);
+    } else {
+      paymentData.push(chart[obj].payment);
+      cashoutData.push(chart[obj].cashout);
+    }
   }
   return { labels, paymentData, cashoutData };
 }

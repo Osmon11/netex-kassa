@@ -15,7 +15,6 @@ export function Statistics({ merchant_id }) {
   const dispatch = useDispatch();
   const state = useSelector((store) => store.reducer);
   let merchantStatistics = state.statistics[merchant_id];
-  let tableDataStatistics = merchantStatistics;
   const [currentBalance, setCurrentBalance] = React.useState("");
   const [currency, setCurrency] = React.useState("");
   // const symbols = { USD: "$", RUB: "₽", KZT: "₸", KGS: "C" };
@@ -58,7 +57,9 @@ export function Statistics({ merchant_id }) {
                   variant='body1'
                   style={{ color: "#2A2B31", lineHeight: 1.2 }}
                 >
-                  {merchantStatistics.balance}
+                  {merchantStatistics.balance
+                    ? merchantStatistics.balance
+                    : "0.0000"}
                 </Typography>
               </div>
             </span>
@@ -102,10 +103,6 @@ export function Statistics({ merchant_id }) {
             <SelectCurrency onChange={(value) => getNewStatistics(value)} />
           </span>
         </div>
-        {/* <Typography variant='body1' style={{ marginBottom: 20 }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </Typography> */}
       </Grid>
       <Chart
         labels={merchantStatistics.chart.labels}
@@ -129,14 +126,14 @@ export function Statistics({ merchant_id }) {
             <Typography variant='body1'>Вывод</Typography>
           </Grid>
         </Grid>
-        {tableDataStatistics.chart.labels.map((date, i) => (
+        {merchantStatistics.dataTable.labels.map((date, i) => (
           <Grid
             item
             container
             key={date + i}
             style={{
               borderBottom:
-                i + 1 === tableDataStatistics.chart.labels.length
+                i + 1 === merchantStatistics.dataTable.labels.length
                   ? "none"
                   : "1px solid #3B3D44",
               textAlign: "center",
@@ -148,12 +145,12 @@ export function Statistics({ merchant_id }) {
             </Grid>
             <Grid item xs={4}>
               <Typography variant='body1'>
-                {tableDataStatistics.chart.paymentData[i]}
+                {merchantStatistics.dataTable.paymentData[i]}
               </Typography>
             </Grid>
             <Grid item xs={4}>
               <Typography variant='body1'>
-                {tableDataStatistics.chart.cashoutData[i]}
+                {merchantStatistics.dataTable.cashoutData[i]}
               </Typography>
             </Grid>
           </Grid>

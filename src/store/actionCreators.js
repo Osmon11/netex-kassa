@@ -9,6 +9,14 @@ export const SET_BACKDROP = "SET_BACKDROP";
 export const SET_FILETOUPLOAD = "SET_FILETOUPLOAD";
 export const SET_CURRENCY = "SET_CURRENCY";
 export const SET_OPERATION_DETAIL = "SET_OPERATION_DETAIL";
+export const SET_MERCHANT_DETAIL = "SET_MERCHANT_DETAIL";
+
+export function setMerchantDetail(payload) {
+  return {
+    payload,
+    type: SET_MERCHANT_DETAIL,
+  };
+}
 
 export function setOperationDetail(payload) {
   return {

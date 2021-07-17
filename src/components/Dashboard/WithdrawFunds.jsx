@@ -8,6 +8,8 @@ import {
   StepLabel,
   Stepper,
   Typography,
+  useMediaQuery,
+  useTheme,
   withStyles,
 } from "@material-ui/core";
 import clsx from "clsx";
@@ -18,23 +20,36 @@ import { NavLink } from "react-router-dom";
 import { GoldButton } from "shared/Buttons/buttons";
 import { Success } from "./CreateProject";
 import goust from "assets/goust-icon.webp";
-import { cashOut, getBalance } from "store/reducer";
+import { cashOut, getBalance, viewMerchant } from "store/reducer";
 import { setAlert } from "store/actionCreators";
 
 export function WithdrawFunds() {
+  const theme = useTheme();
+  const md = useMediaQuery(theme.breakpoints.down(1400));
   const classes = useStyles();
   const dispatch = useDispatch();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-  const { merchants, balance } = useSelector((store) => store.reducer);
+  const { merchants, balance, merchantDetails } = useSelector(
+    (store) => store.reducer
+  );
   const [merchantsFiltered, setFilteredMerchants] = React.useState(false);
   const [currentMerchant, setCurrentMerchant] = React.useState("");
   const [currentBalance, setCurrentBalance] = React.useState("");
   const [currency, setCurrency] = React.useState("");
+  const [merchantDetail, setMerchantDetail] = React.useState("");
   const [sum, setSum] = React.useState(0);
   const [err, setErr] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const steps = ["Создать", "Потвердить", "Успешно"];
+  const requisites = [
+    { text: "INN", key: "inn" },
+    { text: "BIK", key: "bik" },
+    { text: "IBAN", key: "iban" },
+    { text: "OKPO", key: "okpo" },
+    { text: "Bank Name", key: "bank_name" },
+    { text: "Account", key: "checking_account" },
+  ];
 
   React.useEffect(() => {
     if (!Boolean(balance)) {
@@ -63,8 +78,15 @@ export function WithdrawFunds() {
     if (!Boolean(currency) && Boolean(currentBalance)) {
       setCurrency(currentBalance.currencies[0]);
     }
+    if (
+      Boolean(currentMerchant) &&
+      Boolean(merchantDetails[currentMerchant.merchant_id])
+    ) {
+      setMerchantDetail(merchantDetails[currentMerchant.merchant_id]);
+    }
   }, [
     merchants,
+    merchantDetails,
     merchantsFiltered,
     balance,
     currentBalance,
@@ -78,6 +100,9 @@ export function WithdrawFunds() {
       let newSkipped = skipped;
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
       setSkipped(newSkipped);
+      if (merchantDetail.merchant_id !== currentMerchant.merchant_id) {
+        dispatch(viewMerchant(currentMerchant.merchant_id));
+      }
     } else {
       setErr("Введите сумму");
     }
@@ -110,7 +135,7 @@ export function WithdrawFunds() {
     <>
       {Boolean(merchantsFiltered) ? (
         <div className='flex_box'>
-          <section style={{ width: "50%" }}>
+          <section style={{ width: md ? "100%" : "50%" }}>
             <div
               className='title'
               style={{ fontSize: 25, marginTop: 36, textAlign: "center" }}
@@ -123,7 +148,11 @@ export function WithdrawFunds() {
             >
               {steps.map((label, index) => {
                 return (
-                  <Step key={label}>
+                  <Step
+                    key={label}
+                    s
+                    style={{ padding: md ? "0px 20px" : "0px 8px" }}
+                  >
                     <CustomLabel
                       StepIconComponent={(props) => StepIcon(props, index + 1)}
                     >
@@ -244,6 +273,41 @@ export function WithdrawFunds() {
                     }}
                     style={{ width: 334 }}
                   />
+                  {activeStep === 1 &&
+                  merchantDetail.merchant_id === currentMerchant.merchant_id
+                    ? requisites.map(
+                        (obj) =>
+                          merchantDetail.requisite[obj.key] && (
+                            <>
+                              <Typography
+                                variant='body2'
+                                style={{ margin: "15px 0px 5px" }}
+                              >
+                                {obj.text}
+                              </Typography>
+                              <ThemeInput
+                                placeholder={merchantDetail.requisite[obj.key]}
+                                name={obj.key}
+                                type='text'
+                                variant='outlined'
+                                disabled
+                                InputProps={{
+                                  endAdornment: (
+                                    <InputAdornment position='end'>
+                                      {loading && <CircularProgress />}
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                style={{ width: 334 }}
+                              />
+                            </>
+                          )
+                      )
+                    : activeStep === 1 && (
+                        <div className='flex_box'>
+                          <CircularProgress color='primary' />
+                        </div>
+                      )}
                   <br />
                   <div
                     className='flex_box'

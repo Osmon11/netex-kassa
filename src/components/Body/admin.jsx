@@ -16,11 +16,10 @@ import ava from "assets/avatar.png";
 import goust from "assets/goust-icon.webp";
 import success from "assets/success.svg";
 import fail from "assets/fail.svg";
-import warning from "assets/warning.svg";
 import pending from "assets/pending.svg";
 import settings from "assets/settings.svg";
 import trash from "assets/trash.svg";
-import projectsIco from "assets/projects-ico.svg";
+import projectsIco from "assets/projects-ico-2.svg";
 import historyIco from "assets/history-ico.svg";
 import settingsIco from "assets/settings-ico.svg";
 import withdrawIco from "assets/withdraw-ico.svg";
@@ -45,7 +44,7 @@ import { initialState } from "store/initialState";
 import cookie from "cookie_js";
 import OperationDetail from "components/Dashboard/OperationDetail";
 
-let drawerWidth = 320;
+let drawerWidth = 300;
 
 export function Admin() {
   const { state, merchants } = useSelector((store) => ({
@@ -304,7 +303,7 @@ function DefaultComponent() {
               <Typography variant='body2'></Typography>
             </Grid>
           </Grid>
-          {merchants.map((merchant) => (
+          {merchants.map((merchant, i) => (
             <Grid
               item
               xs={12}
@@ -327,12 +326,14 @@ function DefaultComponent() {
                 <div className='flex_box'>
                   <img
                     src={
-                      parseInt(merchant.status.id) === 2
+                      parseInt(merchant.status.id) === 4
+                        ? success
+                        : parseInt(merchant.status.id) === 3
+                        ? success
+                        : parseInt(merchant.status.id) === 2
                         ? success
                         : parseInt(merchant.status.id) === 1
                         ? pending
-                        : merchant.status.slug === "blocked"
-                        ? warning
                         : fail
                     }
                     style={{ width: 24 }}
@@ -344,12 +345,14 @@ function DefaultComponent() {
                 <div className='flex_box'>
                   <img
                     src={
-                      parseInt(merchant.status.id) === 2
+                      parseInt(merchant.status.id) === 4
+                        ? fail
+                        : parseInt(merchant.status.id) === 3
+                        ? pending
+                        : parseInt(merchant.status.id) === 2
                         ? success
                         : parseInt(merchant.status.id) === 1
                         ? pending
-                        : merchant.status.slug === "blocked"
-                        ? warning
                         : fail
                     }
                     style={{ width: 24 }}
@@ -358,26 +361,27 @@ function DefaultComponent() {
                 </div>
               </Grid>
               <Grid item xs={1}>
-                <div
-                  className='flex_box'
-                  style={{
-                    justifyContent:
-                      merchant.status.slug !== "blocked"
-                        ? "center"
-                        : "flex-end",
-                  }}
-                >
-                  {merchant.status.slug !== "blocked" && (
-                    <NavLink
-                      to={`/dashboard/project/${merchant.merchant_id}/`}
-                      style={{ marginRight: 20, maxHeight: 24 }}
-                    >
-                      <img src={settings} alt='' />
-                    </NavLink>
-                  )}
+                <div className='flex_box'>
                   <NavLink
-                    to={`/dashboard/project/${merchant.merchant_id}/delete`}
-                    style={{ maxHeight: 24 }}
+                    to={
+                      merchant.status.slug === "blocked"
+                        ? "/dashboard"
+                        : `/dashboard/project/${merchant.merchant_id}/`
+                    }
+                    style={{
+                      maxHeight: 24,
+                      opacity: merchant.status.slug === "blocked" ? 0.3 : 1,
+                    }}
+                  >
+                    <img src={settings} alt='' />
+                  </NavLink>
+                  <NavLink
+                    to={
+                      merchant.status.slug === "blocked"
+                        ? "/dashboard"
+                        : `/dashboard/project/${merchant.merchant_id}/delete`
+                    }
+                    style={{ marginLeft: 20, maxHeight: 24 }}
                   >
                     <img src={trash} alt='' style={{ maxHeight: 24 }} />
                   </NavLink>
