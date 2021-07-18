@@ -12,6 +12,7 @@ export const initialState = {
   currentDocumentationTab: { value: "Знакомство", index: 0 },
   currentCurrency: "",
   merchants: "",
+  merchantDetails: {},
   balance: "",
   statistics: {},
   operationDetails: {},

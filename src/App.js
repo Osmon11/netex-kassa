@@ -67,7 +67,7 @@ export default function App() {
         </Alert>
       </Snackbar>
       <Backdrop style={{ zIndex: 1301 }} open={openBackdrop}>
-        <CircularProgress color='inherit' />
+        <CircularProgress />
       </Backdrop>
     </div>
   );
@@ -79,6 +79,11 @@ const theme = createMuiTheme({
       light: "#ffa216",
       main: "#ff9900",
       dark: "#d58000",
+    },
+  },
+  overrides: {
+    MuiCircularProgress: {
+      colorPrimary: "#ff9900",
     },
   },
   typography: {
