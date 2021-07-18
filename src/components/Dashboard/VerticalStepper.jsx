@@ -1,7 +1,7 @@
 import { Step, StepContent, Stepper } from "@material-ui/core";
 import React from "react";
 import { SecondStep } from "./SecondStep";
-import { CustomLabel, StepIcon } from "./WithdrawFunds";
+import { CustomLabel, StepIcon } from "../WithdrawFunds/NewRequest";
 
 export function VerticalStepper({ callback, handlePrev }) {
   const [activeStep, setActiveStep] = React.useState(1);

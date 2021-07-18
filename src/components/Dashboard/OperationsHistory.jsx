@@ -272,45 +272,6 @@ export function OperationsHistory() {
           </Grid>
           {state.historyList ? (
             state.historyList.map((obj, i) => {
-              const statusImg = [
-                null,
-                <img
-                  src={pending}
-                  style={{ width: 24 }}
-                  title={obj.status.name}
-                  alt=''
-                />,
-                <img
-                  src={success}
-                  style={{ width: 24 }}
-                  title={obj.status.name}
-                  alt=''
-                />,
-                <img
-                  src={fail}
-                  style={{ width: 24 }}
-                  title={obj.status.name}
-                  alt=''
-                />,
-                <img
-                  src={fail}
-                  style={{ width: 24 }}
-                  title={obj.status.name}
-                  alt=''
-                />,
-                <img
-                  src={warning}
-                  style={{ width: 24 }}
-                  title={obj.status.name}
-                  alt=''
-                />,
-                <img
-                  src={success}
-                  style={{ width: 24 }}
-                  title={obj.status.name}
-                  alt=''
-                />,
-              ];
               return (
                 <Grid
                   item
@@ -440,3 +401,13 @@ const useStyles = makeStyles({
     },
   },
 });
+
+export const statusImg = [
+  null,
+  <img src={pending} style={{ width: 24 }} title='В ожидании' alt='' />,
+  <img src={success} style={{ width: 24 }} title='Завершено' alt='' />,
+  <img src={fail} style={{ width: 24 }} title='Отклонено' alt='' />,
+  <img src={fail} style={{ width: 24 }} title='Заблокирован' alt='' />,
+  <img src={warning} style={{ width: 24 }} title='Отменено' alt='' />,
+  <img src={success} style={{ width: 24 }} title='Зачислен' alt='' />,
+];

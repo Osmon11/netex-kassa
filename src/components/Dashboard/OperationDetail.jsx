@@ -79,125 +79,135 @@ export default function OperationDetail({ match }) {
               style={{ marginTop: "30px", backgroundColor: "#5A5B63" }}
             />
             <div className={classes.paperContent}>
-              <div
-                className='flex_box'
-                style={{
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <Typography variant='body2'>Тип операции</Typography>
-                <Typography variant='body2'>
-                  {merchant.operation_type.name}
-                </Typography>
-              </div>
-              <div
-                className='flex_box'
-                style={{
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <Typography variant='body2'>Дата и время</Typography>
-                <Typography variant='body2'>
-                  {Boolean(merchant.date) ? merchant.date : "---"}
-                </Typography>
-              </div>
-              <div
-                className='flex_box'
-                style={{
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <Typography variant='body2'>Сумма</Typography>
-                <Typography variant='body2'>
-                  {`${merchant.sum} ${merchant.main_currency}`}
-                </Typography>
-              </div>
-              <div
-                className='flex_box'
-                style={{
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <Typography variant='body2'>Сумма в валюте</Typography>
-                <Typography variant='body2'>
-                  {`${merchant.credit || merchant.debit} ${
-                    merchant.main_currency
-                  }`}
-                </Typography>
-              </div>
-              <div
-                className='flex_box'
-                style={{
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <Typography variant='body2'>Наша комиссия</Typography>
-                <Typography variant='body2'>
-                  {Boolean(merchant.additional_commission)
-                    ? merchant.additional_commission
-                    : "---"}
-                </Typography>
-              </div>
-              <div
-                className='flex_box'
-                style={{
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <Typography variant='body2'>Комиссия</Typography>
-                <Typography variant='body2'>
-                  {Boolean(merchant.comission) ? merchant.comission : "---"}
-                </Typography>
-              </div>
-              <Typography variant='body2' style={{ marginBottom: "10px" }}>
-                Номер квитанции
-              </Typography>
-              <ThemeInput
-                name='key'
-                type='text'
-                style={{ width: "100%" }}
-                value={merchant.batch}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <Tooltip
-                        PopperProps={{
-                          disablePortal: true,
-                        }}
-                        open={tooltip}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        title='Copied'
-                        arrow
-                        TransitionComponent={Zoom}
-                      >
-                        <CopyToClipboard
-                          text={merchant.batch}
-                          onCopy={() => {
-                            setTooltip(true);
-                            closeTooltip();
-                          }}
-                        >
-                          <img
-                            src={copyIcon}
-                            style={{ cursor: "pointer" }}
-                            alt='content copy'
-                          />
-                        </CopyToClipboard>
-                      </Tooltip>
-                    </InputAdornment>
-                  ),
-                }}
-                variant='outlined'
-                disabled
-              />
+              {merchant.operation_type.name && (
+                <div
+                  className='flex_box'
+                  style={{
+                    justifyContent: "space-between",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Typography variant='body2'>Тип операции</Typography>
+                  <Typography variant='body2'>
+                    {merchant.operation_type.name}
+                  </Typography>
+                </div>
+              )}
+              {Boolean(merchant.date) && (
+                <div
+                  className='flex_box'
+                  style={{
+                    justifyContent: "space-between",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Typography variant='body2'>Дата и время</Typography>
+                  <Typography variant='body2'>{merchant.date}</Typography>
+                </div>
+              )}
+              {Boolean(merchant.sum) && (
+                <div
+                  className='flex_box'
+                  style={{
+                    justifyContent: "space-between",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Typography variant='body2'>Сумма</Typography>
+                  <Typography variant='body2'>
+                    {`${merchant.sum} ${merchant.main_currency}`}
+                  </Typography>
+                </div>
+              )}
+              {Boolean(merchant.credit || merchant.debit) && (
+                <div
+                  className='flex_box'
+                  style={{
+                    justifyContent: "space-between",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Typography variant='body2'>Сумма в валюте</Typography>
+                  <Typography variant='body2'>
+                    {`${merchant.credit || merchant.debit} ${
+                      merchant.main_currency
+                    }`}
+                  </Typography>
+                </div>
+              )}
+              {Boolean(merchant.additional_commission) && (
+                <div
+                  className='flex_box'
+                  style={{
+                    justifyContent: "space-between",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Typography variant='body2'>Наша комиссия</Typography>
+                  <Typography variant='body2'>
+                    {merchant.additional_commission}
+                  </Typography>
+                </div>
+              )}
+              {Boolean(merchant.comission) && (
+                <div
+                  className='flex_box'
+                  style={{
+                    justifyContent: "space-between",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Typography variant='body2'>Комиссия</Typography>
+                  <Typography variant='body2'>{merchant.comission}</Typography>
+                </div>
+              )}
+              {Boolean(merchant.batch) && (
+                <>
+                  <Typography variant='body2' style={{ marginBottom: "10px" }}>
+                    Номер квитанции
+                  </Typography>
+                  <ThemeInput
+                    name='key'
+                    type='text'
+                    style={{ width: "100%" }}
+                    value={merchant.batch}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Tooltip
+                            PopperProps={{
+                              disablePortal: true,
+                            }}
+                            open={tooltip}
+                            disableFocusListener
+                            disableHoverListener
+                            disableTouchListener
+                            title='Copied'
+                            arrow
+                            TransitionComponent={Zoom}
+                          >
+                            <CopyToClipboard
+                              text={merchant.batch}
+                              onCopy={() => {
+                                setTooltip(true);
+                                closeTooltip();
+                              }}
+                            >
+                              <img
+                                src={copyIcon}
+                                style={{ cursor: "pointer" }}
+                                alt='content copy'
+                              />
+                            </CopyToClipboard>
+                          </Tooltip>
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant='outlined'
+                    disabled
+                  />
+                </>
+              )}
             </div>
           </Paper>
         ) : (

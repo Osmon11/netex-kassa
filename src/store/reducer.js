@@ -422,9 +422,63 @@ export const getMerchantStatistics = (merchant, data) => (dispatch) => {
   });
 };
 
-export const getCurrencies = (errorHandler) => (dispatch) => {
+export const getCurrencies = () => (dispatch) => {
   creatRequest("/currencies", undefined, undefined, dispatch).then((res) =>
     dispatch(setData({ currencies: getArrFromObj(res.data.list) }))
+  );
+};
+
+export const getCashoutList = (options, page) => (dispatch) => {
+  creatRequest(
+    page ? `/cashout/list/${page}` : "/cashout/list",
+    options,
+    undefined,
+    dispatch
+  ).then((res) => {
+    if (Boolean(res.data)) {
+      dispatch(
+        setData({
+          cashoutList: res.data.list ? getArrFromObj(res.data.list) : false,
+          totalCashoutList: Math.round(
+            parseInt(res.data.total.total_operations) / 10
+          ),
+        })
+      );
+    }
+  });
+};
+
+export const addAutoWithdraw = (options) => (dispatch) => {
+  creatRequest("/cashout/settings/add", options, undefined, dispatch).then(
+    (res) => console.log(res.data)
+  );
+};
+
+export const editAutoWithdraw = (options) => (dispatch) => {
+  creatRequest("/cashout/settings/edit/2", options, undefined, dispatch).then(
+    (res) => console.log(res.data)
+  );
+};
+
+export const viewAutoWithdraw = () => (dispatch) => {
+  creatRequest("/cashout/settings/view/2", undefined, undefined, dispatch).then(
+    (res) => console.log(res.data)
+  );
+};
+
+export const getListOfAutoWithdraw = () => (dispatch) => {
+  creatRequest("/cashout/settings/list", undefined, undefined, dispatch).then(
+    (res) => {
+      if (res.data) {
+        dispatch(
+          setData({
+            cashoutSettingsList: Boolean(res.data.list)
+              ? getArrFromObj(res.data.list)
+              : false,
+          })
+        );
+      }
+    }
   );
 };
 
