@@ -36,14 +36,8 @@ export function Auth({ open, handleClose, login, setLogin }) {
     dispatch(setAlert(options));
   }
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby='auth-dialog'
-      className='dialog'
-    >
+    <Dialog open={open} onClose={handleClose} aria-labelledby='auth-dialog'>
       <DialogContent
-        className='auth-container'
         style={{
           backgroundColor: "#2A2B31",
           padding: "55px 80px 20px",
@@ -119,7 +113,6 @@ function SingIn({
   });
 
   function submitHandler(fields) {
-    console.log(fields);
     dispatch(setBackdrop(true));
     if (fogetPassword) {
       return dispatch(

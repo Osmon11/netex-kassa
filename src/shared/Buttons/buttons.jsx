@@ -6,6 +6,8 @@ export const GoldButton = withStyles({
     color: "#fff",
     background: "#FF9900",
     border: "2px solid #ff9900",
+    paddingRight: "16px",
+    paddingLeft: "16px",
     "&:hover": {
       color: "#ff9900",
       backgroundColor: "transparent",

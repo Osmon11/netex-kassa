@@ -16,6 +16,9 @@ export const initialState = {
   balance: "",
   statistics: {},
   operationDetails: {},
+  cashoutList: "",
+  totalCashoutList: 0,
+  cashoutSettingsList: "",
   addMerchant: {
     name: "",
     domain: "",
