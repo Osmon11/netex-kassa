@@ -5,7 +5,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import "./style.css";
 import flag from "assets/flag.png";
 import planet from "assets/planet.webp";
@@ -19,14 +19,13 @@ import cripto4 from "assets/cripto-coin4.webp";
 import cripto5 from "assets/cripto-coin5.webp";
 import { ParallaxMousemove } from "components";
 import { GoldButton } from "shared/Buttons/buttons";
-import { useDispatch } from "react-redux";
-import { setAuthDialog } from "store/actionCreators";
+import { Auth } from "components/Auth/auth";
 
 export function AboutUsBody() {
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
-  const dispatch = useDispatch();
+  const [dialog, setDialog] = useState({ open: false, login: true });
 
   return (
     <section
@@ -75,20 +74,6 @@ export function AboutUsBody() {
                     список ожидания.
                   </Typography>
                 </div>
-                {/* <div className="flex_box" style={{ alignItems: "flex-start" }}>
-                  <img
-                    src={flag}
-                    alt=""
-                    style={{ marginTop: 25, marginRight: 15 }}
-                  />
-                  <Typography variant="body1" style={{ marginTop: 20 }}>
-                    But I must explain to you how all this mistaken idea of
-                    denouncing pleasure and praising pain was born and I will
-                    give you a complete account of the system, and expound the
-                    actual teachings of the great explorer of the truth, the
-                    master-builder of human happiness.
-                  </Typography>
-                </div> */}
               </>
             ) : null}
           </Grid>
@@ -220,27 +205,6 @@ export function AboutUsBody() {
                   ожидания.
                 </Typography>
               </div>
-              {/* <div className="flex_box" style={{ alignItems: "flex-start" }}>
-                <img
-                  src={flag}
-                  alt=""
-                  style={{
-                    marginTop: 25,
-                    marginRight: 15,
-                    width: xs ? 25 : 46,
-                  }}
-                />
-                <Typography
-                  variant="body1"
-                  style={{ marginTop: 20, fontSize: xs ? 14 : 20 }}
-                >
-                  But I must explain to you how all this mistaken idea of
-                  denouncing pleasure and praising pain was born and I will give
-                  you a complete account of the system, and expound the actual
-                  teachings of the great explorer of the truth, the
-                  master-builder of human happiness.
-                </Typography>
-              </div> */}
             </Grid>
           ) : null}
 
@@ -293,9 +257,7 @@ export function AboutUsBody() {
               <img className='cripto_brend' src={cripto5} alt='' />
             </div>
             <GoldButton
-              onClick={() =>
-                dispatch(setAuthDialog({ open: true, login: false }))
-              }
+              onClick={() => setDialog({ open: true, login: false })}
               style={{
                 minWidth: 300,
                 marginLeft: "50%",
@@ -307,6 +269,15 @@ export function AboutUsBody() {
           </Grid>
         </Grid>
       </Container>
+
+      <Auth
+        open={dialog.open}
+        login={dialog.login}
+        setLogin={(login) => setDialog({ open: true, login })}
+        handleClose={() => {
+          setDialog({ ...dialog, open: false });
+        }}
+      />
     </section>
   );
 }

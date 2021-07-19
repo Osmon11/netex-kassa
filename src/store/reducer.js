@@ -5,7 +5,6 @@ import {
   SET_DOCUMENTATION_TAB,
   SET_USER,
   SET_DATA,
-  SET_AUTH_DIALOG,
   SET_ALERT,
   setAlert,
   setBalance,
@@ -68,11 +67,6 @@ export function reducer(state = initialState, action) {
         ...state,
         currentDocumentationTab: payload,
       };
-    case SET_AUTH_DIALOG:
-      return {
-        ...state,
-        authdialog: payload,
-      };
     case SET_DATA:
       return {
         ...state,
@@ -106,9 +100,7 @@ const somethingWentWrong = (endpoint) => {
 
 const errorHandler = function (error, dispatch) {
   dispatch(setBackdrop(false));
-  if (Boolean(error)) {
-    dispatch(setAlert({ open: true, severity: "error", message: error }));
-  }
+  dispatch(setAlert({ open: true, severity: "error", message: error }));
 };
 
 export async function creatRequest(
@@ -435,7 +427,8 @@ export const getCashoutList = (options, page) => (dispatch) => {
     undefined,
     dispatch
   ).then((res) => {
-    if (Boolean(res.data)) {
+    if (res) {
+      dispatch(setBackdrop(false));
       dispatch(
         setData({
           cashoutList: res.data.list ? getArrFromObj(res.data.list) : false,
@@ -448,17 +441,31 @@ export const getCashoutList = (options, page) => (dispatch) => {
   });
 };
 
-export const addAutoWithdraw = (options) => (dispatch) => {
+export const addAutoWithdraw = (options, callback) => (dispatch) => {
   creatRequest("/cashout/settings/add", options, undefined, dispatch).then(
-    (res) => console.log(res.data)
+    (res) => {
+      if (res && res.data && res.data.response) {
+        dispatch(setBackdrop(false));
+        callback();
+      }
+    }
   );
 };
 
-export const editAutoWithdraw = (options) => (dispatch) => {
-  creatRequest("/cashout/settings/edit/2", options, undefined, dispatch).then(
-    (res) => console.log(res.data)
-  );
-};
+export const editAutoWithdraw =
+  (options, withdraw_id, callback) => (dispatch) => {
+    creatRequest(
+      `/cashout/settings/edit/${withdraw_id}`,
+      options,
+      undefined,
+      dispatch
+    ).then((res) => {
+      if (res && res.data && res.data.response) {
+        dispatch(setBackdrop(false));
+        callback();
+      }
+    });
+  };
 
 export const viewAutoWithdraw = () => (dispatch) => {
   creatRequest("/cashout/settings/view/2", undefined, undefined, dispatch).then(
@@ -480,6 +487,20 @@ export const getListOfAutoWithdraw = () => (dispatch) => {
       }
     }
   );
+};
+
+export const deleteAutoWithdraw = (withdraw_id, callback) => (dispatch) => {
+  creatRequest(
+    `/cashout/settings/delete/${withdraw_id}`,
+    undefined,
+    undefined,
+    dispatch
+  ).then((res) => {
+    if (res && res.data && res.data.response) {
+      dispatch(setBackdrop(false));
+      callback();
+    }
+  });
 };
 
 export const changeAvatar = (avatar) => (dispatch) => {

@@ -7,7 +7,6 @@ if (Boolean(cookie.get("token"))) {
 
 export const initialState = {
   user: Boolean(cookie.get("user")) && Boolean(cookie.get("token")),
-  authdialog: { open: false, login: true },
   openBackdrop: false,
   currentDocumentationTab: { value: "Знакомство", index: 0 },
   currentCurrency: "",

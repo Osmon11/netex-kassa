@@ -2,7 +2,6 @@ export const SET_USER = "SET_USER";
 export const SET_DOCUMENTATION_TAB = "SET_DOCUMENTATION_TAB";
 export const SET_DATA = "SET_DATA";
 export const SET_ALERT = "SET_ALERT";
-export const SET_AUTH_DIALOG = "SET_AUTH_DIALOG";
 export const SET_BALANCE = "SET_BALANCE";
 export const SET_STATISTICS = "SET_STATISTICS";
 export const SET_BACKDROP = "SET_BACKDROP";
@@ -78,13 +77,6 @@ export function setData(payload) {
   return {
     payload,
     type: SET_DATA,
-  };
-}
-
-export function setAuthDialog(payload) {
-  return {
-    payload,
-    type: SET_AUTH_DIALOG,
   };
 }
 

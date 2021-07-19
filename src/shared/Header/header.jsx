@@ -23,20 +23,15 @@ import viber from "assets/viber-light-icon.png";
 import { NavLink } from "react-router-dom";
 import { GoldButton } from "shared";
 import { Auth } from "components/Auth/auth";
-import { useDispatch, useSelector } from "react-redux";
-import { setAuthDialog } from "store/actionCreators";
+import { useSelector } from "react-redux";
 
 export function Header() {
-  const dialog = useSelector((store) => store.reducer.authdialog);
   const user = useSelector((store) => store.reducer.user);
-  const dispatch = useDispatch();
   const [drawer, setDrawer] = useState(false);
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
+  const [dialog, setDialog] = useState({ open: false, login: true });
 
-  function handleClose() {
-    dispatch(setAuthDialog({ ...dialog, open: false }));
-  }
   function MobileMenu() {
     return (
       <ThemeDrawer
@@ -142,9 +137,7 @@ export function Header() {
           <Typography variant='body2' style={{ marginBottom: 10 }}>
             {!user ? (
               <span
-                onClick={() =>
-                  dispatch(setAuthDialog({ open: true, login: true }))
-                }
+                onClick={() => setDialog({ open: true, login: true })}
                 className='nav_link'
               >
                 Вход в личный кабинет
@@ -215,9 +208,7 @@ export function Header() {
                     <>
                       <GoldButton
                         style={{ minWidth: 90, minHeight: 40 }}
-                        onClick={() =>
-                          dispatch(setAuthDialog({ open: true, login: true }))
-                        }
+                        onClick={() => setDialog({ open: true, login: true })}
                         variant='outlined'
                       >
                         Вход
@@ -225,9 +216,7 @@ export function Header() {
                       <p
                         className='nav_link'
                         style={{ marginLeft: 20 }}
-                        onClick={() =>
-                          dispatch(setAuthDialog({ open: true, login: false }))
-                        }
+                        onClick={() => setDialog({ open: true, login: false })}
                       >
                         Регистрация
                       </p>
@@ -253,8 +242,10 @@ export function Header() {
       <Auth
         open={dialog.open}
         login={dialog.login}
-        setLogin={(login) => dispatch(setAuthDialog({ open: true, login }))}
-        handleClose={handleClose}
+        setLogin={(login) => setDialog({ open: true, login })}
+        handleClose={() => {
+          setDialog({ ...dialog, open: false });
+        }}
       />
     </AppBar>
   );

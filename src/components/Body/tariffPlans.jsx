@@ -8,11 +8,11 @@ import {
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
-import React, { useEffect } from "react";
+import { Auth } from "components/Auth/auth";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { GoldButton } from "shared/Buttons/buttons";
-import { setAuthDialog } from "store/actionCreators";
 import { getTariffPlans } from "store/reducer";
 import "./style.css";
 
@@ -23,6 +23,7 @@ export function RatesBody() {
   const dispatch = useDispatch();
   const state = useSelector((store) => store.reducer);
   const history = useHistory();
+  const [dialog, setDialog] = useState({ open: false, login: true });
 
   useEffect(() => {
     if (Boolean(!state.tariffPlans)) {
@@ -35,7 +36,7 @@ export function RatesBody() {
       history.push("/dashboard");
       return;
     }
-    dispatch(setAuthDialog({ open: true, login: false }));
+    setDialog({ open: true, login: false });
   }
   return (
     <Container>
@@ -141,15 +142,26 @@ export function RatesBody() {
               ))}
             </>
           ) : (
-            <MobileVertion tariffPlans={state.tariffPlans} />
+            <MobileVertion
+              tariffPlans={state.tariffPlans}
+              setAuthDialog={(options) => setDialog(options)}
+            />
           ))}
       </Grid>
+
+      <Auth
+        open={dialog.open}
+        login={dialog.login}
+        setLogin={(login) => setDialog({ open: true, login })}
+        handleClose={() => {
+          setDialog({ ...dialog, open: false });
+        }}
+      />
     </Container>
   );
 }
 
 function MobileVertion(props) {
-  const dispatch = useDispatch();
   const state = useSelector((store) => store.reducer);
   const history = useHistory();
 
@@ -158,7 +170,7 @@ function MobileVertion(props) {
       history.push("/dashboard");
       return;
     }
-    dispatch(setAuthDialog({ open: true, login: false }));
+    props.setAuthDialog({ open: true, login: false });
   }
   return (
     <Grid

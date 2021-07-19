@@ -13,7 +13,10 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GoldToggleButton } from "shared/Buttons/buttons";
 import { setTab } from "store/actionCreators";
+import pdfIcon from "assets/pdfFile.svg";
 import "./style.css";
+import { GoldButton } from "shared/Buttons/buttons";
+import { Auth } from "components/Auth/auth";
 
 const tabs = [
   { value: "Знакомство", index: 0 },
@@ -198,34 +201,91 @@ function BeginningOfWork() {
 function APIClients() {
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
-  const [tab, setTab] = useState("Node.js");
+  const d400 = useMediaQuery(theme.breakpoints.down(400));
+  const [tab, setTab] = useState("API");
+  const [apiTab, setApiTab] = useState("Удобно");
+  const [dialog, setDialog] = useState({ open: false, login: true });
 
   return (
     <div className='step'>
-      <p className='title'>Поддерживаемые библиотеки</p>
-      <p className='subtitle'>
-        Netex Kassa Team поддерживает несколько самых популярных библиотек,
-        которые могут быть установлены с помощью менеджера пакетов:
-      </p>
-      <ul>
-        <li className='subtitle list_item'>Node.js</li>
-        <li className='subtitle list_item'>PHP</li>
-        <li className='subtitle list_item'>Go</li>
-      </ul>
-      <p className='title'>Примеры использования</p>
       <ToggleButtonGroup
         exclusive
         value={tab}
         style={{ minWidth: xs ? "100%" : 525, margin: "33px 0" }}
         onChange={(_, tab) => setTab(tab)}
       >
-        <GoldToggleButton value='Node.js'>Node.js</GoldToggleButton>
-        <GoldToggleButton value='PHP'>PHP</GoldToggleButton>
-        <GoldToggleButton value='Go'>Go</GoldToggleButton>
+        <GoldToggleButton value='API'>API</GoldToggleButton>
+        <GoldToggleButton value='SCI'>SCI</GoldToggleButton>
       </ToggleButtonGroup>
-      <p className='title'>{tab}</p>
-      <p className='subtitle'>Установите пакет через npm</p>
-      <CodeExample noContent />
+      {tab === "API" && (
+        <>
+          <p className='subtitle' style={{ width: xs ? "100%" : "80%" }}>
+            Merchant API поможет вам с легкостью организовать взаимодействие
+            любого приложения с платежной системой Advanced Cash,
+            автоматизировать отправку и получение платежей, просмотр истории,
+            поиск транзакций и многое другое. Готовые библиотеки для быстрой
+            интеграции: Java, Ruby, PHP
+          </p>
+          <ToggleButtonGroup
+            exclusive
+            value={apiTab}
+            style={{ minWidth: xs ? "100%" : 600, margin: "33px 0px 16px 0px" }}
+            onChange={(_, apiTab) => setApiTab(apiTab)}
+          >
+            <GoldToggleButton value='Удобно'>Удобно</GoldToggleButton>
+            <GoldToggleButton value='Профессиионально'>
+              Профессиионально
+            </GoldToggleButton>
+            <GoldToggleButton value='Безопасно'>Безопасно</GoldToggleButton>
+          </ToggleButtonGroup>
+          <ul style={{ color: "#fff", marginBottom: "40px" }}>
+            <li>Включение и настройка в несколько кликов</li>
+            <li>Гибкий выбор поддерживаемых операций</li>
+            <li>Выбор валют и лимитов по производимым операциям</li>
+          </ul>
+          <Paper
+            style={{
+              backgroundColor: "#18191D",
+              borderRadius: 4,
+              padding: d400 ? 10 : 32,
+              height: "229px",
+              textAlign: "center",
+            }}
+            elevation={0}
+          >
+            <div className='flex_box'>
+              <img src={pdfIcon} alt='' />
+              <span style={{ textAlign: "left", marginLeft: 40 }}>
+                <a href='https://google.com' style={{ color: "#ff9900" }}>
+                  <span className='project_link'>
+                    Инструкция по Merchant API, Версия 1.22
+                  </span>
+                </a>
+                <p className='subtitle'>
+                  Этот документ описывает, как программно
+                  <br /> взаимодействовать с системой Advanced Cash.
+                </p>
+              </span>
+            </div>
+          </Paper>
+          <GoldButton
+            onClick={() => setDialog({ open: true, login: false })}
+            style={{
+              ...btnStyles,
+            }}
+          >
+            Стать клиентом
+          </GoldButton>
+        </>
+      )}
+      <Auth
+        open={dialog.open}
+        login={dialog.login}
+        setLogin={(login) => setDialog({ open: true, login })}
+        handleClose={() => {
+          setDialog({ ...dialog, open: false });
+        }}
+      />
     </div>
   );
 }
@@ -302,6 +362,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const btnStyles = {
+  minHeight: 50,
+  marginTop: 40,
+  minWidth: 195,
+  marginLeft: "50%",
+  fontSize: 16,
+  transform: "translateX(-50%)",
+};
+
 const docSteps = [
   {
     title: "Знакомство с платформой",
@@ -316,7 +385,7 @@ const docSteps = [
       "Дружественная к разработчикам платформа Netex Kassa позволяет с легкостью создавать удивительные приложения или интегрировать Netex Kassa API в существующий проект. В этой статье вы пройдете от регистрации до рабочего решения меньше чем за 5 минут.",
   },
   {
-    title: "API Клиенты",
+    title: "Разработчикам",
     descrip:
       "Netex Kassa API построен на основе спецификации OpenAPI 3.0, поэтому вы можете сгенерировать клиентскую библиотеку API для большинства популярных языков.",
   },
