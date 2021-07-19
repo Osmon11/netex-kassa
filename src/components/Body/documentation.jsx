@@ -30,15 +30,12 @@ export function DocumentationBody() {
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const d400 = useMediaQuery(theme.breakpoints.down(400));
-  const currentTab = useSelector(
-    (store) => store.reducer.currentDocumentationTab
-  );
   const dispatch = useDispatch();
 
   return (
     <Container>
       <Grid container spacing={3} style={{ marginTop: 65 }}>
-        <Grid item md={3} xs={12}>
+        {/* <Grid item md={3} xs={12}>
           <Paper className={classes.sideBar}>
             <Typography
               variant='body1'
@@ -69,18 +66,18 @@ export function DocumentationBody() {
               ))}
             </Grid>
           </Paper>
-        </Grid>
-        <Grid item md={9} xs={12}>
+        </Grid> */}
+        <Grid item xs={12}>
           <Paper
             style={{ background: "#2A2B31", padding: d400 ? 20 : 32 }}
             elevation={0}
           >
-            <p className='main_title'>{docSteps[currentTab.index].title}</p>
-            <p className='subtitle'>{docSteps[currentTab.index].descrip}</p>
-            {docSteps[currentTab.index].subscrip && (
-              <p className='subtitle'>{docSteps[currentTab.index].subscrip}</p>
+            <p className='main_title'>{docSteps[2].title}</p>
+            <p className='subtitle'>{docSteps[2].descrip}</p>
+            {docSteps[2].subscrip && (
+              <p className='subtitle'>{docSteps[2].subscrip}</p>
             )}
-            {tabsContent[currentTab.index]}
+            {tabsContent[2]}
           </Paper>
         </Grid>
       </Grid>
@@ -248,7 +245,6 @@ function APIClients() {
               backgroundColor: "#18191D",
               borderRadius: 4,
               padding: d400 ? 10 : 32,
-              height: "229px",
               textAlign: "center",
             }}
             elevation={0}
@@ -263,7 +259,7 @@ function APIClients() {
                 </a>
                 <p className='subtitle'>
                   Этот документ описывает, как программно
-                  <br /> взаимодействовать с системой Advanced Cash.
+                  <br /> взаимодействовать с системой Netex Kassa.
                 </p>
               </span>
             </div>

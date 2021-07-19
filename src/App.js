@@ -28,8 +28,8 @@ export default function App() {
   return (
     <div className='App'>
       <AuthProvider>
+        <CssBaseline />
         <ThemeProvider theme={theme}>
-          <CssBaseline />
           <Suspense
             fallback={
               <div
@@ -81,7 +81,9 @@ const theme = createMuiTheme({
   },
   overrides: {
     MuiCircularProgress: {
-      colorPrimary: "#ff9900",
+      root: {
+        color: "#ff9900 !important",
+      },
     },
   },
   typography: {

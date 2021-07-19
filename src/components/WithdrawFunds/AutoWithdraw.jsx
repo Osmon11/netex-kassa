@@ -142,15 +142,17 @@ export function AutoWithdraw() {
         <Typography variant='h4' style={{ color: "#fff" }}>
           Мои проекты
         </Typography>
-        <GoldButton
+        <Typography
+          variant='body1'
           onClick={() => {
             setSum("");
             setOpen(true);
             setDialogMod("add");
           }}
+          className={classes.addBtn}
         >
           + Добавить
-        </GoldButton>
+        </Typography>
       </div>
       {Boolean(cashoutSettingsList) ? (
         <div style={{ margin: "40px 0" }}>
@@ -289,22 +291,7 @@ export function AutoWithdraw() {
           {mod === "add" || mod === "edit" ? (
             merchantsFiltered && (
               <>
-                <div
-                  className='flex_box'
-                  style={{
-                    justifyContent: "space-between",
-                    margin: "15px 0px 5px",
-                    width: 440,
-                  }}
-                >
-                  <Typography variant='body2'>Проект</Typography>
-                  <Typography
-                    variant='body2'
-                    style={{ color: "#FF9900", marginLeft: 15 }}
-                  >
-                    {`${currency.balance} ${currency.name}`}
-                  </Typography>
-                </div>
+                <Typography variant='body2'>Проект</Typography>
                 <ThemeInput
                   name='username'
                   select
@@ -358,7 +345,7 @@ export function AutoWithdraw() {
                   </ThemeInput>
                 )}
                 <Typography variant='body2' style={{ margin: "15px 0px 5px" }}>
-                  Прамежуток
+                  Промежуток
                 </Typography>
                 <ThemeInput
                   name='type'
@@ -408,7 +395,7 @@ export function AutoWithdraw() {
                   }}
                   onClick={addNewSettings}
                 >
-                  Создать
+                  {mod === "add" ? "Создать" : "Сохранить"}
                 </GoldButton>
               </>
             )
@@ -447,6 +434,12 @@ const useStyles = makeStyles({
     },
   },
   selected: {
+    "&:hover": {
+      color: "#ff9900",
+    },
+  },
+  addBtn: {
+    cursor: "pointer",
     "&:hover": {
       color: "#ff9900",
     },
