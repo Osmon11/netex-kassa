@@ -55,7 +55,9 @@ export function ProjectSettings({ match }) {
     useSelector((store) => store.reducer);
   const [tab, setTab] = useState("Статистика");
   const [tooltip, setTooltip] = useState({ a: false, b: false });
-  const [currentMerchant, setCurrentMerchant] = useState(null);
+  const [currentMerchant, setCurrentMerchant] = useState({
+    merchant_id: false,
+  });
   let t = new Date();
   t.setDate(t.getDate() - 7);
   const [options, setOptions] = useState({
@@ -84,7 +86,10 @@ export function ProjectSettings({ match }) {
     if (Boolean(merchantDetails[match.params.id])) {
       setCurrentMerchant(merchantDetails[match.params.id]);
     }
-    if (!currentMerchant && !Boolean(merchantDetails[match.params.id])) {
+    if (
+      currentMerchant.merchant_id !== match.params.id &&
+      !Boolean(merchantDetails[match.params.id])
+    ) {
       getCurrentMerchant();
     }
     if (!Boolean(statistics[match.params.id])) {
@@ -246,7 +251,7 @@ export function ProjectSettings({ match }) {
                   <DomenNotConfirmed />
                 </Grid>
               ) : (
-                <Statistics merchant_id={options.merchant_id} />
+                <Statistics merchant_id={match.params.id} />
               )}
             </Grid>
           )}

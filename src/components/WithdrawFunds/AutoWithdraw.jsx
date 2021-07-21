@@ -380,12 +380,6 @@ export function AutoWithdraw() {
                   onChange={(e) => {
                     setErr("");
                     setSum(e.target.value);
-                    if (
-                      parseInt(e.target.value) >
-                      Math.round(parseInt(currency.balance))
-                    ) {
-                      setErr("Недостаточно денег");
-                    }
                   }}
                   style={{ width: "100%" }}
                 />

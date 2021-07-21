@@ -22,6 +22,7 @@ import {
 } from "./actionCreators";
 import { initialState } from "./initialState";
 import { getProfile } from "./actions/profile";
+import { logoutHandler } from "components/Body/admin";
 
 export function reducer(state = initialState, action) {
   const { type, payload } = action;
@@ -93,11 +94,6 @@ export function reducer(state = initialState, action) {
 
 export const baseURL = "https://api.netex-kassa.com";
 
-const somethingWentWrong = (endpoint) => {
-  console.log(`О нет, что-то пошло не так:
-  проверьте запрос на ${endpoint}`);
-};
-
 const errorHandler = function (error, dispatch) {
   dispatch(setBackdrop(false));
   dispatch(setAlert({ open: true, severity: "error", message: error }));
@@ -114,14 +110,18 @@ export async function creatRequest(
     AppAxios.defaults.headers.Authorization = token;
   }
   return data
-    ? AppAxios.post(endpoint, data).catch(({ response }) =>
-        errorCallback(response.data.messages, dispatch)
-      )
-    : AppAxios.get(endpoint).catch(({ response }) =>
-        !!errorCallback
-          ? errorCallback(response.data.messages, dispatch)
-          : somethingWentWrong(endpoint)
-      );
+    ? AppAxios.post(endpoint, data).catch(({ response }) => {
+        errorCallback(response.data.messages, dispatch);
+        if (response.status === 403) {
+          logoutHandler(dispatch);
+        }
+      })
+    : AppAxios.get(endpoint).catch(({ response }) => {
+        errorCallback(response.data.messages, dispatch);
+        if (response.status === 403) {
+          logoutHandler(dispatch);
+        }
+      });
 }
 
 export const getTariffPlans = () => (dispatch) => {
@@ -415,9 +415,11 @@ export const getMerchantStatistics = (merchant, data) => (dispatch) => {
 };
 
 export const getCurrencies = () => (dispatch) => {
-  creatRequest("/currencies", undefined, undefined, dispatch).then((res) =>
-    dispatch(setData({ currencies: getArrFromObj(res.data.list) }))
-  );
+  creatRequest("/currencies", undefined, undefined, dispatch).then((res) => {
+    if (res) {
+      dispatch(setData({ currencies: getArrFromObj(res.data.list) }));
+    }
+  });
 };
 
 export const getCashoutList = (options, page) => (dispatch) => {

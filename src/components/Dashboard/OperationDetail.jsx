@@ -130,7 +130,7 @@ export default function OperationDetail({ match }) {
                   <Typography variant='body2'>Сумма в валюте</Typography>
                   <Typography variant='body2'>
                     {`${merchant.credit || merchant.debit} ${
-                      merchant.main_currency
+                      merchant.currency
                     }`}
                   </Typography>
                 </div>

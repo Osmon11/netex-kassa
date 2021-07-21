@@ -3,14 +3,12 @@ import {
   Grid,
   makeStyles,
   Paper,
-  Typography,
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
 import { ToggleButtonGroup } from "@material-ui/lab";
-import clsx from "clsx";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { GoldToggleButton } from "shared/Buttons/buttons";
 import { setTab } from "store/actionCreators";
 import pdfIcon from "assets/pdfFile.svg";
@@ -25,12 +23,8 @@ const tabs = [
 ];
 
 export function DocumentationBody() {
-  const classes = useStyles();
   const theme = useTheme();
-  const sm = useMediaQuery(theme.breakpoints.down("sm"));
-  const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const d400 = useMediaQuery(theme.breakpoints.down(400));
-  const dispatch = useDispatch();
 
   return (
     <Container>

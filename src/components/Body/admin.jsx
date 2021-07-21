@@ -39,12 +39,21 @@ import { logout } from "store/actions/sign";
 import { GoldButton } from "shared/Buttons/buttons";
 import { AppAxios } from "store/actions/sign";
 import { getCurrencies, getMerchants } from "store/reducer";
-import { setData } from "store/actionCreators";
+import { setData, setUser } from "store/actionCreators";
 import { initialState } from "store/initialState";
 import cookie from "cookie_js";
 import OperationDetail from "components/Dashboard/OperationDetail";
 
 let drawerWidth = 300;
+export function logoutHandler(dispatch) {
+  cookie.remove("user", "token");
+  dispatch(setUser(false));
+  dispatch(
+    logout(() => {
+      dispatch(setData(initialState));
+    })
+  );
+}
 
 export function Admin() {
   const { state, merchants } = useSelector((store) => ({
@@ -70,15 +79,6 @@ export function Admin() {
     }
   }, [state.profileInfo, state.currencies, merchants.merchants, dispatch]);
 
-  function logoutHandler() {
-    cookie.remove("user", "token");
-    dispatch(
-      logout(() => {
-        history.push("/");
-        dispatch(setData(initialState));
-      })
-    );
-  }
   return (
     <div className={classes.root}>
       <AppBar position='absolute' className={classes.appBar}>
@@ -101,7 +101,7 @@ export function Admin() {
               variant='outlined'
               className={classes.customButton}
               style={{ marginLeft: 40 }}
-              onClick={logoutHandler}
+              onClick={() => logoutHandler(dispatch)}
             >
               Выйти
             </Button>

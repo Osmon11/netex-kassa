@@ -20,6 +20,11 @@ export function Statistics({ merchant_id }) {
   // const symbols = { USD: "$", RUB: "₽", KZT: "₸", KGS: "C" };
 
   React.useEffect(() => {
+    if (!Boolean(merchantStatistics) && Boolean(currency)) {
+      getMerchantStatistics(currency);
+    }
+  }, [merchantStatistics, currency, getMerchantStatistics]);
+  React.useEffect(() => {
     if (!Boolean(state.balance)) {
       dispatch(getBalance());
     }
@@ -35,9 +40,12 @@ export function Statistics({ merchant_id }) {
     }
   }, [state.balance, currentBalance, currency, merchant_id, dispatch]);
 
-  function getNewStatistics(currency) {
-    dispatch(getMerchantStatistics(merchant_id, { currency }));
-  }
+  const getNewStatistics = React.useCallback(
+    (currency) => {
+      dispatch(getMerchantStatistics(merchant_id, { currency }));
+    },
+    [currency, merchant_id]
+  );
 
   return Boolean(merchantStatistics) ? (
     <>
