@@ -180,7 +180,9 @@ function APIClients() {
       <div className='flex_box'>
         <div
           className='api_tab'
-          style={{ borderColor: tab === "API" ? "#ff9900" : "#fff" }}
+          style={{
+            borderColor: tab === "API" ? "#ff9900" : "rgba(255, 255, 255, 0.8)",
+          }}
           onClick={() => setTab("API")}
         >
           <p
@@ -194,26 +196,28 @@ function APIClients() {
           >
             API
           </p>
-          <p
-            className='subtitle'
-            style={{ textAlign: "center", color: "rgba(255, 255, 255, 0.8)" }}
-          >
+          <p className='subtitle doc_tab'>
             Merchant API поможет вам с легкостью организовать взаимодействие
-            любого приложения с платежной системой Advanced Cash,
-            автоматизировать отправку и получение платежей, просмотр истории,
-            поиск транзакций и многое другое. Готовые библиотеки для быстрой
-            интеграции: Java, Ruby, PHP
+            любого приложения с платежной системой Netex Kassa, автоматизировать
+            отправку и получение платежей, просмотр истории, поиск транзакций и
+            многое другое. Готовые библиотеки для быстрой интеграции:{" "}
+            <span style={{ color: "#ff9900" }}>Java, Ruby, PHP</span>
           </p>
           <div
             className='tab_icon'
-            style={{ borderColor: tab === "API" ? "#ff9900" : "#fff" }}
+            style={{
+              borderColor:
+                tab === "API" ? "#ff9900" : "rgba(255, 255, 255, 0.8)",
+            }}
           >
             <img src={tab === "API" ? apiActiveIcon : apiIcon} alt='' />
           </div>
         </div>
         <div
           className='sci_tab'
-          style={{ borderColor: tab === "SCI" ? "#ff9900" : "#fff" }}
+          style={{
+            borderColor: tab === "SCI" ? "#ff9900" : "rgba(255, 255, 255, 0.8)",
+          }}
           onClick={() => setTab("SCI")}
         >
           <p
@@ -227,15 +231,12 @@ function APIClients() {
           >
             SCI
           </p>
-          <p
-            className='subtitle'
-            style={{ textAlign: "center", color: "rgba(255, 255, 255, 0.8)" }}
-          >
+          <p className='subtitle doc_tab'>
             Shopping Cart Interface — функционал, позволяющий вам как продавцу
             осуществлять приём платежей на вашем сайте от ваших заказчиков.
             Благодаря активированному SCI вы сможете в течение нескольких минут
-            подключить ваш интернет-магазин или веб-проект к ADVcash и начать
-            принимать платежи от клиентов системы и не только.
+            подключить ваш интернет-магазин или веб-проект к Netex Kassa и
+            начать принимать платежи от клиентов системы и не только.
           </p>
           <div
             className='tab_icon'
@@ -255,9 +256,9 @@ function APIClients() {
         </div>
         <div style={{ width: "50%", marginLeft: 15 }}>
           <ul className='documentation_list'>
-            <li>Включение и настройка в несколько кликов</li>
-            <li>Гибкий выбор поддерживаемых операций</li>
-            <li>Выбор валют и лимитов по производимым операциям</li>
+            <li>Самый простой способ приема платежей на Вашем сайте</li>
+            <li>Автоматическая конвертация перевода при необходимости</li>
+            <li>Ограничение доступа по IP адресу</li>
           </ul>
         </div>
       </div>

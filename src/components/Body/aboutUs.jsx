@@ -38,7 +38,10 @@ export function AboutUsBody() {
       <Container>
         <Grid container spacing={2}>
           <Grid item md={5}>
-            <p className='main_title' style={{ textAlign: "start" }}>
+            <p
+              className='main_title'
+              style={{ textAlign: "start", marginTop: "80px" }}
+            >
               О нас
             </p>
             <Typography variant='body1' style={{ fontSize: xs ? 14 : 20 }}>
@@ -53,29 +56,6 @@ export function AboutUsBody() {
             >
               Работая с нами вы останетесь довольными.
             </Typography>
-            {!sm ? (
-              <>
-                <p
-                  className='main_title'
-                  style={{ textAlign: "start", marginTop: 150 }}
-                >
-                  Технологии
-                </p>
-                <div className='flex_box' style={{ alignItems: "flex-start" }}>
-                  <img
-                    src={flag}
-                    alt=''
-                    style={{ marginTop: 10, marginRight: 15 }}
-                  />
-                  <Typography variant='body1'>
-                    Наш сервис развиваться и мы всегда держимся новых трендов.
-                    Мы готовим проект Netex Card, и если Вы хотите получить
-                    карту свяжитесь со службой поддержки и вашу заявку внесут в
-                    список ожидания.
-                  </Typography>
-                </div>
-              </>
-            ) : null}
           </Grid>
 
           <Grid item md={7} style={{ position: "relative" }}>
@@ -183,37 +163,12 @@ export function AboutUsBody() {
             )}
           </Grid>
 
-          {sm ? (
-            <Grid item xs={12}>
-              <p className='main_title' style={{ textAlign: "start" }}>
-                Технологии
-              </p>
-              <div className='flex_box' style={{ alignItems: "flex-start" }}>
-                <img
-                  src={flag}
-                  alt=''
-                  style={{
-                    marginTop: 10,
-                    marginRight: 15,
-                    width: xs ? 25 : 46,
-                  }}
-                />
-                <Typography variant='body1' style={{ fontSize: xs ? 14 : 20 }}>
-                  Наш сервис развиваться и мы всегда держимся новых трендов. Мы
-                  готовим проект Netex Card, и если Вы хотите получить карту
-                  свяжитесь со службой поддержки и вашу заявку внесут в список
-                  ожидания.
-                </Typography>
-              </div>
-            </Grid>
-          ) : null}
-
           <Grid item md={12}>
             <Typography
               variant='h3'
               style={{
                 padding: "0 20%",
-                marginTop: 100,
+                marginTop: 400,
                 textAlign: "center",
                 fontSize: xs ? 30 : 50,
               }}
