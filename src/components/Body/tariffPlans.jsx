@@ -111,7 +111,7 @@ export function RatesBody() {
                       }}
                     />
                     <ul style={{ marginLeft: 50 }}>
-                      {plan.description.split("-").map((text) => {
+                      {plan.description.split("\n-").map((text) => {
                         return (
                           <li
                             className='rates_list_item'
