@@ -28,7 +28,7 @@ export function Footer() {
   }
   return (
     <Container>
-      <Grid container spacing={2} style={{ margin: "130px 0 50px 0" }}>
+      <Grid container style={{ margin: "130px 0 50px 0" }}>
         <Grid
           item
           xs={12}
@@ -42,16 +42,15 @@ export function Footer() {
           )}
           <Logo />
           <Typography variant='body2' style={{ margin: "24px 0" }}>
-            Netex-kassa – лучшее решение для вашего бизнеса!
-            <br /> Это сервис предоставляющий криптовалютный кошелек, с помощью
-            которого вы с легкостью сможете принимать платежи топовыми
+            Netex-kassa – Это сервис предоставляющий криптовалютный кошелек, с
+            помощью которого вы с легкостью сможете принимать платежи топовыми
             криптовалютами.
           </Typography>
         </Grid>
 
         {!sm ? (
           <>
-            <Grid item md={4}>
+            <Grid item md={4} style={{ paddingLeft: 70 }}>
               <Typography variant='subtitle2' className={classes.tpSubtitle}>
                 Навигация по сайту
               </Typography>
@@ -116,7 +115,7 @@ export function Footer() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  marginBottom: 40,
+                  marginBottom: 20,
                 }}
               >
                 <img src={mailIcon} alt='' style={{ marginRight: 10 }} />
@@ -129,7 +128,7 @@ export function Footer() {
               </Typography>
               <div
                 className='flex_box'
-                style={{ justifyContent: "space-between", maxWidth: 200 }}
+                style={{ justifyContent: "space-between", maxWidth: 175 }}
               >
                 <a href='https://google.com'>
                   <Paper className={classes.iconPaper} elevation={3}>
@@ -158,7 +157,9 @@ export function Footer() {
         setLogin={(login) => setDialog({ open: true, login })}
         handleClose={handleClose}
       />
-      <p style={{ textAlign: "center" }}>2021 © Netex. All rights reserved.</p>
+      <p style={{ textAlign: "center", fontWeight: 300, color: "#fff" }}>
+        2021 &copy; Netex. All rights reserved.
+      </p>
     </Container>
   );
 }

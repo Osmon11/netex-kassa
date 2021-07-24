@@ -175,18 +175,10 @@ export function AutoWithdraw() {
                 variant='body2'
                 style={{ textAlign: "center", fontWeight: 700 }}
               >
-                Дата
-              </Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Typography
-                variant='body2'
-                style={{ textAlign: "center", fontWeight: 700 }}
-              >
                 Сумма
               </Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={3}>
               <Typography
                 variant='body2'
                 style={{ textAlign: "center", fontWeight: 700 }}
@@ -194,7 +186,7 @@ export function AutoWithdraw() {
                 Последний вывод
               </Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={3}>
               <Typography
                 variant='body2'
                 style={{ textAlign: "center", fontWeight: 700 }}
@@ -228,22 +220,17 @@ export function AutoWithdraw() {
                 </Typography>
               </Grid>
               <Grid item xs={2}>
-                <Typography variant='body2' style={{ textAlign: "center" }}>
-                  {settings.date}
-                </Typography>
-              </Grid>
-              <Grid item xs={2}>
                 <Typography
                   variant='body2'
                   style={{ textAlign: "center" }}
                 >{`${settings.sum} ${settings.currency}`}</Typography>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={3}>
                 <Typography variant='body2' style={{ textAlign: "center" }}>
                   {settings.date_update}
                 </Typography>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={3}>
                 <Typography variant='body2' style={{ textAlign: "center" }}>
                   {settings.next_withdrawal}
                 </Typography>
