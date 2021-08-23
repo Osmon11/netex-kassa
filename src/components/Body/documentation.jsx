@@ -1,20 +1,22 @@
 import {
   Container,
   Grid,
-  makeStyles,
   Paper,
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
-import { ToggleButtonGroup } from "@material-ui/lab";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { GoldToggleButton } from "shared/Buttons/buttons";
+import { useDispatch, useSelector } from "react-redux";
 import { setTab } from "store/actionCreators";
 import pdfIcon from "assets/pdfFile.svg";
+import apiIcon from "assets/api.svg";
+import apiActiveIcon from "assets/api-active.svg";
+import sciIcon from "assets/sci.svg";
+import sciActiveIcon from "assets/sci-active.svg";
 import "./style.css";
 import { GoldButton } from "shared/Buttons/buttons";
 import { Auth } from "components/Auth/auth";
+import { useHistory } from "react-router-dom";
 
 const tabs = [
   { value: "Знакомство", index: 0 },
@@ -29,48 +31,24 @@ export function DocumentationBody() {
   return (
     <Container>
       <Grid container spacing={3} style={{ marginTop: 65 }}>
-        {/* <Grid item md={3} xs={12}>
-          <Paper className={classes.sideBar}>
-            <Typography
-              variant='body1'
-              style={{
-                fontWeight: 400,
-                marginBottom: sm ? (xs ? 20 : 40) : 60,
-              }}
-            >
-              API справочник
-            </Typography>
-            <Grid container spacing={2}>
-              {tabs.map((tab) => (
-                <Grid item xs={d400 ? 12 : 6} sm={4} md={12} key={tab.value}>
-                  <span
-                    className={clsx("nav_link", {
-                      active: currentTab.value === tab.value,
-                    })}
-                    style={{
-                      fontSize: xs ? 16 : 20,
-                      fontWeight: 400,
-                      width: sm || xs ? "50%" : "",
-                    }}
-                    onClick={() => dispatch(setTab(tab))}
-                  >
-                    {tab.value}
-                  </span>
-                </Grid>
-              ))}
-            </Grid>
-          </Paper>
-        </Grid> */}
         <Grid item xs={12}>
           <Paper
             style={{ background: "#2A2B31", padding: d400 ? 20 : 32 }}
             elevation={0}
           >
             <p className='main_title'>{docSteps[2].title}</p>
-            <p className='subtitle'>{docSteps[2].descrip}</p>
-            {docSteps[2].subscrip && (
-              <p className='subtitle'>{docSteps[2].subscrip}</p>
-            )}
+            <p
+              className='subtitle'
+              style={{
+                textAlign: "center",
+                paddingBottom: 60,
+                color: "rgba(255, 255, 255, 0.8)",
+              }}
+            >
+              Netex Kassa API построен на основе спецификации OpenAPI 3.0,
+              поэтому вы можете сгенерировать клиентскую библиотеку API для
+              большинства популярных языков.
+            </p>
             {tabsContent[2]}
           </Paper>
         </Grid>
@@ -191,83 +169,149 @@ function BeginningOfWork() {
 
 function APIClients() {
   const theme = useTheme();
-  const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const d400 = useMediaQuery(theme.breakpoints.down(400));
+  const state = useSelector((store) => store.reducer);
+  const history = useHistory();
   const [tab, setTab] = useState("API");
-  const [apiTab, setApiTab] = useState("Удобно");
   const [dialog, setDialog] = useState({ open: false, login: true });
 
   return (
     <div className='step'>
-      <ToggleButtonGroup
-        exclusive
-        value={tab}
-        style={{ minWidth: xs ? "100%" : 525, margin: "33px 0" }}
-        onChange={(_, tab) => setTab(tab)}
-      >
-        <GoldToggleButton value='API'>API</GoldToggleButton>
-        <GoldToggleButton value='SCI'>SCI</GoldToggleButton>
-      </ToggleButtonGroup>
-      {tab === "API" && (
-        <>
-          <p className='subtitle' style={{ width: xs ? "100%" : "80%" }}>
-            Merchant API поможет вам с легкостью организовать взаимодействие
-            любого приложения с платежной системой Advanced Cash,
-            автоматизировать отправку и получение платежей, просмотр истории,
-            поиск транзакций и многое другое. Готовые библиотеки для быстрой
-            интеграции: Java, Ruby, PHP
-          </p>
-          <ToggleButtonGroup
-            exclusive
-            value={apiTab}
-            style={{ minWidth: xs ? "100%" : 600, margin: "33px 0px 16px 0px" }}
-            onChange={(_, apiTab) => setApiTab(apiTab)}
+      <div className='flex_box'>
+        <div
+          className='api_tab'
+          style={{
+            borderColor: tab === "API" ? "#ff9900" : "rgba(255, 255, 255, 0.8)",
+          }}
+          onClick={() => setTab("API")}
+        >
+          <p
+            className='main_title'
+            style={{
+              fontWeight: 400,
+              fontSize: "35px",
+              marginTop: "75px",
+              marginBottom: "23px",
+            }}
           >
-            <GoldToggleButton value='Удобно'>Удобно</GoldToggleButton>
-            <GoldToggleButton value='Профессиионально'>
-              Профессиионально
-            </GoldToggleButton>
-            <GoldToggleButton value='Безопасно'>Безопасно</GoldToggleButton>
-          </ToggleButtonGroup>
-          <ul style={{ color: "#fff", marginBottom: "40px" }}>
+            API
+          </p>
+          <p className='subtitle doc_tab'>
+            Merchant API поможет вам с легкостью организовать взаимодействие
+            любого приложения с платежной системой Netex Kassa, автоматизировать
+            отправку и получение платежей, просмотр истории, поиск транзакций и
+            многое другое. Готовые библиотеки для быстрой интеграции:{" "}
+            <span style={{ color: "#ff9900" }}>Java, Ruby, PHP</span>
+          </p>
+          <div
+            className='tab_icon'
+            style={{
+              borderColor:
+                tab === "API" ? "#ff9900" : "rgba(255, 255, 255, 0.8)",
+            }}
+          >
+            <img src={tab === "API" ? apiActiveIcon : apiIcon} alt='' />
+          </div>
+        </div>
+        <div
+          className='sci_tab'
+          style={{
+            borderColor: tab === "SCI" ? "#ff9900" : "rgba(255, 255, 255, 0.8)",
+          }}
+          onClick={() => setTab("SCI")}
+        >
+          <p
+            className='main_title'
+            style={{
+              fontWeight: 400,
+              fontSize: "35px",
+              marginTop: "75px",
+              marginBottom: "23px",
+            }}
+          >
+            SCI
+          </p>
+          <p className='subtitle doc_tab'>
+            Shopping Cart Interface — функционал, позволяющий вам как продавцу
+            осуществлять приём платежей на вашем сайте от ваших заказчиков.
+            Благодаря активированному SCI вы сможете в течение нескольких минут
+            подключить ваш интернет-магазин или веб-проект к Netex Kassa и
+            начать принимать платежи от клиентов системы и не только.
+          </p>
+          <div
+            className='tab_icon'
+            style={{ borderColor: tab === "SCI" ? "#ff9900" : "#fff" }}
+          >
+            <img src={tab === "SCI" ? sciActiveIcon : sciIcon} alt='' />
+          </div>
+        </div>
+      </div>
+      <div className='flex_box' style={{ margin: "40px 0px" }}>
+        <div style={{ width: "50%", marginRight: 15 }}>
+          <ul className='documentation_list'>
             <li>Включение и настройка в несколько кликов</li>
             <li>Гибкий выбор поддерживаемых операций</li>
             <li>Выбор валют и лимитов по производимым операциям</li>
           </ul>
-          <Paper
-            style={{
-              backgroundColor: "#18191D",
-              borderRadius: 4,
-              padding: d400 ? 10 : 32,
-              textAlign: "center",
-            }}
-            elevation={0}
-          >
-            <div className='flex_box'>
-              <img src={pdfIcon} alt='' />
-              <span style={{ textAlign: "left", marginLeft: 40 }}>
-                <a href='https://google.com' style={{ color: "#ff9900" }}>
-                  <span className='project_link'>
-                    Инструкция по Merchant API, Версия 1.22
-                  </span>
-                </a>
-                <p className='subtitle'>
-                  Этот документ описывает, как программно
-                  <br /> взаимодействовать с системой Netex Kassa.
-                </p>
+        </div>
+        <div style={{ width: "50%", marginLeft: 15 }}>
+          <ul className='documentation_list'>
+            <li>Самый простой способ приема платежей на Вашем сайте</li>
+            <li>Автоматическая конвертация перевода при необходимости</li>
+            <li>Ограничение доступа по IP адресу</li>
+          </ul>
+        </div>
+      </div>
+      <Paper
+        style={{
+          backgroundColor: "#18191D",
+          borderRadius: 4,
+          padding: d400 ? 10 : 32,
+          textAlign: "center",
+        }}
+        elevation={0}
+      >
+        <div className='flex_box'>
+          <img src={pdfIcon} alt='' />
+          <span style={{ textAlign: "left", marginLeft: 40 }}>
+            <a
+              href={
+                tab === "API"
+                  ? "https://docs.netex-kassa.com"
+                  : "https://api.netex-kassa.com/public/docs/netex-kassa-sci.pdf"
+              }
+              style={{ color: "#ff9900" }}
+            >
+              <span
+                className='project_link'
+                style={{ textDecoration: "underline" }}
+              >
+                Инструкция по{" "}
+                {tab === "API" ? "Merchant API" : "Shopping Cart Interface"},
+                Версия 1.0
               </span>
-            </div>
-          </Paper>
-          <GoldButton
-            onClick={() => setDialog({ open: true, login: false })}
-            style={{
-              ...btnStyles,
-            }}
-          >
-            Стать клиентом
-          </GoldButton>
-        </>
-      )}
+            </a>
+            <p className='subtitle'>
+              Этот документ описывает, как программно
+              <br /> взаимодействовать с системой Netex Kassa.
+            </p>
+          </span>
+        </div>
+      </Paper>
+      <GoldButton
+        onClick={() => {
+          if (state.user) {
+            history.push("/dashboard");
+            return;
+          }
+          setDialog({ open: true, login: false });
+        }}
+        style={{
+          ...btnStyles,
+        }}
+      >
+        Стать клиентом
+      </GoldButton>
       <Auth
         open={dialog.open}
         login={dialog.login}
@@ -337,20 +381,6 @@ const CodeExample = ({ noContent, postRequest = false, link }) => {
     </Paper>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  sideBar: {
-    padding: "30px 50px",
-    background: " linear-gradient(270deg, #2A2B31 0%, #18191D 82.47%)",
-    minHeight: 624,
-    [theme.breakpoints.down("sm")]: {
-      minHeight: 165,
-    },
-    [theme.breakpoints.down(400)]: {
-      padding: "30px 40px",
-    },
-  },
-}));
 
 const btnStyles = {
   minHeight: 50,

@@ -293,7 +293,7 @@ export function Settings() {
               onSubmit={changePasswordHandler}
             >
               <Form>
-                <Typography variant='body2' style={{ marginTop: 15 }}>
+                <Typography variant='body2' style={{ marginTop: 10 }}>
                   Текущий пароль
                 </Typography>
                 <ValidatedInput
@@ -302,7 +302,7 @@ export function Settings() {
                   name='old-password'
                   style={{ width: "100%", marginTop: "8px" }}
                 />
-                <Typography variant='body2' style={{ marginTop: 15 }}>
+                <Typography variant='body2' style={{ marginTop: 10 }}>
                   Новый пароль
                 </Typography>
                 <ValidatedInput
@@ -311,7 +311,7 @@ export function Settings() {
                   name='new-password'
                   style={{ width: "100%", marginTop: "8px" }}
                 />
-                <Typography variant='body2' style={{ marginTop: 15 }}>
+                <Typography variant='body2' style={{ marginTop: 10 }}>
                   Повторите пароль
                 </Typography>
                 <ValidatedInput

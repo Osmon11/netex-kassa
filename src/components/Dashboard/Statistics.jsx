@@ -23,7 +23,7 @@ export function Statistics({ merchant_id }) {
     if (!Boolean(merchantStatistics) && Boolean(currency)) {
       getMerchantStatistics(currency);
     }
-  }, [merchantStatistics, currency, getMerchantStatistics]);
+  }, [merchantStatistics, currency]);
   React.useEffect(() => {
     if (!Boolean(state.balance)) {
       dispatch(getBalance());
@@ -44,7 +44,7 @@ export function Statistics({ merchant_id }) {
     (currency) => {
       dispatch(getMerchantStatistics(merchant_id, { currency }));
     },
-    [currency, merchant_id]
+    [merchant_id, dispatch]
   );
 
   return Boolean(merchantStatistics) ? (

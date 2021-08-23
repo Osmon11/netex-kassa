@@ -19,7 +19,6 @@ const Documentation = React.lazy(() => import("./pages/Documentation"));
 const AboutUs = React.lazy(() => import("./pages/AboutUs"));
 const Rates = React.lazy(() => import("./pages/Rates"));
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
-const API = React.lazy(() => import("./pages/API"));
 
 export default function App() {
   const dispatch = useDispatch();
@@ -43,7 +42,6 @@ export default function App() {
           >
             <Router>
               <Route exact path='/' component={Main} />
-              <Route exact path='/api' component={API} />
               <Route exac path='/documentation' component={Documentation} />
               <Route exact path='/about-us' component={AboutUs} />
               <Route exact path='/rates' component={Rates} />
