@@ -26,7 +26,7 @@ export default function API() {
             <Link to='E01' smooth className={classes.sidebarLink}>
               Get balance
             </Link>
-          </div>
+          </div>  
           <div className={classes.flexStart}>
             <span className={classes.GET}>GET</span>
             <Link to='E02' smooth className={classes.sidebarLink}>

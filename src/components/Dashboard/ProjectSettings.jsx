@@ -83,7 +83,10 @@ export function ProjectSettings({ match }) {
   }, [dispatch, match.params.id]);
 
   useEffect(() => {
-    if (Boolean(merchantDetails[match.params.id])) {
+    if (
+      Boolean(merchantDetails[match.params.id]) &&
+      !currentMerchant.merchant_id
+    ) {
       setCurrentMerchant(merchantDetails[match.params.id]);
     }
     if (
@@ -151,10 +154,7 @@ export function ProjectSettings({ match }) {
         );
         setCurrentMerchant({
           ...currentMerchant,
-          view: {
-            ...currentMerchant,
-            params: { ...currentMerchant.params, ...new_api_token },
-          },
+          params: { ...currentMerchant.params, ...new_api_token },
         });
       })
     );
