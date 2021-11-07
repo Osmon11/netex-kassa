@@ -50,12 +50,12 @@ export const logout = (callback) => (dispatch) => {
 };
 
 export const singup = (data, callback) => (dispatch) => {
-  console.log(data);
   AppAxios.post("/auth/registration", data)
     .then((res) => {
       callback(res.data);
     })
     .catch(({ response }) => {
+      callback()
       dispatch(
         setAlert({
           open: true,
@@ -103,8 +103,9 @@ export const restorePassword = (phone, callback) => (dispatch) => {
             message: res.data.messages,
           })
         );
-        callback();
+        callback(true);
       }
+      callback();
     })
     .catch(({ response }) => {
       dispatch(

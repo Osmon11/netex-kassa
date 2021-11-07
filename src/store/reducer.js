@@ -213,7 +213,7 @@ export const getActionLogs = (page) => (dispatch) => {
     }
     dispatch(
       setData({
-        actionLogs: array,
+        actionLogs: getArrFromObj(res.data.action).reverse(),
         actionLogsPages: Math.round(res.data.action_total / 10),
       })
     );

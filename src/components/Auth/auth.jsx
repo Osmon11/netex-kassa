@@ -40,7 +40,7 @@ export function Auth({ open, handleClose, login, setLogin }) {
       <DialogContent
         style={{
           backgroundColor: "#2A2B31",
-          padding: "55px 80px 20px",
+          padding: "25px 80px 20px",
         }}
       >
         {login ? (
@@ -116,9 +116,11 @@ function SingIn({
     dispatch(setBackdrop(true));
     if (fogetPassword) {
       return dispatch(
-        restorePassword(fields, () => {
+        restorePassword(fields, (success) => {
+          if (success) {
+            setLogin(true);
+          }
           dispatch(setBackdrop(false));
-          setLogin(true);
         })
       );
     }
@@ -321,11 +323,10 @@ function SingUp({
     dispatch(
       singup(fields, (data) => {
         dispatch(setBackdrop(false));
-        if (Boolean(data.messages)) {
+        if (Boolean(data) && Boolean(data.messages)) {
           setAlert({ open: true, severity: "error", message: data.messages });
-          return;
+          return setCodeField(true);;
         }
-        setCodeField(true);
       })
     );
   }
