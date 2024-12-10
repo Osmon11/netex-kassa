@@ -1,0 +1,2 @@
+(this["webpackJsonpnetex-kassa"]=this["webpackJsonpnetex-kassa"]||[]).push([[7],{411:function(s,e,a){"use strict";a.r(e),a.d(e,"default",(function(){return c}));var t=a(78),n=(a(1),a(0));function c(){return Object(n.jsx)("div",{className:"dashboard_page",children:Object(n.jsx)(t.a,{})})}}}]);
+//# sourceMappingURL=7.5fdf6a81.chunk.js.map
