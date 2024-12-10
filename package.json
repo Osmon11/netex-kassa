@@ -1,5 +1,6 @@
 {
   "name": "netex-kassa",
+  "homepage": "https://osmon11.github.io/netex-kassa/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
